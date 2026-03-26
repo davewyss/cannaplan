@@ -9,6 +9,7 @@ export type SheetArticleRecord = {
   Categoria?: string;
   Destacado?: boolean | string;
   Visibilidad?: boolean | string;
+  Minutos?: number | string;
   // Image fields — actual sheet column names
   "Enlace de Imagen Drive"?: string;
   "URL de Imagen (auto-gen)"?: string;
@@ -97,19 +98,34 @@ function estimateReadTime(text: string): string {
   return `${mins} min`;
 }
 
+function extractDriveFileId(raw: string): string | null {
+  // lh3 CDN URL already — pull the ID out
+  const lh3 = raw.match(/lh3\.googleusercontent\.com\/d\/([a-zA-Z0-9_-]+)/);
+  if (lh3) return lh3[1];
+
+  // Standard Drive share / file / export URLs
+  const shareMatch =
+    raw.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) ||
+    raw.match(/[?&]id=([a-zA-Z0-9_-]+)/) ||
+    raw.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (shareMatch?.[1]) return shareMatch[1];
+
+  // Bare file ID (20+ alphanumeric chars, nothing else)
+  if (/^[a-zA-Z0-9_-]{25,}$/.test(raw)) return raw;
+
+  return null;
+}
+
 function toDriveDirectUrl(value: string): string {
   const raw = value.trim();
   if (!raw) return "";
 
-  const fileIdMatch =
-    raw.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) ||
-    raw.match(/[?&]id=([a-zA-Z0-9_-]+)/) ||
-    raw.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  const fileId = extractDriveFileId(raw);
+  // lh3.googleusercontent.com/d/<id> is the most reliable public CDN
+  // endpoint for embedded images — no CORS, no rate-limit redirects
+  if (fileId) return `https://lh3.googleusercontent.com/d/${fileId}`;
 
-  if (fileIdMatch?.[1]) {
-    return `https://drive.google.com/thumbnail?id=${fileIdMatch[1]}&sz=w1600`;
-  }
-
+  // Not a Drive URL — return as-is (might be a direct https:// image)
   return raw;
 }
 
@@ -140,20 +156,10 @@ function normalizeImageUrl(value: unknown): string | undefined {
 }
 
 function getRecordImageUrl(record: SheetArticleRecord): string | undefined {
-  // Prefer the pre-built direct URL from Apps Script
-  const autoUrl = record["URL de Imagen (auto-gen)"];
-  if (typeof autoUrl === "string" && autoUrl.trim()) {
-    return autoUrl.trim();
-  }
-
-  // Fall back to building from Drive ID
-  const driveId = record["Drive ID (auto-gen)"];
-  if (typeof driveId === "string" && driveId.trim()) {
-    return `https://drive.google.com/thumbnail?id=${driveId.trim()}&sz=w1600`;
-  }
-
-  // Last resort: parse other link fields
+  // Collect all possible image sources, in priority order
   const candidates: unknown[] = [
+    record["URL de Imagen (auto-gen)"],
+    record["Drive ID (auto-gen)"],
     record["Enlace de Imagen Drive"],
     record["Imagen Drive"],
     record["Image URL"],
@@ -197,13 +203,23 @@ function mapRecord(record: SheetArticleRecord, index: number): Article | null {
   const imageCreditUrl =
     String(record["Credito Enlace"] ?? "").trim() || undefined;
 
+  // Use spreadsheet "Minutos" column if present, otherwise estimate from text
+  let readTime: string;
+  const minutosValue = record.Minutos;
+  if (minutosValue !== undefined && minutosValue !== null && minutosValue !== "") {
+    const mins = Number(minutosValue);
+    readTime = !Number.isNaN(mins) && mins > 0 ? `${mins} min` : estimateReadTime(body || String(record.Extracto ?? ""));
+  } else {
+    readTime = estimateReadTime(body || String(record.Extracto ?? ""));
+  }
+
   return {
     id: Number(record.ID ?? index + 1),
     slug: slugSource || `articulo-${index + 1}`,
     category: String(record.Categoria ?? "Noticias"),
     title,
     excerpt: String(record.Extracto ?? body.slice(0, 160) ?? "").trim(),
-    readTime: estimateReadTime(body || String(record.Extracto ?? "")),
+    readTime,
     date: formatSpanishDate(String(record.Fecha ?? "")) || "",
     author: String(record.Autor ?? "Equipo Cannaplan"),
     body: body || String(record.Extracto ?? "").trim(),

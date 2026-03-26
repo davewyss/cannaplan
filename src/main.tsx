@@ -6,6 +6,7 @@ import {
   Search,
   MapPin,
   Newspaper,
+  House,
   ChevronRight,
   ArrowLeft,
   Heart,
@@ -21,7 +22,7 @@ import "./styles.css";
 import { Article, getArticles, getFeaturedArticle } from "./contentApi";
 
 type TabKey = "home" | "articles" | "map" | "menu";
-type ScreenKey = "home" | "articles" | "map" | "menu" | "article-detail" | "place-detail" | "contact" | "about" | "donate" | "legal-help" | "news";
+type ScreenKey = "home" | "articles" | "map" | "menu" | "article-detail" | "place-detail" | "contact" | "about" | "donate" | "legal-help" | "news" | "search";
 
 type Place = {
   id: number;
@@ -53,26 +54,7 @@ function SectionTitle({ eyebrow, title, body }: { eyebrow: string; title: string
   return <div className="section-title"><div className="eyebrow">{eyebrow}</div><h2>{title}</h2>{body ? <p>{body}</p> : null}</div>;
 }
 
-function InicioTopBar({
-  searchValue = "",
-  onSearchChange,
-  onSearchToggle,
-  searchOpen = false,
-}: {
-  searchValue?: string;
-  onSearchChange?: (v: string) => void;
-  onSearchToggle?: () => void;
-  searchOpen?: boolean;
-}) {
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (searchOpen) {
-      const t = setTimeout(() => inputRef.current?.focus(), 60);
-      return () => clearTimeout(t);
-    }
-  }, [searchOpen]);
-
+function InicioTopBar({ onSearchClick }: { onSearchClick: () => void }) {
   return (
     <header className="inicio-topbar">
       <div className="inicio-topbar-left">
@@ -82,26 +64,63 @@ function InicioTopBar({
           <div className="inicio-topbar-tagline">Información y defensa del cannabis en España.</div>
         </div>
       </div>
-      <div className="inicio-topbar-right">
-        <div className={`inicio-topbar-search-input-wrap${searchOpen ? " open" : ""}`}>
-          <Search size={14} color="var(--cp-text)" />
-          <input
-            ref={inputRef}
-            className="inicio-topbar-search-input"
-            value={searchValue}
-            onChange={(e) => onSearchChange?.(e.target.value)}
-            placeholder="Buscar…"
-          />
-        </div>
-        <button type="button" className="inicio-topbar-search" aria-label="Buscar" onClick={onSearchToggle}>
-          <Search size={20} />
-        </button>
-      </div>
+      <button type="button" className="inicio-topbar-search" aria-label="Buscar" onClick={onSearchClick}>
+        <Search size={20} />
+      </button>
     </header>
   );
 }
 
 
+
+function SearchScreen({ articles, onOpenArticle, onBack }: { articles: Article[]; onOpenArticle: (a: Article) => void; onBack: () => void }) {
+  const [query, setQuery] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  const results = useMemo(
+    () => articles.filter((a) => matchesArticleSearch(a, query)),
+    [articles, query]
+  );
+
+  return (
+    <div style={{ display: "grid", gap: 20 }}>
+      <div className="search-screen-bar">
+        <button className="back-button" onClick={onBack}><ArrowLeft size={18} /></button>
+        <div className="search-screen-input-wrap">
+          <Search size={16} color="var(--cp-brand)" />
+          <input
+            ref={inputRef}
+            className="search-screen-input"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Buscar artículos…"
+          />
+          {query && (
+            <button className="search-clear-btn" onClick={() => { setQuery(""); inputRef.current?.focus(); }}>✕</button>
+          )}
+        </div>
+      </div>
+      {!query ? (
+        <div className="search-hint">Escribe para buscar entre todos los artículos.</div>
+      ) : results.length === 0 ? (
+        <div className="empty-search-state">No hay resultados para "{query}".</div>
+      ) : (
+        <div style={{ display: "grid", gap: 16 }}>
+          <div className="eyebrow">{results.length} resultado{results.length !== 1 ? "s" : ""}</div>
+          {results.map((article) => (
+            <motion.div key={article.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+              <ArticleCard article={article} onOpen={onOpenArticle} compact />
+            </motion.div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function matchesArticleSearch(article: Article, query: string): boolean {
   const normalized = query.trim().toLowerCase();
@@ -119,14 +138,16 @@ function matchesArticleSearch(article: Article, query: string): boolean {
     .includes(normalized);
 }
 
+function DriveImage({ src, alt, className }: { src?: string; alt: string; className: string }) {
+  const [failed, setFailed] = useState(false);
+  if (!src || failed) return <div className={`${className} article-card-image-fallback`} />;
+  return <img src={src} alt={alt} className={className} onError={() => setFailed(true)} />;
+}
+
 function ArticleCard({ article, onOpen, compact = false }: { article: Article; onOpen: (article: Article) => void; compact?: boolean }) {
   return (
     <div className="cp-card article-card-shell">
-      {article.imageUrl ? (
-        <img src={article.imageUrl} alt={article.title} className={`article-card-image ${compact ? "compact" : ""}`} />
-      ) : (
-        <div className={`article-card-image article-card-image-fallback ${compact ? "compact" : ""}`} />
-      )}
+      <DriveImage src={article.imageUrl} alt={article.title} className={`article-card-image${compact ? " compact" : ""}`} />
       <div className={`cp-card-inner ${compact ? "compact" : ""}`}>
         <div className="row between top-gap"><Badge>{article.category}</Badge><span className="meta">{article.readTime}</span></div>
         <div className="stack-sm">
@@ -158,11 +179,7 @@ function PlaceCard({ place, onOpen }: { place: Place; onOpen: (place: Place) => 
 function FeaturedStory({ article, onOpen }: { article: Article; onOpen: (article: Article) => void }) {
   return (
     <div className="cp-card" style={{ overflow: "hidden" }}>
-      {article.imageUrl ? (
-        <img src={article.imageUrl} alt={article.title} className="featured-image" />
-      ) : (
-        <div className="featured-image featured-image-fallback" />
-      )}
+      <DriveImage src={article.imageUrl} alt={article.title} className="featured-image" />
       <div className="featured-body">
         <div className="eyebrow">Artículo destacado</div>
         <h1>{article.title}</h1>
@@ -182,52 +199,31 @@ function HomeScreen({
   onOpenArticle,
   onOpenPlace,
   onGoToTab,
-  searchQuery,
-  onSearchChange,
-  onSearchToggle,
-  searchOpen,
+  onSearchClick,
 }: {
   featured: Article;
   articles: Article[];
   onOpenArticle: (article: Article) => void;
   onOpenPlace: (place: Place) => void;
   onGoToTab: (tab: TabKey) => void;
-  searchQuery: string;
-  onSearchChange: (value: string) => void;
-  onSearchToggle: () => void;
-  searchOpen: boolean;
+  onSearchClick: () => void;
 }) {
-  const filteredArticles = articles.filter((article) => matchesArticleSearch(article, searchQuery));
-  const featuredMatch =
-    filteredArticles.find((article) => article.id === featured.id) ??
-    filteredArticles.find((article) => article.featured) ??
-    filteredArticles[0] ??
-    featured;
-  const secondaryArticles = filteredArticles.filter((article) => article.id !== featuredMatch.id).slice(0, 6);
+  const secondaryArticles = articles.filter((a) => a.id !== featured.id).slice(0, 6);
 
   return (
     <div className="grid-home">
-      <InicioTopBar
-        searchValue={searchQuery}
-        onSearchChange={onSearchChange}
-        onSearchToggle={onSearchToggle}
-        searchOpen={searchOpen}
-      />
-      <FeaturedStory article={featuredMatch} onOpen={onOpenArticle} />
+      <InicioTopBar onSearchClick={onSearchClick} />
+      <FeaturedStory article={featured} onOpen={onOpenArticle} />
       <section className="grid-2-main">
         <div className="cp-card"><div className="cp-card-inner">
           <SectionTitle eyebrow="Últimas noticias" title="" />
-          {secondaryArticles.length > 0 ? (
-            <div style={{ display: "grid", gap: 16 }}>
-              {secondaryArticles.map((article, index) => (
-                <motion.div key={article.id} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.08 }}>
-                  <ArticleCard article={article} onOpen={onOpenArticle} compact />
-                </motion.div>
-              ))}
-            </div>
-          ) : (
-            <div className="empty-search-state">No encontré artículos para “{searchQuery}”.</div>
-          )}
+          <div style={{ display: "grid", gap: 16 }}>
+            {secondaryArticles.map((article, index) => (
+              <motion.div key={article.id} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.08 }}>
+                <ArticleCard article={article} onOpen={onOpenArticle} compact />
+              </motion.div>
+            ))}
+          </div>
         </div></div>
         <div style={{ display: "grid", gap: 16 }}>
           <div className="cp-card"><div className="cp-card-inner">
@@ -264,13 +260,13 @@ function MapScreen({ onOpenPlace }: { onOpenPlace: (place: Place) => void }) {
 
 function MenuScreen({ onOpen }: { onOpen: (target: "news" | "legal-help" | "contact" | "about" | "donate") => void }) {
   const items = [
-    { key: "news" as const, label: "Noticias", icon: Newspaper },
+    { key: "news" as const, label: "Articulos", icon: Newspaper },
     { key: "legal-help" as const, label: "Ayuda Legal", icon: Scale },
     { key: "contact" as const, label: "Contacto", icon: Send },
     { key: "about" as const, label: "Sobre Nosotros", icon: Info },
     { key: "donate" as const, label: "Donar Ahora", icon: Gift },
   ];
-  return <div style={{ display: "grid", gap: 24 }}><SectionTitle eyebrow="Menú" title="Más secciones" body="Un acceso simple a las áreas secundarias de la app, sin recargar la navegación principal." /><div style={{ display: "grid", gap: 12 }}>{items.map((item) => { const Icon = item.icon; return <button key={item.key} onClick={() => onOpen(item.key)} className="cp-card" style={{ padding: 22, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14, cursor: "pointer", textAlign: "left" }}><div style={{ display: "flex", alignItems: "center", gap: 14 }}><div style={{ height: 42, width: 42, borderRadius: 16, background: "var(--cp-mint)", display: "grid", placeItems: "center" }}><Icon size={18} color="var(--cp-brand)" /></div><div style={{ color: "var(--cp-navy)", fontWeight: 600, fontSize: 18 }}>{item.label}</div></div><ChevronRight size={18} color="var(--cp-navy)" /></button>; })}</div></div>;
+  return <div style={{ display: "grid", gap: 24 }}><div style={{ display: "grid", gap: 12 }}>{items.map((item) => { const Icon = item.icon; return <button key={item.key} onClick={() => onOpen(item.key)} className="cp-card" style={{ padding: 22, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14, cursor: "pointer", textAlign: "left" }}><div style={{ display: "flex", alignItems: "center", gap: 14 }}><div style={{ height: 42, width: 42, borderRadius: 16, background: "var(--cp-mint)", display: "grid", placeItems: "center" }}><Icon size={18} color="var(--cp-brand)" /></div><div style={{ color: "var(--cp-navy)", fontWeight: 600, fontSize: 18 }}>{item.label}</div></div><ChevronRight size={18} color="var(--cp-navy)" /></button>; })}</div></div>;
 }
 
 function SimpleInfoPage({ eyebrow, title, body, icon, onBack }: { eyebrow: string; title: string; body: string; icon: React.ReactNode; onBack: () => void }) {
@@ -282,7 +278,7 @@ function ContactScreen({ onBack }: { onBack: () => void }) {
 }
 
 function ArticleDetailScreen({ article, onBack }: { article: Article; onBack: () => void }) {
-  return <div style={{ display: "grid", gap: 24 }}><div className="back-row"><button onClick={onBack} className="back-button"><ArrowLeft size={18} /></button></div><div className="cp-card" style={{ overflow: "hidden" }}>{article.imageUrl ? <img src={article.imageUrl} alt={article.title} className="article-detail-image" /> : <div className="article-detail-image article-detail-image-fallback" />}{article.imageCredit ? <div style={{ padding: "5px 18px 0", textAlign: "right" }}>{article.imageCreditUrl ? <a href={article.imageCreditUrl} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "Poppins, sans-serif", fontSize: 11, color: "#b0b8c1", letterSpacing: "0.01em", textDecoration: "none" }}>{article.imageCredit}</a> : <span style={{ fontFamily: "Poppins, sans-serif", fontSize: 11, color: "#b0b8c1", letterSpacing: "0.01em" }}>{article.imageCredit}</span>}</div> : null}<div style={{ padding: 40, display: "grid", gap: 20 }}><div className="row wrap gap-sm" style={{ alignItems: "center", gap: 10 }}><Badge>{article.category}</Badge><span className="meta">{article.date}</span><span className="meta">{article.readTime}</span></div><h1 style={{ margin: 0, maxWidth: 860, color: "var(--cp-navy)", fontWeight: 700, fontSize: 44, lineHeight: 1.08 }}>{article.title}</h1><p style={{ margin: 0, maxWidth: 860, fontSize: 17, lineHeight: 1.9 }}>{article.body}</p><div className="row wrap gap-sm"><Button primary><Heart size={14} style={{ marginRight: 8, verticalAlign: "middle" }} />Guardar</Button><Button><ExternalLink size={14} style={{ marginRight: 8, verticalAlign: "middle" }} />Compartir</Button></div></div></div></div>;
+  return <div style={{ display: "grid", gap: 24 }}><div className="back-row"><button onClick={onBack} className="back-button"><ArrowLeft size={18} /></button></div><div className="cp-card" style={{ overflow: "hidden" }}><DriveImage src={article.imageUrl} alt={article.title} className="article-detail-image" />{article.imageCredit ? <div style={{ padding: "5px 18px 0", textAlign: "right" }}>{article.imageCreditUrl ? <a href={article.imageCreditUrl} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "Poppins, sans-serif", fontSize: 11, color: "#b0b8c1", letterSpacing: "0.01em", textDecoration: "none" }}>{article.imageCredit}</a> : <span style={{ fontFamily: "Poppins, sans-serif", fontSize: 11, color: "#b0b8c1", letterSpacing: "0.01em" }}>{article.imageCredit}</span>}</div> : null}<div style={{ padding: 40, display: "grid", gap: 20 }}><div className="row wrap gap-sm" style={{ alignItems: "center", gap: 10 }}><Badge>{article.category}</Badge><span className="meta">{article.date}</span><span className="meta">{article.readTime}</span></div><h1 style={{ margin: 0, maxWidth: 860, color: "var(--cp-navy)", fontWeight: 700, fontSize: 44, lineHeight: 1.08 }}>{article.title}</h1><p style={{ margin: 0, maxWidth: 860, fontSize: 17, lineHeight: 1.9 }}>{article.body}</p><div className="row wrap gap-sm"><Button primary><Heart size={14} style={{ marginRight: 8, verticalAlign: "middle" }} />Guardar</Button><Button><ExternalLink size={14} style={{ marginRight: 8, verticalAlign: "middle" }} />Compartir</Button></div></div></div></div>;
 }
 
 function PlaceDetailScreen({ place, onBack }: { place: Place; onBack: () => void }) {
@@ -291,7 +287,7 @@ function PlaceDetailScreen({ place, onBack }: { place: Place; onBack: () => void
 
 function BottomNav({ current, onChange }: { current: TabKey; onChange: (v: TabKey) => void }) {
   const items = [
-    { key: "home" as TabKey, label: "Inicio", icon: Newspaper },
+    { key: "home" as TabKey, label: "Inicio", icon: House },
     { key: "articles" as TabKey, label: "Artículos", icon: Newspaper },
     { key: "map" as TabKey, label: "Mapa", icon: MapPin },
     { key: "menu" as TabKey, label: "Menú", icon: MenuIcon },
@@ -307,8 +303,6 @@ function App() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -339,21 +333,14 @@ function App() {
   const openArticle = (article: Article) => { setSelectedArticle(article); setScreen("article-detail"); };
   const openPlace = (place: Place) => { setSelectedPlace(place); setScreen("place-detail"); };
   const goBackToTab = () => setScreen(currentTab === "menu" ? "home" : currentTab);
-  const handleSearchToggle = () => {
-    setSearchOpen((prev) => {
-      if (prev) setSearchQuery("");
-      return !prev;
-    });
-  };
-  const handleSearchChange = (value: string) => {
-    setSearchQuery(value);
-  };
+  const openSearch = () => setScreen("search");
 
   const content = useMemo(() => {
     if (loading) return <div className="loading-box">Cargando ARTICULOS desde Google Sheets...</div>;
-    if (error) return <div style={{ display: "grid", gap: 16 }}><div className="error-box">No pude leer la hoja en vivo. La app sigue funcionando, pero revisa `VITE_PUBLIC_SHEETS_URL` y tu Apps Script.</div><HomeScreen featured={featured} articles={articles} onOpenArticle={openArticle} onOpenPlace={openPlace} onGoToTab={openTab} searchQuery={searchQuery} onSearchChange={handleSearchChange} onSearchToggle={handleSearchToggle} searchOpen={searchOpen} /></div>;
+    if (error) return <div style={{ display: "grid", gap: 16 }}><div className="error-box">No pude leer la hoja en vivo. La app sigue funcionando, pero revisa `VITE_PUBLIC_SHEETS_URL` y tu Apps Script.</div><HomeScreen featured={featured} articles={articles} onOpenArticle={openArticle} onOpenPlace={openPlace} onGoToTab={openTab} onSearchClick={openSearch} /></div>;
 
     switch (screen) {
+      case "search": return <SearchScreen articles={articles} onOpenArticle={openArticle} onBack={goBackToTab} />;
       case "article-detail": return selectedArticle ? <ArticleDetailScreen article={selectedArticle} onBack={goBackToTab} /> : null;
       case "place-detail": return selectedPlace ? <PlaceDetailScreen place={selectedPlace} onBack={goBackToTab} /> : null;
       case "contact": return <ContactScreen onBack={() => setScreen("home")} />;
@@ -364,7 +351,7 @@ function App() {
       case "articles": return <ArticlesScreen articles={articles} onOpenArticle={openArticle} />;
       case "map": return <MapScreen onOpenPlace={openPlace} />;
       case "menu": return <MenuScreen onOpen={(target) => setScreen(target)} />;
-      default: return <HomeScreen featured={featured} articles={articles} onOpenArticle={openArticle} onOpenPlace={openPlace} onGoToTab={openTab} searchQuery={searchQuery} onSearchChange={handleSearchChange} onSearchToggle={handleSearchToggle} searchOpen={searchOpen} />;
+      default: return <HomeScreen featured={featured} articles={articles} onOpenArticle={openArticle} onOpenPlace={openPlace} onGoToTab={openTab} onSearchClick={openSearch} />;
     }
   }, [loading, error, screen, selectedArticle, selectedPlace, articles, featured]);
 
