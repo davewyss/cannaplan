@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Cannaplan app
 
 Refactored Vite + React project for the Cannaplan app.
@@ -15,7 +14,6 @@ Refactored Vite + React project for the Cannaplan app.
 
 ## Run locally
 
-=======
 
 # Cannaplan V2 — ARTICULOS sheet connection
 
@@ -57,13 +55,11 @@ The endpoint should return JSON like:
 ```
 
 ## 3. Run it
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367
 ```bash
 npm install
 npm run dev
 ```
 
-<<<<<<< HEAD
 ## Build
 
 ```bash
@@ -78,10 +74,8 @@ Set your Google Apps Script endpoint in `.env`:
 ```bash
 VITE_PUBLIC_SHEETS_URL=your-script-url-here
 ```
-=======
 ## Notes
 - `Destacado: true` is used for the top featured story on Inicio.
 - `Visibilidad: false` hides records.
 - if no live data loads, the app falls back to mock content so the UI still works.
 - later, this same mapping can be moved to a Sheets → Firestore sync job.
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367

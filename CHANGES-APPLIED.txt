@@ -11,8 +11,5 @@ Image field support:
 - Imagen
 - imageUrl
 - Imagen Previsual (auto-gen)
-<<<<<<< HEAD
 
 Updated VITE_PUBLIC_SHEETS_URL to latest Apps Script deployment: AKfycbyYI-2WrNGOEkrsvL16wa3ABDzBgov0TOILLJxfAbV2Cn_zr9f0T_kg5elPmioXk8wr/exec
-=======
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367

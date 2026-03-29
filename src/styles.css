@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367
 :root {
   --cp-brand: #1d8867;
   --cp-light: #a8dadc;
@@ -9,7 +6,6 @@
   --cp-text: #495057;
   --cp-surface: #f7fafb;
   --cp-mint: #ecf8f4;
-<<<<<<< HEAD
   --cp-line: rgba(40, 45, 72, 0.08);
 }
 
@@ -24,18 +20,15 @@ body,
   margin: 0;
 }
 
-=======
   --cp-line: rgba(40,45,72,0.08);
 }
 * { box-sizing: border-box; }
 html, body, #root { min-height: 100%; margin: 0; }
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367
 body {
   background: linear-gradient(180deg, #fffcfc 0%, #f7fafb 45%, #f1f8f5 100%);
   color: var(--cp-text);
   font-family: Georgia, serif;
 }
-<<<<<<< HEAD
 
 button,
 input,
@@ -103,7 +96,6 @@ img {
   gap: 12px;
 }
 
-=======
 button, input, textarea, h1, h2, h3, h4, nav, .meta, .eyebrow {
   font-family: Poppins, sans-serif;
 }
@@ -118,7 +110,6 @@ input, textarea { outline: none; }
 }
 .cp-card-inner { padding: 24px; display: grid; gap: 16px; }
 .cp-card-inner.compact { padding: 20px; gap: 12px; }
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367
 .cp-badge {
   display: inline-flex;
   align-items: center;
@@ -128,7 +119,6 @@ input, textarea { outline: none; }
   background: var(--cp-mint);
   color: var(--cp-brand);
 }
-<<<<<<< HEAD
 
 .cp-badge.dark {
   background: var(--cp-navy);
@@ -391,7 +381,6 @@ input, textarea { outline: none; }
   margin: 0;
   line-height: 1.8;
 }
-=======
 .cp-badge.dark { background: var(--cp-navy); color: white; }
 .cp-button {
   height: 44px; padding: 0 16px; border-radius: 18px; border: 1px solid var(--cp-line);
@@ -462,7 +451,6 @@ input, textarea { outline: none; }
   .section-title h2 { font-size: 28px; }
 }
 
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367
 
 .inicio-topbar {
   display: flex;
@@ -470,7 +458,6 @@ input, textarea { outline: none; }
   justify-content: space-between;
   gap: 16px;
   padding: 14px 16px;
-<<<<<<< HEAD
   background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(0, 0, 0, 0.04);
@@ -478,7 +465,6 @@ input, textarea { outline: none; }
   box-shadow: 0 10px 30px rgba(40, 45, 72, 0.04);
 }
 
-=======
   margin-bottom: 4px;
   background: rgba(255,255,255,0.88);
   backdrop-filter: blur(12px);
@@ -486,17 +472,13 @@ input, textarea { outline: none; }
   border-radius: 24px;
   box-shadow: 0 10px 30px rgba(40,45,72,0.04);
 }
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367
 .inicio-topbar-left {
   display: flex;
   align-items: center;
   gap: 10px;
   min-width: 0;
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367
 .inicio-topbar-logo {
   width: 28px;
   height: 28px;
@@ -504,20 +486,16 @@ input, textarea { outline: none; }
   display: block;
   flex-shrink: 0;
 }
-<<<<<<< HEAD
 
 .inicio-topbar-title {
   color: var(--cp-navy);
-=======
 .inicio-topbar-title {
   color: var(--cp-navy);
   font-family: Poppins, sans-serif;
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367
   font-size: 20px;
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.02em;
-<<<<<<< HEAD
 }
 
 .inicio-topbar-tagline {
@@ -529,7 +507,6 @@ input, textarea { outline: none; }
   margin-top: 3px;
 }
 
-=======
   white-space: nowrap;
 }
 .inicio-topbar-tagline {
@@ -542,7 +519,6 @@ input, textarea { outline: none; }
   white-space: nowrap;
   margin-top: 3px;
 }
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367
 .inicio-topbar-search {
   width: 40px;
   height: 40px;
@@ -555,7 +531,6 @@ input, textarea { outline: none; }
   cursor: pointer;
   flex-shrink: 0;
 }
-<<<<<<< HEAD
 
 .inicio-topbar-search:hover {
   background: rgba(40, 45, 72, 0.05);
@@ -623,7 +598,6 @@ input, textarea { outline: none; }
   background: linear-gradient(135deg, #f3f1eb 0%, #e8f6f8 52%, #f2fbf8 100%);
 }
 
-=======
 .inicio-topbar-search:hover {
   background: rgba(40,45,72,0.05);
 }
@@ -662,26 +636,21 @@ input, textarea { outline: none; }
 .article-detail-image {
   height: 320px;
 }
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367
 .search-screen-bar {
   display: flex;
   align-items: center;
   gap: 12px;
 }
-<<<<<<< HEAD
 
 .search-screen-input-wrap,
 .guide-search-row {
-=======
 .search-screen-input-wrap {
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367
   flex: 1;
   display: flex;
   align-items: center;
   gap: 10px;
   height: 52px;
   border-radius: 999px;
-<<<<<<< HEAD
   background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(0, 0, 0, 0.06);
   box-shadow: 0 4px 16px rgba(40, 45, 72, 0.06);
@@ -692,23 +661,19 @@ input, textarea { outline: none; }
 .guide-search-input,
 .field-input,
 .field-textarea {
-=======
   background: rgba(255,255,255,0.95);
   border: 1px solid rgba(0,0,0,0.06);
   box-shadow: 0 4px 16px rgba(40,45,72,0.06);
   padding: 0 18px;
 }
 .search-screen-input {
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367
   flex: 1;
   border: none;
   background: transparent;
   color: var(--cp-navy);
-<<<<<<< HEAD
   font-size: 16px;
 }
 
-=======
   font-family: Poppins, sans-serif;
   font-size: 16px;
   outline: none;
@@ -716,29 +681,24 @@ input, textarea { outline: none; }
 .search-screen-input::placeholder {
   color: #b0b8c1;
 }
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367
 .search-clear-btn {
   border: none;
   background: none;
   color: var(--cp-text);
   font-size: 18px;
   cursor: pointer;
-<<<<<<< HEAD
 }
 
-=======
   line-height: 1;
   padding: 0 2px;
   display: grid;
   place-items: center;
 }
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367
 .search-hint {
   padding: 20px;
   border-radius: 22px;
   background: var(--cp-mint);
   color: var(--cp-brand);
-<<<<<<< HEAD
   font-size: 14px;
   text-align: center;
 }
@@ -1233,7 +1193,6 @@ input, textarea { outline: none; }
     font-size: 9px;
   }
 
-=======
   font-family: Poppins, sans-serif;
   font-size: 14px;
   text-align: center;
@@ -1247,12 +1206,10 @@ input, textarea { outline: none; }
 }
 @media (max-width: 640px) {
   .article-card-image,
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367
   .featured-image,
   .article-detail-image {
     height: 220px;
   }
-<<<<<<< HEAD
 
   .featured-body,
   .article-detail-body,
@@ -1362,6 +1319,4 @@ input, textarea { outline: none; }
   display: block;
   margin: 16px auto;
   border-radius: 12px;
-=======
->>>>>>> d61e1152bc372a0ca83b51e7b7eafab73c5db367
 }

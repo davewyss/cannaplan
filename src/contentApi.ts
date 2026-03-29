@@ -20,6 +20,7 @@ const fallbackArticles: Article[] = [
     imageUrl: undefined,
     imageCredit: undefined,
     imageCreditUrl: undefined,
+    tags: ["guía", "cannabis", "españa"],
   },
   {
     id: 2,
@@ -37,6 +38,7 @@ const fallbackArticles: Article[] = [
     imageUrl: undefined,
     imageCredit: undefined,
     imageCreditUrl: undefined,
+    tags: ["recursos", "apoyo", "información"],
   },
 ];
 
@@ -203,6 +205,10 @@ function mapRecord(record: SheetArticleRecord, index: number): Article | null {
     imageUrl: getRecordImageUrl(record),
     imageCredit,
     imageCreditUrl,
+    tags: String(record.Tags ?? record.Etiquetas ?? "")
+      .split(/[,;|]/)
+      .map((value) => value.trim())
+      .filter(Boolean),
   };
 }
 
