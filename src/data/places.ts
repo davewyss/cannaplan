@@ -1,0 +1,33 @@
+import type { Place } from "../types";
+
+export const categories = ["Educación", "Noticias", "Recursos", "Asociaciones", "Salud"];
+
+export const mapPlaces: Place[] = [
+  {
+    id: 1,
+    name: "Asociación Centro",
+    type: "Asociación",
+    area: "Madrid Centro",
+    description: "Espacio informativo y comunitario con enfoque responsable.",
+    address: "Centro, Madrid",
+    hours: "L–V · 10:00–19:00",
+  },
+  {
+    id: 2,
+    name: "Recurso Retiro",
+    type: "Recurso",
+    area: "Retiro",
+    description: "Punto de referencia con información práctica y actualizada.",
+    address: "Retiro, Madrid",
+    hours: "L–S · 11:00–20:00",
+  },
+  {
+    id: 3,
+    name: "Guía Chamberí",
+    type: "Educación",
+    area: "Chamberí",
+    description: "Contenido útil y orientación pensada para el día a día.",
+    address: "Chamberí, Madrid",
+    hours: "Cita previa",
+  },
+];

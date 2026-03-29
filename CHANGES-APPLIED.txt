@@ -1,0 +1,15 @@
+Added:
+- Functional search on Inicio top bar and search panel
+- Featured section eyebrow now says "Artículo destacado"
+- Article images now load from the Google Drive image URL field when present
+- Article cards, featured story, and article detail screens all display images
+
+Image field support:
+- Enlace de Imagen Drive
+- Imagen Drive
+- Image URL
+- Imagen
+- imageUrl
+- Imagen Previsual (auto-gen)
+
+Updated VITE_PUBLIC_SHEETS_URL to latest Apps Script deployment: AKfycbyYI-2WrNGOEkrsvL16wa3ABDzBgov0TOILLJxfAbV2Cn_zr9f0T_kg5elPmioXk8wr/exec
