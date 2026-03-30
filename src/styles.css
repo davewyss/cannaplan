@@ -1038,6 +1038,30 @@ input, textarea { outline: none; }
   top: 24px;
 }
 
+/* Inline ads: hidden on desktop, shown on mobile */
+.articles-inline-ad-wrap {
+  display: none;
+  text-decoration: none;
+  color: inherit;
+}
+
+.articles-inline-ad {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: white;
+  border: 1px solid var(--cp-line);
+}
+
+.articles-inline-ad-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
 .back-row {
   display: flex;
   align-items: center;
@@ -1164,6 +1188,14 @@ input, textarea { outline: none; }
   .article-detail-layout,
   .articles-layout {
     grid-template-columns: 1fr;
+  }
+
+  .articles-sidebar {
+    display: none;
+  }
+
+  .articles-inline-ad-wrap {
+    display: block;
   }
 
   .featured-body h1 {
@@ -1343,4 +1375,62 @@ input, textarea { outline: none; }
   display: block;
   margin: 16px auto;
   border-radius: 12px;
+}
+
+.align-left,
+.align-left p,
+.align-left h1,
+.align-left h2,
+.align-left h3,
+.align-left h4,
+.align-left span {
+  text-align: left !important;
+}
+
+.align-center,
+.align-center p,
+.align-center h1,
+.align-center h2,
+.align-center h3,
+.align-center h4,
+.align-center span {
+  text-align: center !important;
+}
+
+.align-right,
+.align-right p,
+.align-right h1,
+.align-right h2,
+.align-right h3,
+.align-right h4,
+.align-right span {
+  text-align: right !important;
+}
+
+.align-justify,
+.align-justify p,
+.align-justify h1,
+.align-justify h2,
+.align-justify h3,
+.align-justify h4,
+.align-justify span {
+  text-align: justify !important;
+}
+
+.doc-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+.doc-image.img-medium img {
+  width: 50%;
+  max-width: 50%;
+}
+
+.doc-image.img-profile img {
+  width: 120px;
+  height: 120px;
+  max-width: 120px;
+  object-fit: cover;
+  border-radius: 50%;
 }

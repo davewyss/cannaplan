@@ -28,7 +28,11 @@ export function HomeScreen({
   onSearchClick: () => void;
 }) {
   const secondaryArticles = useMemo(
-    () => articles.filter((article) => article.id !== featured.id).slice(0, 6),
+    () =>
+      articles
+        .filter((article) => article.id !== featured.id)
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .slice(0, 6),
     [articles, featured.id],
   );
 
