@@ -1,46 +1,58 @@
-import { ArrowLeft, Send } from "lucide-react";
-import { Button } from "../components/Button";
-import { SectionTitle } from "../components/SectionTitle";
+import { useEffect, useState } from "react";
+import { getDocPageHtml } from "../contentApi";
+import { Spinner } from "../components/Spinner";
+
+const CONTACT_DOC_ID = (import.meta.env.VITE_CONTACT_DOC_ID as string | undefined) ?? "16Slf98nAp6GefxzUDouQWuThYiJ_IdmQfzydH3OJjtw";
 
 export default function ContactScreen({ onBack }: { onBack: () => void }) {
+  const [html, setHtml] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let active = true;
+    async function load() {
+      try {
+        setLoading(true);
+        setError("");
+        const nextHtml = await getDocPageHtml(CONTACT_DOC_ID ?? "");
+        if (!active) return;
+        setHtml(nextHtml);
+      } catch (err) {
+        if (!active) return;
+        setError(err instanceof Error ? err.message : "No se pudo cargar la página.");
+      } finally {
+        if (active) setLoading(false);
+      }
+    }
+    load();
+    return () => { active = false; };
+  }, []);
+
   return (
     <div className="screen-grid">
-      <div className="back-row">
-        <button onClick={onBack} className="back-button">
-          <ArrowLeft size={18} />
-        </button>
-      </div>
-
-      <SectionTitle
-        eyebrow="Contacto"
-        title="Escríbenos"
-        body="Una entrada clara para correcciones, sugerencias o nuevas ideas editoriales."
-      />
-
-      <div className="grid-2-main">
-        <div className="cp-card">
-          <div className="cp-card-inner">
-            <h3 className="subsection-title">Qué puedes enviar</h3>
-            <p className="body-copy">Nuevos recursos, cambios en una ficha, ideas editoriales o comentarios generales.</p>
-            {["Sugerir un recurso", "Corregir una ficha", "Proponer un artículo", "Enviar comentarios"].map((item) => (
-              <div key={item} className="pill-row">
-                {item}
-              </div>
-            ))}
+      <div className="static-page-wrap">
+        {loading ? (
+          <Spinner />
+        ) : error ? (
+          <div className="cp-card"><div className="cp-card-inner"><p className="static-page-status">{error}</p></div></div>
+        ) : (
+          <div className="cp-card">
+            <div className="cp-card-inner">
+              <div className="article-content" dangerouslySetInnerHTML={{ __html: html }} />
+            </div>
           </div>
-        </div>
-
-        <div className="cp-card">
-          <div className="cp-card-inner">
-            {["Nombre", "Email", "Asunto"].map((placeholder) => (
-              <input key={placeholder} placeholder={placeholder} className="field-input" />
-            ))}
-            <textarea placeholder="Cuéntanos un poco más..." className="field-textarea" />
-            <Button primary>
-              <Send size={14} />
-              <span>Enviar</span>
-            </Button>
-          </div>
+        )}
+        <div className="contact-form-wrap">
+          <iframe
+            title="Contact Form"
+            src="https://plugins.crisp.chat/urn:crisp.im:contact-form:0/contact/2c23d7c0-c6dd-42f4-b798-6f17a0f41dcc"
+            referrerPolicy="origin"
+            sandbox="allow-forms allow-popups allow-scripts allow-same-origin"
+            width="100%"
+            height="600px"
+            frameBorder="0"
+          />
         </div>
       </div>
     </div>
