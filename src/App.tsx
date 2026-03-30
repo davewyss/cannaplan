@@ -18,6 +18,7 @@ const ArticleDetailScreen = lazy(() => import("./screens/ArticleDetailScreen"));
 const PlaceDetailScreen = lazy(() => import("./screens/PlaceDetailScreen"));
 const ContactScreen = lazy(() => import("./screens/ContactScreen"));
 const SimpleInfoPage = lazy(() => import("./screens/SimpleInfoPage"));
+const AyudaLegalScreen = lazy(() => import("./screens/AyudaLegalScreen"));
 const SobreNosotrosScreen = lazy(() => import("./screens/SobreNosotrosScreen"));
 const DonarScreen = lazy(() => import("./screens/DonarScreen"));
 const PrivacyScreen = lazy(() => import("./screens/PrivacyScreen"));
@@ -159,8 +160,10 @@ export default function App() {
         content = <DonarScreen onBack={() => setScreen("menu")} />;
         break;
       case "legal-help":
+        content = <AyudaLegalScreen onBack={() => setScreen("menu")} />;
+        break;
       case "news": {
-        const info = menuInfo[screen];
+        const info = menuInfo["news"];
         content = <SimpleInfoPage {...info} onBack={() => setScreen("menu")} />;
         break;
       }
@@ -193,7 +196,7 @@ export default function App() {
         <Suspense fallback={<ScreenLoader />}>{content}</Suspense>
       </main>
       {screen === "article-detail" ? (
-        <ArticleBottomBar onBack={goBackToMain} onMenu={() => setScreen("menu")} />
+        <ArticleBottomBar onBack={goBackToMain} onMenu={() => setScreen("menu")} article={selectedArticle} />
       ) : isStatic ? (
         <StaticBottomBar
           onBack={goBackToMain}

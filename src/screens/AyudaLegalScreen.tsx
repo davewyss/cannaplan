@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { getDocPageHtml } from "../contentApi";
 import { Spinner } from "../components/Spinner";
 
-const DONAR_DOC_ID = (import.meta.env.VITE_DONAR_DOC_ID as string | undefined) ?? "1JpKzsgjkZn7SHdegchs89gcN9E0nEjcML3h8DWbMcAQ";
+const LEGAL_HELP_DOC_ID = (import.meta.env.VITE_LEGAL_HELP_DOC_ID as string | undefined) ?? "1y2vRQfoX1Tf6lPrMcxe8ED_MfXXC9Mh2RCH0vch7Smg";
 
-export default function DonarScreen({ onBack }: { onBack: () => void }) {
+export default function AyudaLegalScreen({ onBack }: { onBack: () => void }) {
   const [html, setHtml] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -16,7 +16,7 @@ export default function DonarScreen({ onBack }: { onBack: () => void }) {
       try {
         setLoading(true);
         setError("");
-        const nextHtml = await getDocPageHtml(DONAR_DOC_ID ?? "");
+        const nextHtml = await getDocPageHtml(LEGAL_HELP_DOC_ID ?? "");
         if (!active) return;
         setHtml(nextHtml);
       } catch (err) {
@@ -28,9 +28,7 @@ export default function DonarScreen({ onBack }: { onBack: () => void }) {
     }
 
     load();
-    return () => {
-      active = false;
-    };
+    return () => { active = false; };
   }, []);
 
   return (
@@ -44,10 +42,16 @@ export default function DonarScreen({ onBack }: { onBack: () => void }) {
           <div className="cp-card">
             <div className="cp-card-inner">
               <div className="article-content" dangerouslySetInnerHTML={{ __html: html }} />
-              <div className="static-sub-section donate-button-wrap">
-                <a href="https://www.gofundme.com" target="_blank" rel="noopener noreferrer" className="cp-button primary">
-                  Donar ahora
-                </a>
+              <div className="static-sub-section contact-form-wrap">
+                <iframe
+                  title="Formulario de Contacto"
+                  src="https://plugins.crisp.chat/urn:crisp.im:contact-form:0/contact/2c23d7c0-c6dd-42f4-b798-6f17a0f41dcc"
+                  referrerPolicy="origin"
+                  sandbox="allow-forms allow-popups allow-scripts allow-same-origin"
+                  width="100%"
+                  height="600px"
+                  frameBorder="0"
+                />
               </div>
             </div>
           </div>
