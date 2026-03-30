@@ -68,6 +68,7 @@ export type Article = {
   excerpt: string;
   readTime: string;
   date: string;
+  isoDate: string;
   author: string;
   body: string;
   featured: boolean;

@@ -37,7 +37,7 @@ export default function ArticlesScreen({
 
   // Sort articles by date, most recent first
   const sortedArticles = [...articles].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    (a, b) => b.isoDate.localeCompare(a.isoDate)
   );
 
   type Item =

@@ -31,7 +31,7 @@ export function HomeScreen({
     () =>
       articles
         .filter((article) => article.id !== featured.id)
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .sort((a, b) => b.isoDate.localeCompare(a.isoDate))
         .slice(0, 6),
     [articles, featured.id],
   );

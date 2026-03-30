@@ -14,6 +14,7 @@ const fallbackArticles: Article[] = [
       "Información útil, directa y serena para personas que buscan orientación sin ruido ni estigma.",
     readTime: "5 min",
     date: "24 marzo 2026",
+    isoDate: "2026-03-24",
     author: "Equipo Cannaplan",
     body: "Contenido provisional mientras se conecta la hoja ARTICULOS.",
     featured: true,
@@ -31,6 +32,7 @@ const fallbackArticles: Article[] = [
       "Un enfoque accesible para navegar un tema complejo con criterio, calma y confianza.",
     readTime: "4 min",
     date: "22 marzo 2026",
+    isoDate: "2026-03-22",
     author: "Equipo Cannaplan",
     body:
       "El listado real llegará desde Google Sheets usando el endpoint público del proyecto.",
@@ -191,6 +193,8 @@ function mapRecord(record: SheetArticleRecord, index: number): Article | null {
     }
   }
 
+  const isoDate = String(record.Fecha ?? "");
+
   return {
     id: Number(record.ID ?? index + 1),
     slug: slug || `articulo-${index + 1}`,
@@ -198,7 +202,8 @@ function mapRecord(record: SheetArticleRecord, index: number): Article | null {
     title,
     excerpt: String(record.Extracto ?? body.slice(0, 160) ?? "").trim(),
     readTime,
-    date: formatSpanishDate(String(record.Fecha ?? "")),
+    date: formatSpanishDate(isoDate),
+    isoDate,
     author: String(record.Autor ?? "Equipo Cannaplan"),
     body: body || String(record.Extracto ?? "").trim(),
     featured: truthy(record.Destacado),
@@ -450,6 +455,23 @@ function processDocHtml(html: string): string {
       }
       el.remove();
       continue;
+    }
+
+    // ── Detect alignment from inline styles (e.g., style="text-align: center") ──
+    const style = el.getAttribute("style") || "";
+    const alignMatch = style.match(/text-align:\s*(left|center|right|justify)/i);
+    if (alignMatch) {
+      const alignValue = alignMatch[1].toLowerCase();
+      el.classList.add(`align-${alignValue}`);
+      // Remove the inline text-align style, keep other styles
+      const newStyle = style
+        .replace(/text-align:\s*(left|center|right|justify);?/i, "")
+        .trim();
+      if (newStyle) {
+        el.setAttribute("style", newStyle);
+      } else {
+        el.removeAttribute("style");
+      }
     }
   }
 
