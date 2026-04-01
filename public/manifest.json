@@ -1,0 +1,58 @@
+{
+  "background_color": "#282d48",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Cannaplan España",
+  "orientation": "natural",
+  "scope": "/app.cannaplan.org",
+  "short_name": "Cannaplan",
+  "start_url": "/app.cannaplan.org",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "https://app.cannaplan.org/favicon.svg",
+      "type": "image/svg+xml",
+      "isSquare": false,
+      "isPng": false,
+      "isWebp": false,
+      "isJpg": false,
+      "width": 0,
+      "is512x512": false,
+      "is256x256": false,
+      "is192x192": false
+    },
+    {
+      "src": "https://app.cannaplan.org/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180",
+      "isSquare": true,
+      "isPng": true,
+      "isWebp": false,
+      "isJpg": false,
+      "width": 180,
+      "is512x512": false,
+      "is256x256": false,
+      "is192x192": false
+    },
+    {
+      "src": "https://app.cannaplan.org/favicon.ico",
+      "type": "image/x-icon",
+      "isSquare": false,
+      "isPng": false,
+      "isWebp": false,
+      "isJpg": false,
+      "width": 0,
+      "is512x512": false,
+      "is256x256": false,
+      "is192x192": false
+    }
+  ],
+  "id": "CP-ES",
+  "description": "Cannaplan te ayuda a descubrir artículos, recursos e información de forma clara, rápida y visual. Explora contenidos destacados, encuentra temas de interés y accede fácilmente a una experiencia sencilla e intuitiva, pensada para el día a día.",
+  "lang": "es",
+  "categories": [
+    "education",
+    "lifestyle",
+    "news"
+  ]
+}
