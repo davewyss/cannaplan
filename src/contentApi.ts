@@ -2,7 +2,7 @@ import type { Ad, Article, Place, Recurso, SheetArticleRecord } from "./types";
 
 const baseUrl =
   (import.meta.env.VITE_PUBLIC_SHEETS_URL as string | undefined) ??
-  "https://script.google.com/macros/s/AKfycbyeHVnioLdNVwu8CYk3hO1zjlLRmP6jKYWxLLlhZTVyoDREtIfj_CM-_EEcUQtdj8Rs/exec";
+  "https://script.google.com/macros/s/AKfycbxGIAcSERkt9wIyPEJWUn7Zeo4UyaKNV0aW6-xK2ctm7SZmHfuihhaxm0ZBUsMAtEX3/exec";
 
 const fallbackArticles: Article[] = [
   {

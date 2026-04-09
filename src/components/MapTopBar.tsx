@@ -15,7 +15,7 @@ export function MapTopBar({
     <header className="inicio-topbar">
       <div className="inicio-topbar-left">
         <img src="/cannaplan-logo.png" alt="Cannaplan" className="inicio-topbar-logo" width="28" height="28" />
-        <div className="inicio-topbar-title">Guía</div>
+        <div className="inicio-topbar-title">Guía Cannábica</div>
       </div>
       <div style={{ display: "flex", gap: "4px" }}>
         <button

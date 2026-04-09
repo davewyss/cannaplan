@@ -16,7 +16,7 @@ function BottomNavComponent({ activeTab, onChange }: { activeTab: TabKey; onChan
         {items.map((item) => {
           const Icon = item.icon;
           return (
-            <button key={item.key} onClick={() => onChange(item.key)} className={activeTab === item.key ? "active" : ""}>
+            <button key={item.key} onClick={() => onChange(item.key)}>
               <Icon size={18} />
               <span>{item.label}</span>
             </button>
