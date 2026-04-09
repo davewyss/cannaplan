@@ -1,7 +1,5 @@
-import { MapPin } from "lucide-react";
 import { useMemo } from "react";
-import { mapPlaces } from "../data/places";
-import type { Ad, Article, Place, TabKey } from "../types";
+import type { Ad, Article, Place, Recurso, TabKey } from "../types";
 import { AdSidebar } from "../components/AdSidebar";
 import { ArticleCard } from "../components/ArticleCard";
 import { Button } from "../components/Button";
@@ -9,11 +7,13 @@ import { FeaturedStory } from "../components/FeaturedStory";
 import { InicioTopBar } from "../components/InicioTopBar";
 import { PlaceCard } from "../components/PlaceCard";
 import { SectionTitle } from "../components/SectionTitle";
+import { SpainMapPreview } from "../components/SpainMapPreview";
 
 export function HomeScreen({
   featured,
   articles,
   ads,
+  recursos,
   onOpenArticle,
   onOpenPlace,
   onGoToTab,
@@ -22,6 +22,7 @@ export function HomeScreen({
   featured: Article;
   articles: Article[];
   ads: Ad[];
+  recursos: Recurso[];
   onOpenArticle: (article: Article) => void;
   onOpenPlace: (place: Place) => void;
   onGoToTab: (tab: TabKey) => void;
@@ -35,6 +36,17 @@ export function HomeScreen({
         .slice(0, 6),
     [articles, featured.id],
   );
+
+  const recursoAsPlaces: Place[] = recursos.map((r) => ({
+    id: r.id,
+    name: r.name,
+    type: r.type,
+    area: r.area,
+    country: "",
+    description: r.description,
+    address: r.address ?? "",
+    hours: r.hours ?? "",
+  }));
 
   return (
     <div className="grid-home">
@@ -57,12 +69,7 @@ export function HomeScreen({
           <div className="cp-card">
             <div className="cp-card-inner">
               <SectionTitle eyebrow="Nuestros aliados" title="Guía Cannábica" body="Consulta fichas y explora por zona." />
-              <div className="surface-box">
-                <div className="surface-box-inner">
-                  <MapPin size={34} color="var(--cp-brand)" />
-                  <p>Un directorio limpio y orientado a consulta rápida.</p>
-                </div>
-              </div>
+              <SpainMapPreview onClick={() => onGoToTab("map")} />
               <Button onClick={() => onGoToTab("map")}>Ir a la guía</Button>
             </div>
           </div>
@@ -70,14 +77,16 @@ export function HomeScreen({
         </div>
       </section>
 
-      <section className="section-stack">
-        <SectionTitle eyebrow="Para ti" title="Recursos y asociaciones" />
-        <div className="grid-places-3">
-          {mapPlaces.map((place) => (
-            <PlaceCard key={place.id} place={place} onOpen={onOpenPlace} />
-          ))}
-        </div>
-      </section>
+      {recursoAsPlaces.length > 0 && (
+        <section className="section-stack">
+          <SectionTitle eyebrow="Para ti" title="Recursos y asociaciones" />
+          <div className="grid-places-3">
+            {recursoAsPlaces.map((place) => (
+              <PlaceCard key={place.id} place={place} onOpen={onOpenPlace} />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

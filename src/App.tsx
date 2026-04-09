@@ -32,7 +32,7 @@ function ScreenLoader() {
 }
 
 export default function App() {
-  const { articles, ads, featured, loading, error } = useContent();
+  const { articles, ads, recursos, places, featured, loading, error } = useContent();
   const [screen, setScreen] = useState<ScreenKey>("home");
   const [activeTab, setActiveTab] = useState<TabKey>("home");
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
@@ -101,16 +101,17 @@ export default function App() {
     content = <LoadingState />;
   } else if (error) {
     content = <ErrorState message={error} />;
-  } else if (!hasContent || !featured) {
+  } else if ((!hasContent || !featured) && screen !== "map" && screen !== "place-detail") {
     content = <ErrorState message="No hay contenido disponible todavía." />;
   } else {
     switch (screen) {
       case "home":
         content = (
           <HomeScreen
-            featured={featured}
+            featured={featured!}
             articles={articles}
             ads={ads}
+            recursos={recursos}
             onOpenArticle={openArticle}
             onOpenPlace={openPlace}
             onGoToTab={goToTab}
@@ -122,7 +123,7 @@ export default function App() {
         content = <ArticlesScreen articles={articles} ads={ads} onOpenArticle={openArticle} onSearchClick={() => setScreen("search")} />;
         break;
       case "map":
-        content = <MapScreen onOpenPlace={openPlace} />;
+        content = <MapScreen places={places} ads={ads} onOpenPlace={openPlace} />;
         break;
       case "menu":
         content = (

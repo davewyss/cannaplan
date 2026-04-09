@@ -25,9 +25,14 @@ export type Place = {
   name: string;
   type: string;
   area: string;
+  country: string;
   description: string;
   address: string;
   hours: string;
+  lat?: number;
+  lng?: number;
+  imageUrl?: string;
+  linkUrl?: string;
 };
 
 export type SheetArticleRecord = {
@@ -75,6 +80,18 @@ export type Article = {
   imageUrl?: string;
   imageCredit?: string;
   imageCreditUrl?: string;
+};
+
+export type Recurso = {
+  id: number;
+  name: string;
+  type: string;
+  area: string;
+  description: string;
+  imageUrl?: string;
+  linkUrl?: string;
+  address?: string;
+  hours?: string;
 };
 
 export type Ad = {

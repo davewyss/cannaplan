@@ -1,4 +1,4 @@
-import type { Ad, Article, SheetArticleRecord } from "./types";
+import type { Ad, Article, Place, Recurso, SheetArticleRecord } from "./types";
 
 const baseUrl =
   (import.meta.env.VITE_PUBLIC_SHEETS_URL as string | undefined) ??
@@ -402,6 +402,7 @@ export async function getAds(): Promise<Ad[]> {
   }
 }
 
+<<<<<<< HEAD
 const IMAGE_MARKERS = ["img-profile", "img-medium", "img-full"] as const;
 const ALIGN_MARKERS = ["align-left", "align-center", "align-right", "align-justify"] as const;
 
@@ -476,6 +477,60 @@ function processDocHtml(html: string): string {
   }
 
   return body.innerHTML;
+=======
+export async function getRecursos(): Promise<Recurso[]> {
+  if (!baseUrl) return [];
+
+  try {
+    const url = new URL(baseUrl);
+    url.searchParams.set("sheet", "RECURSOS");
+
+    const response = await fetch(url.toString(), { method: "GET" });
+    if (!response.ok) return [];
+
+    const data = await response.json();
+    const records: Record<string, unknown>[] = Array.isArray(data?.records)
+      ? data.records
+      : Array.isArray(data?.data)
+        ? data.data
+        : [];
+
+    return records
+      .map((r, i): Recurso | null => {
+        const visible =
+          r.Visibilidad === undefined ? true : truthy(r.Visibilidad);
+        if (!visible) return null;
+
+        const name = getFirstString(r, ["Nombre", "Titulo", "Título", "Name", "Title"]);
+        if (!name) return null;
+
+        const imageUrl = normalizeImageUrl(
+          r["URL de Imagen (auto-gen)"] ??
+          r["Enlace de Imagen Drive"] ??
+          r["Imagen"] ??
+          r["Image URL"] ??
+          r["Foto"]
+        );
+
+        const rawLink = getFirstString(r, ["Enlace", "Link", "URL", "Web", "Website"]);
+
+        return {
+          id: Number(r.ID ?? i + 1),
+          name,
+          type: String(r.Tipo ?? r.Categoria ?? r.Category ?? r.Type ?? "Recurso"),
+          area: String(r.Area ?? r.Zona ?? r.Region ?? r.Lugar ?? ""),
+          description: String(r.Descripcion ?? r.Descripción ?? r.Extracto ?? r.Description ?? "").trim(),
+          imageUrl,
+          linkUrl: normalizeLinkUrl(rawLink),
+          address: String(r.Direccion ?? r.Dirección ?? r.Address ?? "").trim() || undefined,
+          hours: String(r.Horario ?? r.Horas ?? r.Hours ?? "").trim() || undefined,
+        };
+      })
+      .filter((r): r is Recurso => r !== null);
+  } catch {
+    return [];
+  }
+>>>>>>> 269eebf (map and more)
 }
 
 export async function getDocPageHtml(docId: string): Promise<string> {
@@ -492,6 +547,72 @@ export async function getDocPageHtml(docId: string): Promise<string> {
   if (!response.ok) throw new Error(`Doc request failed: ${response.status}`);
 
   const data = await response.json();
+<<<<<<< HEAD
   const raw = typeof data?.html === "string" ? data.html : "";
   return processDocHtml(raw);
+=======
+  return typeof data?.html === "string" ? data.html : "";
+}
+
+export async function getMapPlaces(): Promise<Place[]> {
+  if (!baseUrl) return [];
+
+  try {
+    const url = new URL(baseUrl);
+    url.searchParams.set("sheet", "MAPA");
+
+    const response = await fetch(url.toString(), { method: "GET" });
+    if (!response.ok) return [];
+
+    const data = await response.json();
+    const records: Record<string, unknown>[] = Array.isArray(data?.records)
+      ? data.records
+      : Array.isArray(data?.data)
+        ? data.data
+        : [];
+
+    return records
+      .map((r, i): Place | null => {
+        const visible =
+          r.Visibilidad === undefined ? true : truthy(r.Visibilidad);
+        if (!visible) return null;
+
+        const name = getFirstString(r, ["Nombre", "Titulo", "Título", "Name"]);
+        if (!name) return null;
+
+        const rawLat = r.Lat ?? r.Latitud ?? r.lat ?? r.latitude;
+        const rawLng = r.Lng ?? r.Lon ?? r.Longitud ?? r.lng ?? r.longitude;
+        const lat = rawLat !== undefined && rawLat !== "" ? parseFloat(String(rawLat)) : undefined;
+        const lng = rawLng !== undefined && rawLng !== "" ? parseFloat(String(rawLng)) : undefined;
+
+        const rawLink = r.URL ?? r.Enlace ?? r.Link ?? r.Web ?? r.Website ?? "";
+        const imageUrl = normalizeImageUrl(
+          r["URL de Imagen (auto-gen)"] ??
+          r["Enlace de Imagen Drive"] ??
+          r["Imagen"] ??
+          r["Image URL"] ??
+          r["imageUrl"] ??
+          ""
+        );
+
+        return {
+          id: typeof r.ID === "number" ? r.ID : i + 1,
+          name,
+          type: String(r.Tipo ?? r.Type ?? r.Categoria ?? r.Categoría ?? "Lugar").trim(),
+          area: String(r.Zona ?? r.Area ?? r.Barrio ?? r.Ciudad ?? r.Region ?? "").trim(),
+          country: String(r.Pais ?? r.País ?? r.Country ?? "").trim(),
+          description: String(r.Descripcion ?? r.Descripción ?? r.Extracto ?? "").trim(),
+          address: String(r["Direcion Completa"] ?? r["Dirección Completa"] ?? r["Direccion Completa"] ?? r.Direccion ?? r.Dirección ?? r.Address ?? "").trim(),
+          hours: String(r.Horario ?? r.Horas ?? r.Hours ?? "").trim(),
+          lat: lat !== undefined && !isNaN(lat) ? lat : undefined,
+          lng: lng !== undefined && !isNaN(lng) ? lng : undefined,
+          imageUrl,
+          linkUrl: normalizeLinkUrl(rawLink),
+        };
+      })
+      .filter((r): r is Place => r !== null);
+  } catch {
+    return [];
+  }
+>>>>>>> 269eebf (map and more)
 }

@@ -40,6 +40,7 @@ export default function ContactScreen({ onBack }: { onBack: () => void }) {
           <div className="cp-card">
             <div className="cp-card-inner">
               <div className="article-content" dangerouslySetInnerHTML={{ __html: html }} />
+<<<<<<< HEAD
               <div className="static-sub-section contact-form-wrap">
                 <iframe
                   title="Contact Form"
@@ -54,6 +55,23 @@ export default function ContactScreen({ onBack }: { onBack: () => void }) {
             </div>
           </div>
         )}
+=======
+            </div>
+          </div>
+        )}
+
+        <div className="contact-form-wrap">
+          <iframe
+            title="Contact Form"
+            src="https://plugins.crisp.chat/urn:crisp.im:contact-form:0/contact/2c23d7c0-c6dd-42f4-b798-6f17a0f41dcc"
+            referrerPolicy="origin"
+            sandbox="allow-forms allow-popups allow-scripts allow-same-origin"
+            width="100%"
+            height="600px"
+            frameBorder="0"
+          />
+        </div>
+>>>>>>> 269eebf (map and more)
       </div>
     </div>
   );

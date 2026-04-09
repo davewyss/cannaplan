@@ -1,6 +1,6 @@
-import { ChevronRight, Gift, House, Info, MapPin, Newspaper, Scale, Send } from "lucide-react";
+import { ChevronRight, House, Info, MapPin, Newspaper, Scale, Send } from "lucide-react";
 
-type Target = "home" | "map" | "news" | "legal-help" | "contact" | "about" | "donate" | "privacy" | "cookies" | "terms" | "data-access" | "sobre-app";
+type Target = "home" | "map" | "news" | "legal-help" | "contact" | "about" | "privacy" | "cookies" | "terms" | "data-access" | "sobre-app";
 
 const items = [
   { key: "home" as const, label: "Inicio", icon: House },
@@ -9,7 +9,6 @@ const items = [
   { key: "legal-help" as const, label: "Ayuda legal", icon: Scale },
   { key: "contact" as const, label: "Contacto", icon: Send },
   { key: "about" as const, label: "Sobre nosotros", icon: Info },
-  { key: "donate" as const, label: "Donar", icon: Gift },
 ];
 
 const footerItems = [
