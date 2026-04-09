@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { getDocPageHtml } from "../contentApi";
 import { Spinner } from "../components/Spinner";
 
-const CONTACT_DOC_ID = (import.meta.env.VITE_CONTACT_DOC_ID as string | undefined) ?? "16Slf98nAp6GefxzUDouQWuThYiJ_IdmQfzydH3OJjtw";
+const CONTACT_DOC_ID =
+  (import.meta.env.VITE_CONTACT_DOC_ID as string | undefined) ??
+  "16Slf98nAp6GefxzUDouQWuThYiJ_IdmQfzydH3OJjtw";
 
 export default function ContactScreen({ onBack }: { onBack: () => void }) {
   const [html, setHtml] = useState("");
@@ -11,6 +13,7 @@ export default function ContactScreen({ onBack }: { onBack: () => void }) {
 
   useEffect(() => {
     let active = true;
+
     async function load() {
       try {
         setLoading(true);
@@ -25,8 +28,11 @@ export default function ContactScreen({ onBack }: { onBack: () => void }) {
         if (active) setLoading(false);
       }
     }
+
     load();
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, []);
 
   return (
@@ -35,12 +41,19 @@ export default function ContactScreen({ onBack }: { onBack: () => void }) {
         {loading ? (
           <Spinner />
         ) : error ? (
-          <div className="cp-card"><div className="cp-card-inner"><p className="static-page-status">{error}</p></div></div>
+          <div className="cp-card">
+            <div className="cp-card-inner">
+              <p className="static-page-status">{error}</p>
+            </div>
+          </div>
         ) : (
           <div className="cp-card">
             <div className="cp-card-inner">
-              <div className="article-content" dangerouslySetInnerHTML={{ __html: html }} />
-<<<<<<< HEAD
+              <div
+                className="article-content"
+                dangerouslySetInnerHTML={{ __html: html }}
+              />
+
               <div className="static-sub-section contact-form-wrap">
                 <iframe
                   title="Contact Form"
@@ -55,23 +68,6 @@ export default function ContactScreen({ onBack }: { onBack: () => void }) {
             </div>
           </div>
         )}
-=======
-            </div>
-          </div>
-        )}
-
-        <div className="contact-form-wrap">
-          <iframe
-            title="Contact Form"
-            src="https://plugins.crisp.chat/urn:crisp.im:contact-form:0/contact/2c23d7c0-c6dd-42f4-b798-6f17a0f41dcc"
-            referrerPolicy="origin"
-            sandbox="allow-forms allow-popups allow-scripts allow-same-origin"
-            width="100%"
-            height="600px"
-            frameBorder="0"
-          />
-        </div>
->>>>>>> 269eebf (map and more)
       </div>
     </div>
   );

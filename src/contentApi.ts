@@ -402,82 +402,82 @@ export async function getAds(): Promise<Ad[]> {
   }
 }
 
-<<<<<<< HEAD
 const IMAGE_MARKERS = ["img-profile", "img-medium", "img-full"] as const;
 const ALIGN_MARKERS = ["align-left", "align-center", "align-right", "align-justify"] as const;
 
 function processDocHtml(html: string): string {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
-  const body = doc.body;
-
-  // Work on a snapshot so removals don't affect iteration
-  const children = Array.from(body.children);
-
-  for (let i = 0; i < children.length; i++) {
-    const el = children[i];
-    const text = (el.textContent ?? "").trim();
-
-    // ── Image size markers: [img-profile], [img-medium], [img-full] ──
-    const imageMarker = IMAGE_MARKERS.find((m) => text === `[${m}]`);
-    if (imageMarker) {
-      // Look forward for the next element that has an <img>
-      for (let j = i + 1; j < children.length; j++) {
-        const sibling = children[j];
-        const img =
-          sibling.tagName === "IMG"
-            ? (sibling as HTMLImageElement)
-            : sibling.querySelector("img");
-
-        if (img) {
-          // If img is already inside a .doc-image wrapper, add the marker class to it
-          const container = img.closest(".doc-image");
-          if (container) {
-            container.classList.add(imageMarker);
-          } else {
-            // Wrap the img in a new doc-image div with the marker class
-            const wrapper = doc.createElement("div");
-            wrapper.className = `doc-image ${imageMarker}`;
-            img.replaceWith(wrapper);
-            wrapper.appendChild(img);
-          }
-          break;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    const body = doc.body;
+    
+    // Work on a snapshot so removals don't affect iteration
+    const children = Array.from(body.children);
+    
+    for (let i = 0; i < children.length; i++) {
+        const el = children[i];
+        const text = (el.textContent ?? "").trim();
+        
+        // ── Image size markers: [img-profile], [img-medium], [img-full] ──
+        const imageMarker = IMAGE_MARKERS.find((m) => text === `[${m}]`);
+        if (imageMarker) {
+            // Look forward for the next element that has an <img>
+            for (let j = i + 1; j < children.length; j++) {
+                const sibling = children[j];
+                const img =
+                sibling.tagName === "IMG"
+                ? (sibling as HTMLImageElement)
+                : sibling.querySelector("img");
+                
+                if (img) {
+                    // If img is already inside a .doc-image wrapper, add the marker class to it
+                    const container = img.closest(".doc-image");
+                    if (container) {
+                        container.classList.add(imageMarker);
+                    } else {
+                        // Wrap the img in a new doc-image div with the marker class
+                        const wrapper = doc.createElement("div");
+                        wrapper.className = `doc-image ${imageMarker}`;
+                        img.replaceWith(wrapper);
+                        wrapper.appendChild(img);
+                    }
+                    break;
+                }
+            }
+            el.remove();
+            continue;
         }
-      }
-      el.remove();
-      continue;
+        
+        // ── Alignment markers: [align-left], [align-center], etc. ──
+        const alignMarker = ALIGN_MARKERS.find((m) => text === `[${m}]`);
+        if (alignMarker) {
+            if (el.nextElementSibling) {
+                el.nextElementSibling.classList.add(alignMarker);
+            }
+            el.remove();
+            continue;
+        }
+        
+        // ── Detect alignment from inline styles (e.g., style="text-align: center") ──
+        const style = el.getAttribute("style") || "";
+        const alignMatch = style.match(/text-align:\s*(left|center|right|justify)/i);
+        if (alignMatch) {
+            const alignValue = alignMatch[1].toLowerCase();
+            el.classList.add(`align-${alignValue}`);
+            // Remove the inline text-align style, keep other styles
+            const newStyle = style
+            .replace(/text-align:\s*(left|center|right|justify);?/i, "")
+            .trim();
+            if (newStyle) {
+                el.setAttribute("style", newStyle);
+            } else {
+                el.removeAttribute("style");
+            }
+        }
     }
+    
+    return body.innerHTML;
+}
 
-    // ── Alignment markers: [align-left], [align-center], etc. ──
-    const alignMarker = ALIGN_MARKERS.find((m) => text === `[${m}]`);
-    if (alignMarker) {
-      if (el.nextElementSibling) {
-        el.nextElementSibling.classList.add(alignMarker);
-      }
-      el.remove();
-      continue;
-    }
-
-    // ── Detect alignment from inline styles (e.g., style="text-align: center") ──
-    const style = el.getAttribute("style") || "";
-    const alignMatch = style.match(/text-align:\s*(left|center|right|justify)/i);
-    if (alignMatch) {
-      const alignValue = alignMatch[1].toLowerCase();
-      el.classList.add(`align-${alignValue}`);
-      // Remove the inline text-align style, keep other styles
-      const newStyle = style
-        .replace(/text-align:\s*(left|center|right|justify);?/i, "")
-        .trim();
-      if (newStyle) {
-        el.setAttribute("style", newStyle);
-      } else {
-        el.removeAttribute("style");
-      }
-    }
-  }
-
-  return body.innerHTML;
-=======
 export async function getRecursos(): Promise<Recurso[]> {
   if (!baseUrl) return [];
 
@@ -530,7 +530,6 @@ export async function getRecursos(): Promise<Recurso[]> {
   } catch {
     return [];
   }
->>>>>>> 269eebf (map and more)
 }
 
 export async function getDocPageHtml(docId: string): Promise<string> {
@@ -547,10 +546,9 @@ export async function getDocPageHtml(docId: string): Promise<string> {
   if (!response.ok) throw new Error(`Doc request failed: ${response.status}`);
 
   const data = await response.json();
-<<<<<<< HEAD
   const raw = typeof data?.html === "string" ? data.html : "";
   return processDocHtml(raw);
-=======
+
   return typeof data?.html === "string" ? data.html : "";
 }
 
@@ -614,5 +612,4 @@ export async function getMapPlaces(): Promise<Place[]> {
   } catch {
     return [];
   }
->>>>>>> 269eebf (map and more)
 }

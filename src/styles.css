@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 
-=======
->>>>>>> 269eebf (map and more)
 :root {
   --cp-brand: #1d8867;
   --cp-light: #a8dadc;
@@ -23,13 +20,10 @@ body,
   margin: 0;
 }
 
-<<<<<<< HEAD
   --cp-line: rgba(40,45,72,0.08);
 }
 * { box-sizing: border-box; }
 html, body, #root { min-height: 100%; margin: 0; }
-=======
->>>>>>> 269eebf (map and more)
 body {
   background: linear-gradient(180deg, #fffcfc 0%, #f7fafb 45%, #f1f8f5 100%);
   color: var(--cp-text);
@@ -102,7 +96,6 @@ img {
   gap: 12px;
 }
 
-<<<<<<< HEAD
 button, input, textarea, h1, h2, h3, h4, nav, .meta, .eyebrow {
   font-family: Poppins, sans-serif;
 }
@@ -117,8 +110,6 @@ input, textarea { outline: none; }
 }
 .cp-card-inner { padding: 24px; display: grid; gap: 16px; }
 .cp-card-inner.compact { padding: 20px; gap: 12px; }
-=======
->>>>>>> 269eebf (map and more)
 .cp-badge {
   display: inline-flex;
   align-items: center;
@@ -390,7 +381,6 @@ input, textarea { outline: none; }
   margin: 0;
   line-height: 1.8;
 }
-<<<<<<< HEAD
 .cp-badge.dark { background: var(--cp-navy); color: white; }
 .cp-button {
   height: 44px; padding: 0 16px; border-radius: 18px; border: 1px solid var(--cp-line);
@@ -461,8 +451,6 @@ input, textarea { outline: none; }
   .section-title h2 { font-size: 28px; }
 }
 
-=======
->>>>>>> 269eebf (map and more)
 
 .inicio-topbar {
   display: flex;
@@ -496,10 +484,7 @@ input, textarea { outline: none; }
 
 .inicio-topbar-title {
   color: var(--cp-navy);
-<<<<<<< HEAD
   font-family: Poppins, sans-serif;
-=======
->>>>>>> 269eebf (map and more)
   font-size: 20px;
   font-weight: 700;
   line-height: 1.1;
@@ -508,19 +493,16 @@ input, textarea { outline: none; }
 
 .inicio-topbar-tagline {
   color: var(--cp-brand);
-<<<<<<< HEAD
   font-family: Poppins, sans-serif;
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   white-space: nowrap;
-=======
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
->>>>>>> 269eebf (map and more)
   margin-top: 3px;
 }
 
@@ -603,7 +585,6 @@ input, textarea { outline: none; }
   background: linear-gradient(135deg, #f3f1eb 0%, #e8f6f8 52%, #f2fbf8 100%);
 }
 
-<<<<<<< HEAD
 .inicio-topbar-search:hover {
   background: rgba(40,45,72,0.05);
 }
@@ -642,8 +623,6 @@ input, textarea { outline: none; }
 .article-detail-image {
   height: 320px;
 }
-=======
->>>>>>> 269eebf (map and more)
 .search-screen-bar {
   display: flex;
   align-items: center;
@@ -652,10 +631,7 @@ input, textarea { outline: none; }
 
 .search-screen-input-wrap,
 .guide-search-row {
-<<<<<<< HEAD
 .search-screen-input-wrap {
-=======
->>>>>>> 269eebf (map and more)
   flex: 1;
   display: flex;
   align-items: center;
@@ -672,15 +648,12 @@ input, textarea { outline: none; }
 .guide-search-input,
 .field-input,
 .field-textarea {
-<<<<<<< HEAD
   background: rgba(255,255,255,0.95);
   border: 1px solid rgba(0,0,0,0.06);
   box-shadow: 0 4px 16px rgba(40,45,72,0.06);
   padding: 0 18px;
 }
 .search-screen-input {
-=======
->>>>>>> 269eebf (map and more)
   flex: 1;
   border: none;
   background: transparent;
@@ -688,7 +661,6 @@ input, textarea { outline: none; }
   font-size: 16px;
 }
 
-<<<<<<< HEAD
   font-family: Poppins, sans-serif;
   font-size: 16px;
   outline: none;
@@ -696,8 +668,6 @@ input, textarea { outline: none; }
 .search-screen-input::placeholder {
   color: #b0b8c1;
 }
-=======
->>>>>>> 269eebf (map and more)
 .search-clear-btn {
   border: none;
   background: none;
@@ -706,14 +676,11 @@ input, textarea { outline: none; }
   cursor: pointer;
 }
 
-<<<<<<< HEAD
   line-height: 1;
   padding: 0 2px;
   display: grid;
   place-items: center;
 }
-=======
->>>>>>> 269eebf (map and more)
 .search-hint {
   padding: 20px;
   border-radius: 22px;
@@ -1247,7 +1214,6 @@ input, textarea { outline: none; }
   .inicio-topbar-tagline {
     font-size: 9px;
   }
-<<<<<<< HEAD
 }
 .empty-search-state {
   border-radius: 20px;
@@ -1258,9 +1224,6 @@ input, textarea { outline: none; }
 }
 @media (max-width: 640px) {
   .article-card-image,
-=======
-
->>>>>>> 269eebf (map and more)
   .featured-image,
   .article-detail-image {
     height: 220px;
@@ -1308,7 +1271,6 @@ input, textarea { outline: none; }
 }
 
 .contact-form-wrap {
-<<<<<<< HEAD
   border-radius: 12px;
   overflow: hidden;
 }
@@ -1328,12 +1290,10 @@ input, textarea { outline: none; }
 
 .donate-button-wrap .cp-button {
   min-width: 180px;
-=======
   border-radius: 18px;
   overflow: hidden;
   border: 1px solid rgba(0, 0, 0, 0.06);
   background: white;
->>>>>>> 269eebf (map and more)
 }
 
 .static-page-status,
@@ -1405,8 +1365,6 @@ input, textarea { outline: none; }
   display: block;
   margin: 16px auto;
   border-radius: 12px;
-<<<<<<< HEAD
-=======
 }
 
 /* ═══════════════════════════════════════════════════
@@ -2189,7 +2147,6 @@ input, textarea { outline: none; }
 .inicio-topbar-search.active {
   background: var(--cp-mint);
   color: var(--cp-brand);
->>>>>>> 269eebf (map and more)
 }
 
 .align-left,

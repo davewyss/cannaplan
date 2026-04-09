@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { ArrowLeft, Bookmark, Check, Menu as MenuIcon, Share2 } from "lucide-react";
 import { useState } from "react";
 import type { Article } from "../types";
@@ -33,9 +32,6 @@ export function ArticleBottomBar({ onBack, onMenu, article }: ArticleBottomBarPr
       }
     }
   };
-=======
-import { ArrowLeft, Menu as MenuIcon, Share2 } from "lucide-react";
->>>>>>> 269eebf (map and more)
 
   return (
     <div className="bottom-nav-wrap">
@@ -45,17 +41,12 @@ import { ArrowLeft, Menu as MenuIcon, Share2 } from "lucide-react";
           <span>Volver</span>
         </button>
         <button>
-<<<<<<< HEAD
           <Bookmark size={18} />
           <span>Guardar</span>
         </button>
         <button onClick={handleShare}>
           {copied ? <Check size={18} /> : <Share2 size={18} />}
           <span>{copied ? "¡Copiado!" : "Compartir"}</span>
-=======
-          <Share2 size={18} />
-          <span>Compartir</span>
->>>>>>> 269eebf (map and more)
         </button>
         <button onClick={onMenu}>
           <MenuIcon size={18} />
