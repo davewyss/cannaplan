@@ -3,6 +3,13 @@ import { AdSidebar } from "../components/AdSidebar";
 import { ResponsiveImage } from "../components/ResponsiveImage";
 import { TagPills } from "../components/TagPills";
 
+declare const marked: { parse: (text: string) => string };
+
+function renderMarkdown(text: string): string {
+  if (typeof marked === "undefined") return text.replace(/\n/g, "<br />");
+  return marked.parse(text);
+}
+
 export default function ArticleDetailScreen({ article, ads }: { article: Article; ads: Ad[] }) {
   return (
     <div className="article-detail-stack">
@@ -33,7 +40,10 @@ export default function ArticleDetailScreen({ article, ads }: { article: Article
             <span className="meta">{article.readTime}</span>
           </div>
           <h1 className="article-detail-title">{article.title}</h1>
-          <p className="article-detail-text">{article.body}</p>
+          <div
+            className="article-detail-text article-markdown"
+            dangerouslySetInnerHTML={{ __html: renderMarkdown(article.body) }}
+          />
         </div>
       </article>
       <AdSidebar
