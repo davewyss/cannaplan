@@ -2,6 +2,7 @@ import { Gift, Info, Newspaper, Scale, Send } from "lucide-react";
 import { Suspense, lazy, useMemo, useState } from "react";
 import { ArticleBottomBar } from "./components/ArticleBottomBar";
 import { BottomNav } from "./components/BottomNav";
+import { InstallPrompt } from "./components/InstallPrompt";
 import { StaticBottomBar } from "./components/StaticBottomBar";
 import { ErrorState } from "./components/ErrorState";
 import { LoadingState } from "./components/LoadingState";
@@ -196,6 +197,7 @@ export default function App() {
       <main className="shell">
         <Suspense fallback={<ScreenLoader />}>{content}</Suspense>
       </main>
+      <InstallPrompt />
       {screen === "article-detail" ? (
         <ArticleBottomBar onBack={goBackToMain} onMenu={() => setScreen("menu")} article={selectedArticle} />
       ) : isStatic ? (

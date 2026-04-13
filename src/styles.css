@@ -2278,3 +2278,152 @@ input, textarea { outline: none; }
   object-fit: cover;
   border-radius: 50%;
 }
+
+/* ── PWA Install Prompts ─────────────────────────────────── */
+
+/* Shared */
+.install-app-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.install-dismiss {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(40, 45, 72, 0.08);
+  color: var(--cp-navy);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* iOS bottom sheet */
+.install-ios-sheet {
+  position: fixed;
+  bottom: 88px; /* sits above the bottom nav */
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(92vw, 420px);
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 20px;
+  box-shadow: 0 16px 48px rgba(40, 45, 72, 0.16);
+  padding: 16px;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.install-ios-sheet .install-dismiss {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.install-ios-inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-right: 24px;
+}
+
+.install-ios-title {
+  font-family: Poppins, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cp-navy);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.install-ios-desc {
+  font-family: Poppins, sans-serif;
+  font-size: 13px;
+  color: var(--cp-text);
+  line-height: 1.5;
+}
+
+.install-share-icon {
+  display: inline-flex;
+  align-items: center;
+  color: #007aff; /* iOS blue */
+  vertical-align: middle;
+  margin: 0 1px;
+}
+
+.install-ios-arrow {
+  width: 16px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.97);
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  transform: rotate(45deg);
+  position: absolute;
+  bottom: -9px;
+  left: 50%;
+  margin-left: -8px;
+}
+
+/* Android / Chrome install banner */
+.install-android-banner {
+  position: fixed;
+  bottom: 88px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(92vw, 420px);
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 20px;
+  box-shadow: 0 16px 48px rgba(40, 45, 72, 0.16);
+  padding: 14px 16px;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.install-android-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.install-android-title {
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cp-navy);
+  line-height: 1.2;
+}
+
+.install-android-desc {
+  font-family: Poppins, sans-serif;
+  font-size: 12px;
+  color: var(--cp-text);
+  margin-top: 2px;
+}
+
+.install-android-btn {
+  background: var(--cp-brand);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-family: Poppins, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.install-android-btn:hover {
+  opacity: 0.9;
+}
