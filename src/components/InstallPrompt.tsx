@@ -2,6 +2,23 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 
 const DISMISSED_KEY = "cp_install_dismissed";
+const INSTALLED_KEY = "cp_install_done";
+const COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+function shouldShow(): boolean {
+  if (localStorage.getItem(INSTALLED_KEY)) return false; // permanently installed
+  const last = localStorage.getItem(DISMISSED_KEY);
+  if (!last) return true;
+  return Date.now() - Number(last) > COOLDOWN_MS;
+}
+
+function recordDismiss() {
+  localStorage.setItem(DISMISSED_KEY, String(Date.now()));
+}
+
+function recordInstalled() {
+  localStorage.setItem(INSTALLED_KEY, "1");
+}
 
 function isIosSafari(): boolean {
   const ua = window.navigator.userAgent.toLowerCase();
@@ -34,26 +51,36 @@ export function InstallPrompt() {
   const [showAndroid, setShowAndroid] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem(DISMISSED_KEY)) return;
     if (isInStandaloneMode()) return;
+    if (!shouldShow()) return;
 
-    if (isIosSafari()) {
-      const t = setTimeout(() => setShowIos(true), 6000);
-      return () => clearTimeout(t);
-    }
-
+    // Android: capture install event early so it's ready when user interacts
+    let captured: typeof deferredPrompt = null;
     function handleBeforeInstall(e: Event) {
       e.preventDefault();
-      setDeferredPrompt(e as typeof deferredPrompt);
-      setShowAndroid(true);
+      captured = e as typeof deferredPrompt;
+      setDeferredPrompt(captured);
     }
-
     window.addEventListener("beforeinstallprompt", handleBeforeInstall);
-    return () => window.removeEventListener("beforeinstallprompt", handleBeforeInstall);
+
+    // Show on meaningful user engagement (scroll 50% or tap something)
+    function handleTrigger() {
+      if (isIosSafari()) {
+        setShowIos(true);
+      } else if (captured) {
+        setShowAndroid(true);
+      }
+    }
+    window.addEventListener("cp:install-trigger", handleTrigger);
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstall);
+      window.removeEventListener("cp:install-trigger", handleTrigger);
+    };
   }, []);
 
   function dismiss() {
-    localStorage.setItem(DISMISSED_KEY, "1");
+    recordDismiss();
     setShowIos(false);
     setShowAndroid(false);
   }
@@ -63,7 +90,7 @@ export function InstallPrompt() {
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     if (outcome === "accepted") {
-      localStorage.setItem(DISMISSED_KEY, "1");
+      recordInstalled();
     }
     setDeferredPrompt(null);
     setShowAndroid(false);

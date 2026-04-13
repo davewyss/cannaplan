@@ -24,7 +24,6 @@ body,
 }
 * { box-sizing: border-box; }
 html, body, #root { min-height: 100%; margin: 0; }
-html, body { overflow-x: hidden; }
 body {
   background: linear-gradient(180deg, #fffcfc 0%, #f7fafb 45%, #f1f8f5 100%);
   color: var(--cp-text);
@@ -102,7 +101,7 @@ button, input, textarea, h1, h2, h3, h4, nav, .meta, .eyebrow {
 }
 button { font: inherit; }
 input, textarea { outline: none; }
-.shell { max-width: 1240px; margin: 0 auto; padding: 24px; padding-bottom: 120px; }
+.shell { max-width: 1240px; margin: 0 auto; padding: 24px; padding-bottom: 120px; overflow-x: clip; }
 .cp-card {
   background: rgba(255,255,255,0.95);
   border-radius: 28px;

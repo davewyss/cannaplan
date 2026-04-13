@@ -1,4 +1,8 @@
-import { useMemo } from "react";
+import { useEffect, useRef, useMemo } from "react";
+
+function fireInstallTrigger() {
+  window.dispatchEvent(new CustomEvent("cp:install-trigger"));
+}
 import type { Ad, Article, Place, Recurso, TabKey } from "../types";
 import { AdSidebar } from "../components/AdSidebar";
 import { ArticleCard } from "../components/ArticleCard";
@@ -28,6 +32,22 @@ export function HomeScreen({
   onGoToTab: (tab: TabKey) => void;
   onSearchClick: () => void;
 }) {
+  const triggered = useRef(false);
+
+  useEffect(() => {
+    function onScroll() {
+      if (triggered.current) return;
+      const scrolled = window.scrollY;
+      const half = (document.documentElement.scrollHeight - window.innerHeight) * 0.5;
+      if (scrolled >= half) {
+        triggered.current = true;
+        fireInstallTrigger();
+      }
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const secondaryArticles = useMemo(
     () =>
       articles
@@ -51,7 +71,7 @@ export function HomeScreen({
   return (
     <div className="grid-home">
       <InicioTopBar onSearchClick={onSearchClick} />
-      <FeaturedStory article={featured} onOpen={onOpenArticle} />
+      <FeaturedStory article={featured} onOpen={(a) => { fireInstallTrigger(); onOpenArticle(a); }} />
 
       <section className="grid-2-main">
         <div className="cp-card">
@@ -59,7 +79,7 @@ export function HomeScreen({
             <SectionTitle eyebrow="Últimas noticias" title="" />
             <div className="card-list-grid">
               {secondaryArticles.map((article) => (
-                <ArticleCard key={article.id} article={article} onOpen={onOpenArticle} />
+                <ArticleCard key={article.id} article={article} onOpen={(a) => { fireInstallTrigger(); onOpenArticle(a); }} />
               ))}
             </div>
           </div>
