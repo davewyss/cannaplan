@@ -1898,7 +1898,8 @@ input, textarea { outline: none; }
 /* ── Map place cards (below map) ──────────────────── */
 .map-place-row {
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
+  padding: 0;
   gap: 0;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 24px;
@@ -1915,7 +1916,8 @@ input, textarea { outline: none; }
 
 .map-place-row-thumb {
   width: 100px;
-  height: 100px;
+  height: 100%;
+  min-height: 100px;
   flex-shrink: 0;
   object-fit: cover;
   display: block;
@@ -1923,7 +1925,8 @@ input, textarea { outline: none; }
 
 .map-place-row-swatch {
   width: 100px;
-  height: 100px;
+  height: 100%;
+  min-height: 100px;
   flex-shrink: 0;
   display: grid;
   place-items: center;
