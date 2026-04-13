@@ -24,6 +24,7 @@ body,
 }
 * { box-sizing: border-box; }
 html, body, #root { min-height: 100%; margin: 0; }
+html, body { overflow-x: hidden; }
 body {
   background: linear-gradient(180deg, #fffcfc 0%, #f7fafb 45%, #f1f8f5 100%);
   color: var(--cp-text);
@@ -2305,40 +2306,35 @@ input, textarea { outline: none; }
 /* iOS bottom sheet */
 .install-ios-sheet {
   position: fixed;
-  bottom: 88px; /* sits above the bottom nav */
+  bottom: 88px;
   left: 50%;
   transform: translateX(-50%);
   width: min(92vw, 420px);
-  background: rgba(255, 255, 255, 0.97);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: #d4f0e5;
+  border: 1px solid rgba(29, 136, 103, 0.18);
   border-radius: 20px;
   box-shadow: 0 16px 48px rgba(40, 45, 72, 0.16);
-  padding: 16px;
+  padding: 16px 44px 16px 16px;
   z-index: 1200;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
 
 .install-ios-sheet .install-dismiss {
   position: absolute;
   top: 12px;
   right: 12px;
+  background: rgba(29, 136, 103, 0.15);
+  color: #1d8867;
 }
 
 .install-ios-inner {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding-right: 24px;
+  display: block;
 }
 
 .install-ios-title {
   font-family: Poppins, sans-serif;
   font-size: 15px;
   font-weight: 700;
-  color: var(--cp-navy);
+  color: #0f4d38;
   line-height: 1.2;
   margin-bottom: 4px;
 }
@@ -2346,8 +2342,12 @@ input, textarea { outline: none; }
 .install-ios-desc {
   font-family: Poppins, sans-serif;
   font-size: 13px;
-  color: var(--cp-text);
+  color: #1a6b50;
   line-height: 1.5;
+}
+
+.install-ios-desc strong {
+  color: #0f4d38;
 }
 
 .install-share-icon {

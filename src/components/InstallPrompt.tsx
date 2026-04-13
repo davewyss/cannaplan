@@ -69,7 +69,6 @@ export function InstallPrompt() {
           <X size={16} />
         </button>
         <div className="install-ios-inner">
-          <img src="/apple-touch-icon.png" alt="Cannaplan" className="install-app-icon" />
           <div className="install-ios-text">
             <div className="install-ios-title">Añadir a inicio</div>
             <div className="install-ios-desc">
