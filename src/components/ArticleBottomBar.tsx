@@ -1,14 +1,14 @@
 import { ArrowLeft, Check, Menu as MenuIcon, Share2 } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "../router";
 import type { Article } from "../types";
 
 interface ArticleBottomBarProps {
-  onBack: () => void;
-  onMenu: () => void;
   article?: Article | null;
 }
 
-export function ArticleBottomBar({ onBack, onMenu, article }: ArticleBottomBarProps) {
+export function ArticleBottomBar({ article }: ArticleBottomBarProps) {
+  const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
 
   const handleShare = async () => {
@@ -36,7 +36,7 @@ export function ArticleBottomBar({ onBack, onMenu, article }: ArticleBottomBarPr
   return (
     <div className="bottom-nav-wrap">
       <div className="bottom-nav">
-        <button onClick={onBack}>
+        <button onClick={() => navigate(-1)}>
           <ArrowLeft size={18} />
           <span>Volver</span>
         </button>
@@ -45,7 +45,7 @@ export function ArticleBottomBar({ onBack, onMenu, article }: ArticleBottomBarPr
           {copied ? <Check size={18} /> : <Share2 size={18} />}
           <span>{copied ? "¡Copiado!" : "Compartir"}</span>
         </button>
-        <button onClick={onMenu}>
+        <button onClick={() => navigate("/menu")}>
           <MenuIcon size={18} />
           <span>Menú</span>
         </button>

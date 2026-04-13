@@ -1,5 +1,5 @@
-import { Gift, Info, Newspaper, Scale, Send } from "lucide-react";
-import { Suspense, lazy, useMemo, useState } from "react";
+import { Suspense, lazy } from "react";
+import { Route, Routes, useLocation, useNavigate, useParams } from "./router";
 import { ArticleBottomBar } from "./components/ArticleBottomBar";
 import { BottomNav } from "./components/BottomNav";
 import { InstallPrompt } from "./components/InstallPrompt";
@@ -9,207 +9,269 @@ import { LoadingState } from "./components/LoadingState";
 import { Spinner } from "./components/Spinner";
 import { useContent } from "./hooks/useContent";
 import { HomeScreen } from "./screens/HomeScreen";
-import type { Article, Place, ScreenKey, TabKey } from "./types";
+import type { Ad, Article, Place, TabKey } from "./types";
 
-const ArticlesScreen = lazy(() => import("./screens/ArticlesScreen"));
-const MapScreen = lazy(() => import("./screens/MapScreen"));
-const MenuScreen = lazy(() => import("./screens/MenuScreen"));
-const SearchScreen = lazy(() => import("./screens/SearchScreen"));
+// ── Lazy screens ──────────────────────────────────────────────────────────────
+
+const ArticlesScreen  = lazy(() => import("./screens/ArticlesScreen"));
+const MapScreen       = lazy(() => import("./screens/MapScreen"));
+const MenuScreen      = lazy(() => import("./screens/MenuScreen"));
+const SearchScreen    = lazy(() => import("./screens/SearchScreen"));
 const ArticleDetailScreen = lazy(() => import("./screens/ArticleDetailScreen"));
-const PlaceDetailScreen = lazy(() => import("./screens/PlaceDetailScreen"));
-const ContactScreen = lazy(() => import("./screens/ContactScreen"));
-const SimpleInfoPage = lazy(() => import("./screens/SimpleInfoPage"));
-const AyudaLegalScreen = lazy(() => import("./screens/AyudaLegalScreen"));
+const PlaceDetailScreen   = lazy(() => import("./screens/PlaceDetailScreen"));
+const ContactScreen       = lazy(() => import("./screens/ContactScreen"));
 const SobreNosotrosScreen = lazy(() => import("./screens/SobreNosotrosScreen"));
-const DonarScreen = lazy(() => import("./screens/DonarScreen"));
-const PrivacyScreen = lazy(() => import("./screens/PrivacyScreen"));
-const CookiesScreen = lazy(() => import("./screens/CookiesScreen"));
-const TermsScreen = lazy(() => import("./screens/TermsScreen"));
-const DataAccessScreen = lazy(() => import("./screens/DataAccessScreen"));
-const SobreAppScreen = lazy(() => import("./screens/SobreAppScreen"));
+const DonarScreen         = lazy(() => import("./screens/DonarScreen"));
+const AyudaLegalScreen    = lazy(() => import("./screens/AyudaLegalScreen"));
+const PrivacyScreen       = lazy(() => import("./screens/PrivacyScreen"));
+const CookiesScreen       = lazy(() => import("./screens/CookiesScreen"));
+const TermsScreen         = lazy(() => import("./screens/TermsScreen"));
+const DataAccessScreen    = lazy(() => import("./screens/DataAccessScreen"));
+const SobreAppScreen      = lazy(() => import("./screens/SobreAppScreen"));
+
+// ── Route helpers ─────────────────────────────────────────────────────────────
+
+const TAB_ROUTES: Record<TabKey, string> = {
+  home:     "/",
+  articles: "/articulos",
+  map:      "/mapa",
+  menu:     "/menu",
+};
+
+// MenuScreen target → URL
+const MENU_ROUTES: Record<string, string> = {
+  home:          "/",
+  map:           "/mapa",
+  news:          "/articulos",
+  "legal-help":  "/menu/ayuda-legal",
+  contact:       "/menu/contacto",
+  about:         "/menu/sobre-nosotros",
+  privacy:       "/legal/privacidad",
+  cookies:       "/legal/cookies",
+  terms:         "/legal/terminos",
+  "data-access": "/legal/acceso-datos",
+  "sobre-app":   "/sobre-app",
+};
+
+// ── Detail route wrappers ─────────────────────────────────────────────────────
+
+function ArticleDetailRoute({ articles, ads }: { articles: Article[]; ads: Ad[] }) {
+  const { slug } = useParams<{ slug: string }>();
+  const article = articles.find((a) => a.slug === slug) ?? null;
+
+  if (!article) {
+    return <ErrorState message="Artículo no encontrado." />;
+  }
+
+  return (
+    <>
+      <ArticleDetailScreen article={article} ads={ads} />
+      <ArticleBottomBar article={article} />
+    </>
+  );
+}
+
+function PlaceDetailRoute({ places }: { places: Place[] }) {
+  const { slug } = useParams<{ slug: string }>();
+  const place = places.find((p) => p.slug === slug) ?? null;
+
+  if (!place) {
+    return <ErrorState message="Lugar no encontrado." />;
+  }
+
+  return (
+    <>
+      <PlaceDetailScreen place={place} onBack={() => {}} />
+      <ArticleBottomBar article={null} />
+    </>
+  );
+}
+
+// ── Bottom bar switch ─────────────────────────────────────────────────────────
+
+function BottomBarSwitch() {
+  const { pathname } = useLocation();
+
+  // Detail routes render their own ArticleBottomBar — don't double-render
+  if (/^\/articulos\/.+/.test(pathname) || /^\/mapa\/.+/.test(pathname)) {
+    return null;
+  }
+
+  const isStatic =
+    pathname.startsWith("/menu/") ||
+    pathname.startsWith("/legal/") ||
+    pathname === "/sobre-app";
+
+  if (isStatic) return <StaticBottomBar />;
+
+  return <BottomNav />;
+}
+
+// ── Root component ────────────────────────────────────────────────────────────
 
 function ScreenLoader() {
   return <Spinner />;
 }
 
 export default function App() {
-  const { articles, ads, recursos, places, featured, loading, error } = useContent();
-  const [screen, setScreen] = useState<ScreenKey>("home");
-  const [activeTab, setActiveTab] = useState<TabKey>("home");
-  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
-  const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+  const { articles, ads, recursos, places, featured, loading, error } =
+    useContent();
+  const navigate = useNavigate();
 
-  const hasContent = Boolean(featured && articles.length);
+  const openArticle = (article: Article) =>
+    navigate(`/articulos/${article.slug}`);
+  const openPlace = (place: Place) => navigate(`/mapa/${place.slug}`);
+  const goToTab   = (tab: TabKey) => navigate(TAB_ROUTES[tab]);
 
-  const openArticle = (article: Article) => {
-    setSelectedArticle(article);
-    setScreen("article-detail");
-  };
-
-  const openPlace = (place: Place) => {
-    setSelectedPlace(place);
-    setScreen("place-detail");
-  };
-
-  const goToTab = (tab: TabKey) => {
-    setActiveTab(tab);
-    setScreen(tab);
-  };
-
-  const goBackToMain = () => {
-    setScreen(activeTab);
-  };
-
-  const menuInfo = useMemo(
-    () => ({
-      news: {
-        eyebrow: "Artículos",
-        title: "Biblioteca editorial",
-        body: "Accede a lectura clara, útil y pensada para consulta rápida.",
-        icon: <Newspaper size={22} color="var(--cp-brand)" />,
-      },
-      "legal-help": {
-        eyebrow: "Ayuda legal",
-        title: "Orientación básica",
-        body: "Un punto de entrada para entender dudas frecuentes y próximos pasos.",
-        icon: <Scale size={22} color="var(--cp-brand)" />,
-      },
-      contact: {
-        eyebrow: "Contacto",
-        title: "Escríbenos",
-        body: "Comparte correcciones, sugerencias o ideas nuevas para el proyecto.",
-        icon: <Send size={22} color="var(--cp-brand)" />,
-      },
-      about: {
-        eyebrow: "Sobre nosotros",
-        title: "Una guía más clara",
-        body: "Cannaplan busca ordenar información útil con una voz calmada, moderna y responsable.",
-        icon: <Info size={22} color="var(--cp-brand)" />,
-      },
-      donate: {
-        eyebrow: "Donar",
-        title: "Apoya el proyecto",
-        body: "Una vía simple para sostener mejoras futuras y crecimiento editorial.",
-        icon: <Gift size={22} color="var(--cp-brand)" />,
-      },
-    }),
-    [],
-  );
-
-  let content = null;
+  // ── Loading / error full-screen ───────────────────────────────────────────
 
   if (loading) {
-    content = <LoadingState />;
-  } else if (error) {
-    content = <ErrorState message={error} />;
-  } else if ((!hasContent || !featured) && screen !== "map" && screen !== "place-detail") {
-    content = <ErrorState message="No hay contenido disponible todavía." />;
-  } else {
-    switch (screen) {
-      case "home":
-        content = (
-          <HomeScreen
-            featured={featured!}
-            articles={articles}
-            ads={ads}
-            recursos={recursos}
-            onOpenArticle={openArticle}
-            onOpenPlace={openPlace}
-            onGoToTab={goToTab}
-            onSearchClick={() => setScreen("search")}
-          />
-        );
-        break;
-      case "articles":
-        content = <ArticlesScreen articles={articles} ads={ads} onOpenArticle={openArticle} onSearchClick={() => setScreen("search")} />;
-        break;
-      case "map":
-        content = <MapScreen places={places} ads={ads} onOpenPlace={openPlace} />;
-        break;
-      case "menu":
-        content = (
-          <MenuScreen
-            onOpen={(target) => {
-              if (target === "news") {
-                setActiveTab("articles");
-                setScreen("articles");
-                return;
-              }
-              setScreen(target);
-            }}
-          />
-        );
-        break;
-      case "search":
-        content = <SearchScreen articles={articles} onOpenArticle={openArticle} onBack={() => setScreen("home")} />;
-        break;
-      case "article-detail":
-        content = selectedArticle ? <ArticleDetailScreen article={selectedArticle} ads={ads} /> : null;
-        break;
-      case "place-detail":
-        content = selectedPlace ? <PlaceDetailScreen place={selectedPlace} onBack={goBackToMain} /> : null;
-        break;
-      case "contact":
-        content = <ContactScreen onBack={() => setScreen("menu")} />;
-        break;
-      case "about":
-        content = <SobreNosotrosScreen onBack={() => setScreen("menu")} />;
-        break;
-      case "about-doc":
-        content = <SobreNosotrosScreen onBack={() => setScreen("menu")} />;
-        break;
-      case "donate":
-        content = <DonarScreen onBack={() => setScreen("menu")} />;
-        break;
-      case "legal-help":
-        content = <AyudaLegalScreen onBack={() => setScreen("menu")} />;
-        break;
-      case "news": {
-        const info = menuInfo["news"];
-        content = <SimpleInfoPage {...info} onBack={() => setScreen("menu")} />;
-        break;
-      }
-      case "privacy":
-        content = <PrivacyScreen onBack={() => setScreen("menu")} />;
-        break;
-      case "cookies":
-        content = <CookiesScreen onBack={() => setScreen("menu")} />;
-        break;
-      case "terms":
-        content = <TermsScreen onBack={() => setScreen("menu")} />;
-        break;
-      case "data-access":
-        content = <DataAccessScreen onBack={() => setScreen("menu")} />;
-        break;
-      case "sobre-app":
-        content = <SobreAppScreen onBack={() => setScreen("menu")} />;
-        break;
-      default:
-        content = null;
-    }
+    return (
+      <>
+        <main className="shell">
+          <LoadingState />
+        </main>
+        <BottomNav />
+      </>
+    );
   }
 
-  const staticScreens: ScreenKey[] = ["about", "about-doc", "donate", "contact", "legal-help", "privacy", "cookies", "terms", "data-access", "sobre-app"];
-  const isStatic = staticScreens.includes(screen);
+  if (error) {
+    return (
+      <>
+        <main className="shell">
+          <ErrorState message={error} />
+        </main>
+        <BottomNav />
+      </>
+    );
+  }
+
+  // ── Routes ────────────────────────────────────────────────────────────────
 
   return (
     <>
       <main className="shell">
-        <Suspense fallback={<ScreenLoader />}>{content}</Suspense>
+        <Suspense fallback={<ScreenLoader />}>
+          <Routes>
+
+            {/* ── Main tabs ────────────────────────────────────────────── */}
+            <Route
+              path="/"
+              element={
+                featured ? (
+                  <HomeScreen
+                    featured={featured}
+                    articles={articles}
+                    ads={ads}
+                    recursos={recursos}
+                    onOpenArticle={openArticle}
+                    onOpenPlace={openPlace}
+                    onGoToTab={goToTab}
+                    onSearchClick={() => navigate("/buscar")}
+                  />
+                ) : (
+                  <ErrorState message="No hay contenido disponible todavía." />
+                )
+              }
+            />
+
+            <Route
+              path="/articulos"
+              element={
+                <ArticlesScreen
+                  articles={articles}
+                  ads={ads}
+                  onOpenArticle={openArticle}
+                  onSearchClick={() => navigate("/buscar")}
+                />
+              }
+            />
+
+            <Route
+              path="/articulos/:slug"
+              element={<ArticleDetailRoute articles={articles} ads={ads} />}
+            />
+
+            <Route
+              path="/mapa"
+              element={
+                <MapScreen places={places} ads={ads} onOpenPlace={openPlace} />
+              }
+            />
+
+            <Route
+              path="/mapa/:slug"
+              element={<PlaceDetailRoute places={places} />}
+            />
+
+            <Route
+              path="/buscar"
+              element={
+                <SearchScreen
+                  articles={articles}
+                  onOpenArticle={openArticle}
+                  onBack={() => navigate(-1)}
+                />
+              }
+            />
+
+            {/* ── Menu + sub-pages ─────────────────────────────────────── */}
+            <Route
+              path="/menu"
+              element={
+                <MenuScreen
+                  onOpen={(target) => navigate(MENU_ROUTES[target] ?? "/")}
+                />
+              }
+            />
+
+            <Route
+              path="/menu/contacto"
+              element={<ContactScreen onBack={() => navigate(-1)} />}
+            />
+            <Route
+              path="/menu/sobre-nosotros"
+              element={<SobreNosotrosScreen onBack={() => navigate(-1)} />}
+            />
+            <Route
+              path="/menu/donar"
+              element={<DonarScreen onBack={() => navigate(-1)} />}
+            />
+            <Route
+              path="/menu/ayuda-legal"
+              element={<AyudaLegalScreen onBack={() => navigate(-1)} />}
+            />
+
+            {/* ── Legal pages ───────────────────────────────────────────── */}
+            <Route
+              path="/legal/privacidad"
+              element={<PrivacyScreen onBack={() => navigate(-1)} />}
+            />
+            <Route
+              path="/legal/cookies"
+              element={<CookiesScreen onBack={() => navigate(-1)} />}
+            />
+            <Route
+              path="/legal/terminos"
+              element={<TermsScreen onBack={() => navigate(-1)} />}
+            />
+            <Route
+              path="/legal/acceso-datos"
+              element={<DataAccessScreen onBack={() => navigate(-1)} />}
+            />
+
+            {/* ── Misc ─────────────────────────────────────────────────── */}
+            <Route
+              path="/sobre-app"
+              element={<SobreAppScreen onBack={() => navigate(-1)} />}
+            />
+
+          </Routes>
+        </Suspense>
       </main>
       <InstallPrompt />
-      {screen === "article-detail" || screen === "place-detail" ? (
-        <ArticleBottomBar onBack={goBackToMain} onMenu={() => setScreen("menu")} article={selectedArticle} />
-      ) : isStatic ? (
-        <StaticBottomBar
-          onBack={goBackToMain}
-          onHome={() => goToTab("home")}
-          onArticles={() => goToTab("articles")}
-          onMenu={() => goToTab("menu")}
-        />
-      ) : (
-        <BottomNav activeTab={activeTab} onChange={goToTab} />
-      )}
+      <BottomBarSwitch />
     </>
   );
 }

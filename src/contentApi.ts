@@ -593,8 +593,17 @@ export async function getMapPlaces(): Promise<Place[]> {
           ""
         );
 
+        const placeSlug =
+          String(r.Slug ?? r.slug ?? name)
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "") || `lugar-${i + 1}`;
+
         return {
           id: typeof r.ID === "number" ? r.ID : i + 1,
+          slug: placeSlug,
           name,
           type: String(r.Tipo ?? r.Type ?? r.Categoria ?? r.Categoría ?? "Lugar").trim(),
           area: String(r.Zona ?? r.Area ?? r.Barrio ?? r.Ciudad ?? r.Region ?? "").trim(),

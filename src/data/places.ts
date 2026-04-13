@@ -5,6 +5,7 @@ export const categories = ["Educación", "Noticias", "Recursos", "Asociaciones",
 export const mapPlaces: Place[] = [
   {
     id: 1,
+    slug: "asociacion-centro",
     name: "Asociación Centro",
     type: "Asociación",
     area: "Madrid Centro",
@@ -15,6 +16,7 @@ export const mapPlaces: Place[] = [
   },
   {
     id: 2,
+    slug: "recurso-retiro",
     name: "Recurso Retiro",
     type: "Recurso",
     area: "Retiro",
@@ -25,6 +27,7 @@ export const mapPlaces: Place[] = [
   },
   {
     id: 3,
+    slug: "guia-chamberi",
     name: "Guía Chamberí",
     type: "Educación",
     area: "Chamberí",

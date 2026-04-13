@@ -1,32 +1,25 @@
 import { ArrowLeft, House, Menu as MenuIcon, Newspaper } from "lucide-react";
+import { useNavigate } from "../router";
 
-export function StaticBottomBar({
-  onBack,
-  onHome,
-  onArticles,
-  onMenu,
-}: {
-  onBack: () => void;
-  onHome: () => void;
-  onArticles: () => void;
-  onMenu: () => void;
-}) {
+export function StaticBottomBar() {
+  const navigate = useNavigate();
+
   return (
     <div className="bottom-nav-wrap">
       <div className="bottom-nav">
-        <button onClick={onBack}>
+        <button onClick={() => navigate(-1)}>
           <ArrowLeft size={18} />
           <span>Volver</span>
         </button>
-        <button onClick={onHome}>
+        <button onClick={() => navigate("/")}>
           <House size={18} />
           <span>Inicio</span>
         </button>
-        <button onClick={onArticles}>
+        <button onClick={() => navigate("/articulos")}>
           <Newspaper size={18} />
           <span>Artículos</span>
         </button>
-        <button onClick={onMenu}>
+        <button onClick={() => navigate("/menu")}>
           <MenuIcon size={18} />
           <span>Menú</span>
         </button>

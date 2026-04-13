@@ -59,6 +59,7 @@ export function HomeScreen({
 
   const recursoAsPlaces: Place[] = recursos.map((r) => ({
     id: r.id,
+    slug: r.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || `recurso-${r.id}`,
     name: r.name,
     type: r.type,
     area: r.area,

@@ -22,6 +22,7 @@ export type ScreenKey =
 
 export type Place = {
   id: number;
+  slug: string;
   name: string;
   type: string;
   area: string;
