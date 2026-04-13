@@ -198,7 +198,7 @@ export default function App() {
         <Suspense fallback={<ScreenLoader />}>{content}</Suspense>
       </main>
       <InstallPrompt />
-      {screen === "article-detail" ? (
+      {screen === "article-detail" || screen === "place-detail" ? (
         <ArticleBottomBar onBack={goBackToMain} onMenu={() => setScreen("menu")} article={selectedArticle} />
       ) : isStatic ? (
         <StaticBottomBar

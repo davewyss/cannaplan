@@ -40,6 +40,7 @@ export function ArticleBottomBar({ onBack, onMenu, article }: ArticleBottomBarPr
           <ArrowLeft size={18} />
           <span>Volver</span>
         </button>
+        <div className="bottom-nav-spacer" />
         <button onClick={handleShare}>
           {copied ? <Check size={18} /> : <Share2 size={18} />}
           <span>{copied ? "¡Copiado!" : "Compartir"}</span>

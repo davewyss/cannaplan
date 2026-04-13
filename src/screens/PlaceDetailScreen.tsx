@@ -1,15 +1,9 @@
-import { ArrowLeft, Clock, ExternalLink, MapPin } from "lucide-react";
+import { Clock, ExternalLink, MapPin } from "lucide-react";
 import type { Place } from "../types";
 
-export default function PlaceDetailScreen({ place, onBack }: { place: Place; onBack: () => void }) {
+export default function PlaceDetailScreen({ place, onBack: _onBack }: { place: Place; onBack: () => void }) {
   return (
     <div className="screen-grid">
-      <div className="back-row">
-        <button onClick={onBack} className="back-button">
-          <ArrowLeft size={18} />
-        </button>
-      </div>
-
       <div className="cp-card place-detail-card">
         {place.imageUrl && (
           <img src={place.imageUrl} alt={place.name} className="place-detail-image-real" />
