@@ -18,13 +18,12 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Network-first: always try network, fall back to cache for navigation
+  // Only intercept same-origin navigation requests (page loads).
+  // Everything else — CDN scripts, API calls, images — passes through natively.
   const { request } = event;
-  if (request.mode === 'navigate') {
-    event.respondWith(
-      fetch(request).catch(() => caches.match('/index.html'))
-    );
-    return;
-  }
-  event.respondWith(fetch(request));
+  if (request.mode !== 'navigate') return;
+
+  event.respondWith(
+    fetch(request).catch(() => caches.match('/index.html'))
+  );
 });

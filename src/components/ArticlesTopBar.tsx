@@ -4,7 +4,7 @@ export function ArticlesTopBar({ onSearchClick }: { onSearchClick: () => void })
   return (
     <header className="inicio-topbar">
       <div className="inicio-topbar-left">
-        <img src="/apple-touch-icon.png" alt="Cannaplan logo" className="inicio-topbar-logo" width="28" height="28" />
+        <img src="/logo_reverse_512.png" alt="Cannaplan logo" className="inicio-topbar-logo" width="28" height="28" />
         <div className="inicio-topbar-title">Artículos</div>
       </div>
       <button type="button" className="inicio-topbar-search" aria-label="Buscar" onClick={onSearchClick}>
