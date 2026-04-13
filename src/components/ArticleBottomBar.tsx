@@ -1,4 +1,4 @@
-import { ArrowLeft, Bookmark, Check, Menu as MenuIcon, Share2 } from "lucide-react";
+import { ArrowLeft, Check, Menu as MenuIcon, Share2 } from "lucide-react";
 import { useState } from "react";
 import type { Article } from "../types";
 
@@ -39,10 +39,6 @@ export function ArticleBottomBar({ onBack, onMenu, article }: ArticleBottomBarPr
         <button onClick={onBack}>
           <ArrowLeft size={18} />
           <span>Volver</span>
-        </button>
-        <button>
-          <Bookmark size={18} />
-          <span>Guardar</span>
         </button>
         <button onClick={handleShare}>
           {copied ? <Check size={18} /> : <Share2 size={18} />}
