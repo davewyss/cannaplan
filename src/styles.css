@@ -2310,72 +2310,117 @@ input, textarea { outline: none; }
   flex-shrink: 0;
 }
 
-/* iOS bottom sheet */
-.install-ios-sheet {
+/* iOS install modal */
+.install-modal-overlay {
   position: fixed;
-  bottom: 88px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(92vw, 420px);
-  background: #d4f0e5;
-  border: 1px solid rgba(29, 136, 103, 0.18);
-  border-radius: 20px;
-  box-shadow: 0 16px 48px rgba(40, 45, 72, 0.16);
-  padding: 16px 44px 16px 16px;
-  z-index: 1200;
+  inset: 0;
+  background: rgba(40, 45, 72, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 1300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
 }
 
-.install-ios-sheet .install-dismiss {
+.install-modal-card {
+  position: relative;
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px 28px 28px;
+  width: 100%;
+  max-width: 340px;
+  box-shadow: 0 24px 64px rgba(40, 45, 72, 0.22);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+}
+
+.install-modal-close {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  background: rgba(29, 136, 103, 0.15);
-  color: #1d8867;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(40, 45, 72, 0.07);
+  color: var(--cp-navy);
+  cursor: pointer;
 }
 
-.install-ios-inner {
-  display: block;
+.install-modal-icon-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--cp-brand);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
 }
 
-.install-ios-title {
+.install-modal-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: contain;
+  border: 3px solid white;
+  box-sizing: border-box;
+}
+
+.install-modal-title {
+  font-family: Poppins, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--cp-navy);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.install-modal-body {
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  color: var(--cp-text);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.install-modal-body strong {
+  color: var(--cp-navy);
+  font-weight: 600;
+}
+
+.install-share-inline {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  color: #007aff;
+  margin: 0 2px;
+  position: relative;
+  top: -1px;
+}
+
+.install-modal-cta {
+  width: 100%;
+  background: var(--cp-brand);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 13px 0;
   font-family: Poppins, sans-serif;
   font-size: 15px;
   font-weight: 700;
-  color: #0f4d38;
-  line-height: 1.2;
-  margin-bottom: 4px;
+  cursor: pointer;
+  margin-top: 4px;
+  letter-spacing: 0.01em;
 }
 
-.install-ios-desc {
-  font-family: Poppins, sans-serif;
-  font-size: 13px;
-  color: #1a6b50;
-  line-height: 1.5;
-}
-
-.install-ios-desc strong {
-  color: #0f4d38;
-}
-
-.install-share-icon {
-  display: inline-flex;
-  align-items: center;
-  color: #007aff; /* iOS blue */
-  vertical-align: middle;
-  margin: 0 1px;
-}
-
-.install-ios-arrow {
-  width: 16px;
-  height: 16px;
-  background: rgba(255, 255, 255, 0.97);
-  border-right: 1px solid rgba(0, 0, 0, 0.06);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  transform: rotate(45deg);
-  position: absolute;
-  bottom: -9px;
-  left: 50%;
-  margin-left: -8px;
+.install-modal-cta:hover {
+  opacity: 0.9;
 }
 
 /* Android / Chrome install banner */

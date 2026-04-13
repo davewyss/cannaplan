@@ -6,7 +6,6 @@ const DISMISSED_KEY = "cp_install_dismissed";
 function isIosSafari(): boolean {
   const ua = window.navigator.userAgent.toLowerCase();
   const isIos = /iphone|ipad|ipod/.test(ua);
-  // Exclude Chrome on iOS (which can't install PWAs via this method)
   const isSafari = !ua.includes("crios") && !ua.includes("fxios");
   return isIos && isSafari;
 }
@@ -15,6 +14,17 @@ function isInStandaloneMode(): boolean {
   return (
     (window.navigator as unknown as Record<string, unknown>).standalone === true ||
     window.matchMedia("(display-mode: standalone)").matches
+  );
+}
+
+function ShareIcon() {
+  return (
+    <span className="install-share-inline" aria-label="botón compartir">
+      <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 1v11M4 4l4-3 4 3M1 13v3.5a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5V13"
+          stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    </span>
   );
 }
 
@@ -27,13 +37,11 @@ export function InstallPrompt() {
     if (localStorage.getItem(DISMISSED_KEY)) return;
     if (isInStandaloneMode()) return;
 
-    // iOS: show after a short delay so the app feels settled
     if (isIosSafari()) {
       const t = setTimeout(() => setShowIos(true), 3000);
       return () => clearTimeout(t);
     }
 
-    // Chrome / Android / Chromium: listen for browser install event
     function handleBeforeInstall(e: Event) {
       e.preventDefault();
       setDeferredPrompt(e as typeof deferredPrompt);
@@ -61,38 +69,39 @@ export function InstallPrompt() {
     setShowAndroid(false);
   }
 
-  // ── iOS bottom sheet ──────────────────────────────────────
+  // ── iOS modal ─────────────────────────────────────────────
   if (showIos) {
     return (
-      <div className="install-ios-sheet">
-        <button className="install-dismiss" onClick={dismiss} aria-label="Cerrar">
-          <X size={16} />
-        </button>
-        <div className="install-ios-inner">
-          <div className="install-ios-text">
-            <div className="install-ios-title">Añadir a inicio</div>
-            <div className="install-ios-desc">
-              Toca el botón{" "}
-              <span className="install-share-icon" aria-label="Compartir">
-                {/* iOS share icon inline SVG */}
-                <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M7 1v9M3.5 4L7 1l3.5 3M1 11v3.5a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5V11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </span>{" "}
-              y luego <strong>«Añadir a pantalla de inicio»</strong>
-            </div>
+      <div className="install-modal-overlay" onClick={dismiss}>
+        <div className="install-modal-card" onClick={(e) => e.stopPropagation()}>
+          <button className="install-modal-close" onClick={dismiss} aria-label="Cerrar">
+            <X size={15} />
+          </button>
+
+          <div className="install-modal-icon-wrap">
+            <img src="/logo_reverse_512.png" alt="Cannaplan" className="install-modal-logo" />
           </div>
+
+          <h2 className="install-modal-title">Consigue la mejor experiencia</h2>
+
+          <p className="install-modal-body">
+            Pulsa <ShareIcon /> y selecciona{" "}
+            <strong>«Añadir a pantalla de inicio»</strong>.
+          </p>
+
+          <button className="install-modal-cta" onClick={dismiss}>
+            Entendido
+          </button>
         </div>
-        <div className="install-ios-arrow" />
       </div>
     );
   }
 
-  // ── Android / Chrome install banner ──────────────────────
+  // ── Android / Chrome banner ───────────────────────────────
   if (showAndroid) {
     return (
       <div className="install-android-banner">
-        <img src="/apple-touch-icon.png" alt="Cannaplan" className="install-app-icon" />
+        <img src="/logo_reverse_512.png" alt="Cannaplan" className="install-app-icon" />
         <div className="install-android-text">
           <div className="install-android-title">Instalar Cannaplan</div>
           <div className="install-android-desc">Acceso rápido desde tu pantalla de inicio</div>
