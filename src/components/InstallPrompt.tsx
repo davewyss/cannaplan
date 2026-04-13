@@ -38,7 +38,7 @@ export function InstallPrompt() {
     if (isInStandaloneMode()) return;
 
     if (isIosSafari()) {
-      const t = setTimeout(() => setShowIos(true), 3000);
+      const t = setTimeout(() => setShowIos(true), 6000);
       return () => clearTimeout(t);
     }
 
@@ -78,15 +78,13 @@ export function InstallPrompt() {
             <X size={15} />
           </button>
 
-          <div className="install-modal-icon-wrap">
-            <img src="/logo_reverse_512.png" alt="Cannaplan" className="install-modal-logo" />
-          </div>
+          <div className="install-modal-emoji">✨📱</div>
 
           <h2 className="install-modal-title">Consigue la mejor experiencia</h2>
 
           <p className="install-modal-body">
             Pulsa <ShareIcon /> y selecciona{" "}
-            <strong>«Añadir a pantalla de inicio»</strong>.
+            <strong>«Añadir a Pantalla de Inicio»</strong>.
           </p>
 
           <button className="install-modal-cta" onClick={dismiss}>

@@ -2353,23 +2353,10 @@ input, textarea { outline: none; }
   cursor: pointer;
 }
 
-.install-modal-icon-wrap {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: var(--cp-brand);
-  display: grid;
-  place-items: center;
+.install-modal-emoji {
+  font-size: 48px;
+  line-height: 1;
   flex-shrink: 0;
-}
-
-.install-modal-logo {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  object-fit: contain;
-  border: 3px solid white;
-  box-sizing: border-box;
 }
 
 .install-modal-title {
