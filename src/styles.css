@@ -497,16 +497,28 @@ input, textarea { outline: none; }
 .inicio-topbar-tagline {
   color: var(--cp-brand);
   font-family: Poppins, sans-serif;
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  white-space: nowrap;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tagline-short { display: none; }
+.tagline-full  { display: inline; }
+
+@media (max-width: 425px) {
+  .tagline-short { display: inline; }
+  .tagline-full  { display: none; }
+}
+
+/* inner text wrapper inside topbar-left must be able to shrink */
+.inicio-topbar-left > div {
+  min-width: 0;
+  overflow: hidden;
 }
 
 .inicio-topbar-search {
