@@ -578,21 +578,60 @@ export async function getMapPlaces(): Promise<Place[]> {
         const name = getFirstString(r, ["Nombre", "Titulo", "Título", "Name"]);
         if (!name) return null;
 
+        // ── Coordinates ───────────────────────────────────────────────────
         const rawLat = r.Lat ?? r.Latitud ?? r.lat ?? r.latitude;
         const rawLng = r.Lng ?? r.Lon ?? r.Longitud ?? r.lng ?? r.longitude;
         const lat = rawLat !== undefined && rawLat !== "" ? parseFloat(String(rawLat)) : undefined;
         const lng = rawLng !== undefined && rawLng !== "" ? parseFloat(String(rawLng)) : undefined;
 
-        const rawLink = r.URL ?? r.Enlace ?? r.Link ?? r.Web ?? r.Website ?? "";
+        // ── Address components ────────────────────────────────────────────
+        const address1   = String(r["Direcion 1"]    ?? r["Dirección 1"]   ?? "").trim();
+        const address2   = String(r["Direcion 2"]    ?? r["Dirección 2"]   ?? "").trim();
+        const city       = String(r.Ciudad           ?? "").trim();
+        const province   = String(r.Provincia        ?? "").trim();
+        const postalCode = String(r["Codigo Postal"] ?? r["Código Postal"] ?? "").trim();
+        const country    = String(r.Pais ?? r.País   ?? r.Country          ?? "").trim();
+        const dirCompleta = getFirstString(r, [
+          "Dirrecion Completa",   // actual sheet spelling (double r)
+          "Direcion Completa",
+          "Dirección Completa",
+          "Direccion Completa",
+        ]);
+        const address = dirCompleta ?? [
+          address1,
+          address2,
+          city,
+          [province, postalCode].filter(Boolean).join(" "),
+        ].filter(Boolean).join(", ");
+
+        // ── Logo image ────────────────────────────────────────────────────
         const imageUrl = normalizeImageUrl(
-          r["URL de Imagen (auto-gen)"] ??
-          r["Enlace de Imagen Drive"] ??
-          r["Imagen"] ??
-          r["Image URL"] ??
-          r["imageUrl"] ??
+          r["Logo Enlace"]              ??  // actual sheet column
+          r["URL de Imagen (auto-gen)"] ??  // legacy fallback
+          r["Drive ID (auto-gen)"]      ??
+          r["Enlace de Logo"]           ??
+          r["Imagen"]                   ??
+          r["Image URL"]                ??
+          r["imageUrl"]                 ??
           ""
         );
 
+        // ── Banner image ──────────────────────────────────────────────────
+        const bannerUrl = normalizeImageUrl(
+          r["Logo Banner"]                     ??  // actual sheet column
+          r["Banner URL de Imagen (auto-gen)"] ??  // legacy fallback
+          r["Banner Drive ID (auto-gen)"]      ??
+          r["Enlace Banner"]                   ??
+          ""
+        );
+
+        // ── Links ─────────────────────────────────────────────────────────
+        const link1Url   = normalizeLinkUrl(getFirstString(r, ["Enlace 1"]));
+        const link1Label = String(r["Etiqueta Enlace 1"] ?? "").trim() || undefined;
+        const link2Url   = normalizeLinkUrl(getFirstString(r, ["Enlace 2"]));
+        const link2Label = String(r["Etiqueta Enlace 2"] ?? "").trim() || undefined;
+
+        // ── Slug ──────────────────────────────────────────────────────────
         const placeSlug =
           String(r.Slug ?? r.slug ?? name)
             .toLowerCase()
@@ -605,16 +644,29 @@ export async function getMapPlaces(): Promise<Place[]> {
           id: typeof r.ID === "number" ? r.ID : i + 1,
           slug: placeSlug,
           name,
-          type: String(r.Tipo ?? r.Type ?? r.Categoria ?? r.Categoría ?? "Lugar").trim(),
-          area: String(r.Zona ?? r.Area ?? r.Barrio ?? r.Ciudad ?? r.Region ?? "").trim(),
-          country: String(r.Pais ?? r.País ?? r.Country ?? "").trim(),
-          description: String(r.Descripcion ?? r.Descripción ?? r.Extracto ?? "").trim(),
-          address: String(r["Direcion Completa"] ?? r["Dirección Completa"] ?? r["Direccion Completa"] ?? r.Direccion ?? r.Dirección ?? r.Address ?? "").trim(),
-          hours: String(r.Horario ?? r.Horas ?? r.Hours ?? "").trim(),
-          lat: lat !== undefined && !isNaN(lat) ? lat : undefined,
-          lng: lng !== undefined && !isNaN(lng) ? lng : undefined,
-          imageUrl,
-          linkUrl: normalizeLinkUrl(rawLink),
+          type:    String(r.Categoria ?? r.Categoría ?? r.Tipo ?? r.Type ?? "Lugar").trim(),
+          area:    city || province,
+          country,
+          description: String(r["Texto Corto"] ?? r.Descripcion ?? r.Descripción ?? r.Extracto ?? "").trim(),
+          bio:         String(r["Texto Largo"]  ?? "").trim(),
+          address,
+          address1,
+          address2,
+          city,
+          province,
+          postalCode,
+          hours:    String(r.Horario ?? r.Horas ?? r.Hours ?? "").trim(),
+          lat:      lat !== undefined && !isNaN(lat) ? lat : undefined,
+          lng:      lng !== undefined && !isNaN(lng) ? lng : undefined,
+          imageUrl:  imageUrl  || undefined,
+          logoAlt:   String(r["Logo Alt"]    ?? "").trim() || undefined,
+          bannerUrl: bannerUrl || undefined,
+          bannerAlt: String(r["Banner Alt"]  ?? "").trim() || undefined,
+          link1Url,
+          link1Label,
+          link2Url,
+          link2Label,
+          linkUrl: link1Url, // backward compat for list cards
         };
       })
       .filter((r): r is Place => r !== null);

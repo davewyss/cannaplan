@@ -2507,3 +2507,156 @@ input, textarea { outline: none; }
 .install-android-btn:hover {
   opacity: 0.9;
 }
+
+/* ── Place profile (detail page) ─────────────────────────────────────────── */
+
+.place-profile {
+  /* no extra padding — shell provides it */
+}
+
+/* Banner bleeds edge-to-edge; position:relative so logo can be anchored inside */
+.place-profile-banner-outer {
+  position: relative;
+  margin: -24px -24px 0;
+}
+
+.place-profile-banner {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 1;
+  object-fit: cover;
+}
+
+.place-profile-banner--empty {
+  aspect-ratio: 4 / 1;
+  background: linear-gradient(135deg, var(--cp-mint) 0%, #c8ede1 100%);
+}
+
+/* Logo sits inside the banner container, anchored to the bottom-left */
+.place-profile-logo {
+  position: absolute;
+  bottom: -36px;
+  left: 20px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid white;
+  box-shadow: 0 4px 14px rgba(40,45,72,0.14);
+  background: var(--cp-mint);
+  z-index: 1;
+}
+
+.place-profile-logo--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Poppins, sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--cp-brand);
+  background: var(--cp-mint);
+}
+
+/* Body: all content below the banner, padded to clear the protruding logo */
+.place-profile-body {
+  padding-top: 52px; /* 36px logo overlap + 16px gap */
+  padding-bottom: 16px;
+}
+
+/* Heading block: name + meta */
+.place-profile-heading {
+  margin-bottom: 16px;
+}
+
+.place-profile-name {
+  font-family: Poppins, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--cp-navy);
+  margin: 0 0 6px;
+  line-height: 1.2;
+}
+
+.place-profile-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.place-profile-area {
+  font-family: Poppins, sans-serif;
+  font-size: 12px;
+  color: var(--cp-text-muted, #888);
+}
+
+/* Bio */
+.place-profile-bio {
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--cp-text);
+  margin: 0 0 18px;
+}
+
+/* Contact rows */
+.place-profile-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.place-profile-contact-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: Poppins, sans-serif;
+  font-size: 13px;
+  color: var(--cp-text);
+  line-height: 1.4;
+}
+
+.place-profile-contact-row svg {
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+/* Link buttons */
+.place-profile-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.place-profile-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--cp-mint);
+  color: var(--cp-brand);
+  font-family: Poppins, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 140ms ease;
+}
+
+.place-profile-link-btn:hover {
+  background: #c8ede1;
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+  .place-profile-banner-outer {
+    margin: -16px -16px 0;
+  }
+
+  .place-profile-name {
+    font-size: 18px;
+  }
+}

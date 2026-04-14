@@ -25,15 +25,28 @@ export type Place = {
   slug: string;
   name: string;
   type: string;
-  area: string;
+  area: string;       // Ciudad or Provincia — used in list cards
   country: string;
-  description: string;
-  address: string;
+  description: string; // Texto Corto — used in list cards
+  bio: string;         // Texto Largo — shown on detail profile
+  address: string;     // Direcion Completa or constructed
+  address1: string;
+  address2: string;
+  city: string;
+  province: string;
+  postalCode: string;
   hours: string;
   lat?: number;
   lng?: number;
-  imageUrl?: string;
-  linkUrl?: string;
+  imageUrl?: string;   // Logo (1:1)
+  logoAlt?: string;
+  bannerUrl?: string;  // Banner (4:1)
+  bannerAlt?: string;
+  link1Url?: string;
+  link1Label?: string;
+  link2Url?: string;
+  link2Label?: string;
+  linkUrl?: string;    // kept for backward compat (= link1Url)
 };
 
 export type SheetArticleRecord = {

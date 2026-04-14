@@ -65,7 +65,9 @@ export function HomeScreen({
     area: r.area,
     country: "",
     description: r.description,
+    bio: "",
     address: r.address ?? "",
+    address1: "", address2: "", city: "", province: "", postalCode: "",
     hours: r.hours ?? "",
   }));
 

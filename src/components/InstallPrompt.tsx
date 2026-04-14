@@ -15,9 +15,16 @@ function shouldShow(): boolean {
 function recordDismiss()   { localStorage.setItem(DISMISSED_KEY, String(Date.now())); }
 function recordInstalled() { localStorage.setItem(INSTALLED_KEY, "1"); }
 
-/** Any iOS device regardless of browser — share sheet works the same everywhere on iOS. */
 function isIos(): boolean {
   return /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+}
+
+/** Safari on iOS — has the share sheet with "Add to Home Screen". */
+function isIosSafari(): boolean {
+  const ua = window.navigator.userAgent.toLowerCase();
+  const isIos = /iphone|ipad|ipod/.test(ua);
+  const isSafari = !ua.includes("crios") && !ua.includes("fxios");
+  return isIos && isSafari;
 }
 
 function isInStandaloneMode(): boolean {
@@ -60,7 +67,7 @@ export function InstallPrompt() {
     window.addEventListener("beforeinstallprompt", handleBeforeInstall);
 
     function handleTrigger() {
-      if (isIos()) {
+      if (isIos()) {  // Safari, Chrome, or Firefox on iOS
         setShowIos(true);
       } else if (captured) {
         setShowAndroid(true);
@@ -107,6 +114,8 @@ export function InstallPrompt() {
 
   // ── iOS modal ─────────────────────────────────────────────────────────────
   if (showIos) {
+    const isSafari = isIosSafari();
+
     return (
       <div className="install-modal-overlay" onClick={dismiss}>
         <div className="install-modal-card" onClick={(e) => e.stopPropagation()}>
@@ -115,18 +124,33 @@ export function InstallPrompt() {
           <h2 className="install-modal-title">Consigue la mejor experiencia</h2>
 
           <p className="install-modal-body">
-            Pulsa <ShareIcon /> y selecciona{" "}
-            <strong>«Añadir a Pantalla de Inicio»</strong>.
+            {isSafari ? (
+              <>
+                Pulsa <ShareIcon /> y selecciona{" "}
+                <strong>«Añadir a Pantalla de Inicio»</strong>.
+              </>
+            ) : (
+              <>
+                Abre el menú de opciones y selecciona{" "}
+                <strong>«Añadir a Pantalla de Inicio»</strong>.
+              </>
+            )}
           </p>
 
-          <div className="install-modal-actions">
-            <button className="install-modal-cta" onClick={handleAddIos}>
-              Añadir
+          {isSafari ? (
+            <div className="install-modal-actions">
+              <button className="install-modal-cta" onClick={handleAddIos}>
+                Añadir
+              </button>
+              <button className="install-modal-secondary" onClick={dismiss}>
+                Cerrar
+              </button>
+            </div>
+          ) : (
+            <button className="install-modal-cta" onClick={dismiss}>
+              Entendido
             </button>
-            <button className="install-modal-secondary" onClick={dismiss}>
-              Cerrar
-            </button>
-          </div>
+          )}
         </div>
       </div>
     );
