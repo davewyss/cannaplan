@@ -13,7 +13,7 @@ export default function PlaceDetailScreen({
   const displayArea = [place.city || place.area, place.country].filter(Boolean).join(", ");
 
   return (
-    <div className="place-profile">
+    <div className="place-profile cp-card">
 
       {/* ── Banner + logo (logo is inside banner div, absolutely positioned) ── */}
       <div className="place-profile-banner-outer">

@@ -2511,13 +2511,12 @@ input, textarea { outline: none; }
 /* ── Place profile (detail page) ─────────────────────────────────────────── */
 
 .place-profile {
-  /* no extra padding — shell provides it */
+  overflow: hidden; /* clips banner to the cp-card border-radius */
 }
 
-/* Banner bleeds edge-to-edge; position:relative so logo can be anchored inside */
+/* Banner fills card width; position:relative so logo can be anchored inside */
 .place-profile-banner-outer {
   position: relative;
-  margin: -24px -24px 0;
 }
 
 .place-profile-banner {
@@ -2560,8 +2559,11 @@ input, textarea { outline: none; }
 
 /* Body: all content below the banner, padded to clear the protruding logo */
 .place-profile-body {
-  padding-top: 52px; /* 36px logo overlap + 16px gap */
-  padding-bottom: 16px;
+  padding: 52px 40px 32px; /* top clears the logo; sides + bottom for comfort */
+  max-width: 660px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Heading block: name + meta */
@@ -2652,8 +2654,8 @@ input, textarea { outline: none; }
 
 /* Mobile adjustments */
 @media (max-width: 640px) {
-  .place-profile-banner-outer {
-    margin: -16px -16px 0;
+  .place-profile-body {
+    padding: 52px 20px 24px;
   }
 
   .place-profile-name {
