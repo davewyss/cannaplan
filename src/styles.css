@@ -1709,9 +1709,37 @@ input, textarea { outline: none; }
   display: flex;
   align-items: center;
   gap: 5px;
+  flex-wrap: nowrap;
   font-family: Poppins, sans-serif;
   font-size: 12px;
   color: var(--cp-text);
+}
+
+.map-place-card-address {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.map-place-card-directions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--cp-mint);
+  color: var(--cp-brand);
+  text-decoration: none;
+  transition: background 140ms;
+  margin-left: 2px;
+}
+
+.map-place-card-directions:hover {
+  background: #c8ede1;
 }
 
 .map-place-card-cta {
@@ -2531,11 +2559,12 @@ input, textarea { outline: none; }
   background: linear-gradient(135deg, var(--cp-mint) 0%, #c8ede1 100%);
 }
 
-/* Logo sits inside the banner container, aligned with the body text's left edge */
+/* Logo sits inside the banner container, aligned with the body text's left edge.
+   max() clamps it so it never goes off-screen on narrow cards. */
 .place-profile-logo {
   position: absolute;
   bottom: -36px;
-  left: calc(50% - 290px); /* aligns with centered body's left content edge (50% - 330px + 40px padding) */
+  left: max(20px, calc(50% - 290px)); /* aligns with centered body padding-left (50% - 330px + 40px) */
   width: 72px;
   height: 72px;
   border-radius: 50%;
@@ -2659,7 +2688,7 @@ input, textarea { outline: none; }
   }
 
   .place-profile-logo {
-    left: calc(50% - 310px); /* adjust for mobile padding: 50% - 330px + 20px */
+    left: max(16px, calc(50% - 310px)); /* mobile padding is 20px: 50% - 330px + 20px */
   }
 
   .place-profile-name {

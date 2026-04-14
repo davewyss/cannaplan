@@ -1,4 +1,4 @@
-import { MapPin, Search, X } from "lucide-react";
+import { MapPin, Navigation, Search, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AdSidebar } from "../components/AdSidebar";
 import { MapPlaceCard } from "../components/MapPlaceCard";
@@ -276,9 +276,6 @@ export default function MapScreen({
 
         {selectedPlace && (
           <div className="map-place-card">
-            {selectedPlace.imageUrl && (
-              <img src={selectedPlace.imageUrl} alt={selectedPlace.name} className="map-place-card-img" />
-            )}
             <div className="map-place-card-body">
               <div className="map-place-card-top">
                 <span className="map-place-type-pill" style={{ background: typeColor(selectedPlace.type) }}>
@@ -290,12 +287,27 @@ export default function MapScreen({
               </div>
               <div className="map-place-card-name">{selectedPlace.name}</div>
               {selectedPlace.area && <div className="map-place-card-area">{selectedPlace.area}</div>}
-              {selectedPlace.address && (
-                <div className="map-place-card-meta">
-                  <MapPin size={12} />
-                  {selectedPlace.address}
-                </div>
-              )}
+              {(selectedPlace.address1 || selectedPlace.address) && (() => {
+                const shortAddr = selectedPlace.address1 || selectedPlace.address;
+                const mapsQuery = encodeURIComponent(
+                  [shortAddr, selectedPlace.city, selectedPlace.province].filter(Boolean).join(", ")
+                );
+                return (
+                  <div className="map-place-card-meta">
+                    <MapPin size={12} />
+                    <span className="map-place-card-address">{shortAddr}</span>
+                    <a
+                      href={`https://www.google.com/maps/dir/?api=1&destination=${mapsQuery}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="map-place-card-directions"
+                      title="Cómo llegar"
+                    >
+                      <Navigation size={13} />
+                    </a>
+                  </div>
+                );
+              })()}
               <button className="map-place-card-cta" onClick={() => onOpenPlace(selectedPlace)}>
                 Ver ficha completa
               </button>
