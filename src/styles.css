@@ -2412,6 +2412,14 @@ input, textarea { outline: none; }
   top: -1px;
 }
 
+.install-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-top: 4px;
+}
+
 .install-modal-cta {
   width: 100%;
   background: var(--cp-brand);
@@ -2423,13 +2431,25 @@ input, textarea { outline: none; }
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
-  margin-top: 4px;
   letter-spacing: 0.01em;
 }
 
-.install-modal-cta:hover {
-  opacity: 0.9;
+.install-modal-cta:hover { opacity: 0.9; }
+
+.install-modal-secondary {
+  width: 100%;
+  background: #e8e9ee;
+  color: #555;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 0;
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
 }
+
+.install-modal-secondary:hover { background: #dddee5; }
 
 /* Android / Chrome install banner */
 .install-android-banner {
