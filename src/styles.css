@@ -2531,11 +2531,11 @@ input, textarea { outline: none; }
   background: linear-gradient(135deg, var(--cp-mint) 0%, #c8ede1 100%);
 }
 
-/* Logo sits inside the banner container, anchored to the bottom-left */
+/* Logo sits inside the banner container, aligned with the body text's left edge */
 .place-profile-logo {
   position: absolute;
   bottom: -36px;
-  left: 20px;
+  left: calc(50% - 290px); /* aligns with centered body's left content edge (50% - 330px + 40px padding) */
   width: 72px;
   height: 72px;
   border-radius: 50%;
@@ -2656,6 +2656,10 @@ input, textarea { outline: none; }
 @media (max-width: 640px) {
   .place-profile-body {
     padding: 52px 20px 24px;
+  }
+
+  .place-profile-logo {
+    left: calc(50% - 310px); /* adjust for mobile padding: 50% - 330px + 20px */
   }
 
   .place-profile-name {

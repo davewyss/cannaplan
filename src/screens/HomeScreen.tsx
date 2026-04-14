@@ -1,7 +1,17 @@
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useMemo } from "react";
+
+const INSTALL_TRIGGERED_KEY = "cp_install_triggered_session";
 
 function fireInstallTrigger() {
   window.dispatchEvent(new CustomEvent("cp:install-trigger"));
+}
+
+function hasTriggeredInSession(): boolean {
+  return sessionStorage.getItem(INSTALL_TRIGGERED_KEY) === "1";
+}
+
+function markTriggeredInSession() {
+  sessionStorage.setItem(INSTALL_TRIGGERED_KEY, "1");
 }
 import type { Ad, Article, Place, Recurso, TabKey } from "../types";
 import { AdSidebar } from "../components/AdSidebar";
@@ -32,15 +42,13 @@ export function HomeScreen({
   onGoToTab: (tab: TabKey) => void;
   onSearchClick: () => void;
 }) {
-  const triggered = useRef(false);
-
   useEffect(() => {
     function onScroll() {
-      if (triggered.current) return;
+      if (hasTriggeredInSession()) return;
       const scrolled = window.scrollY;
       const half = (document.documentElement.scrollHeight - window.innerHeight) * 0.5;
       if (scrolled >= half) {
-        triggered.current = true;
+        markTriggeredInSession();
         fireInstallTrigger();
       }
     }
