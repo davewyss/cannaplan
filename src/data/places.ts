@@ -2,7 +2,7 @@ import type { Place } from "../types";
 
 export const categories = ["Educación", "Noticias", "Recursos", "Asociaciones", "Salud"];
 
-const empty = { bio: "", address1: "", address2: "", city: "", province: "", postalCode: "" };
+const empty = { bio: "", address1: "", address2: "", city: "", province: "", postalCode: "", phone: undefined, email: undefined };
 
 export const mapPlaces: Place[] = [
   {

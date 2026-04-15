@@ -625,6 +625,10 @@ export async function getMapPlaces(): Promise<Place[]> {
           ""
         );
 
+        // ── Contact info ──────────────────────────────────────────────────
+        const phone = String(r.Telefono ?? r.Teléfono ?? r.Celular ?? r.Phone ?? "").trim() || undefined;
+        const email = String(r.Email ?? r.Correo ?? r["Correo Electrónico"] ?? "").trim() || undefined;
+
         // ── Links ─────────────────────────────────────────────────────────
         const link1Url   = normalizeLinkUrl(getFirstString(r, ["Enlace 1"]));
         const link1Label = String(r["Etiqueta Enlace 1"] ?? "").trim() || undefined;
@@ -655,6 +659,8 @@ export async function getMapPlaces(): Promise<Place[]> {
           city,
           province,
           postalCode,
+          phone,
+          email,
           hours:    String(r.Horario ?? r.Horas ?? r.Hours ?? "").trim(),
           lat:      lat !== undefined && !isNaN(lat) ? lat : undefined,
           lng:      lng !== undefined && !isNaN(lng) ? lng : undefined,

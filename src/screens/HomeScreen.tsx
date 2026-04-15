@@ -76,6 +76,8 @@ export function HomeScreen({
     bio: "",
     address: r.address ?? "",
     address1: "", address2: "", city: "", province: "", postalCode: "",
+    phone: undefined,
+    email: undefined,
     hours: r.hours ?? "",
   }));
 

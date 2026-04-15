@@ -35,6 +35,8 @@ export type Place = {
   city: string;
   province: string;
   postalCode: string;
+  phone?: string;
+  email?: string;
   hours: string;
   lat?: number;
   lng?: number;

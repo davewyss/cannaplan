@@ -1,4 +1,4 @@
-import { Clock, ExternalLink, MapPin } from "lucide-react";
+import { Clock, ExternalLink, Mail, MapPin, Navigation, Phone } from "lucide-react";
 import type { Place } from "../types";
 
 export default function PlaceDetailScreen({
@@ -8,9 +8,17 @@ export default function PlaceDetailScreen({
   place: Place;
   onBack: () => void;
 }) {
-  const hasContact = Boolean(place.address || place.hours);
+  const hasContact = Boolean(place.phone || place.email || place.address || place.hours);
   const hasLinks   = Boolean(place.link1Url || place.link2Url);
   const displayArea = [place.city || place.area, place.country].filter(Boolean).join(", ");
+
+  // Helper to build Google Maps directions URL
+  const getMapsDirectionsUrl = (): string => {
+    const addrParts = [place.address1 || place.address, place.city, place.province]
+      .filter(Boolean);
+    const query = encodeURIComponent(addrParts.join(", "));
+    return `https://www.google.com/maps/dir/?api=1&destination=${query}`;
+  };
 
   return (
     <div className="place-profile cp-card">
@@ -63,10 +71,31 @@ export default function PlaceDetailScreen({
         {/* Contact */}
         {hasContact && (
           <div className="place-profile-contact">
-            {place.address && (
+            {place.phone && (
               <div className="place-profile-contact-row">
+                <Phone size={15} color="var(--cp-brand)" />
+                <span>{place.phone}</span>
+              </div>
+            )}
+            {place.email && (
+              <div className="place-profile-contact-row">
+                <Mail size={15} color="var(--cp-brand)" />
+                <span>{place.email}</span>
+              </div>
+            )}
+            {place.address && (
+              <div className="place-profile-contact-row place-profile-contact-address">
                 <MapPin size={15} color="var(--cp-brand)" />
-                <span>{place.address}</span>
+                <span className="place-profile-address-text">{place.address1 || place.address}</span>
+                <a
+                  href={getMapsDirectionsUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="place-profile-directions-btn"
+                  title="Cómo llegar"
+                >
+                  <Navigation size={13} />
+                </a>
               </div>
             )}
             {place.hours && (

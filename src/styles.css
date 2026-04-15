@@ -2654,6 +2654,35 @@ input, textarea { outline: none; }
   flex-shrink: 0;
 }
 
+/* Address row with directions button */
+.place-profile-contact-address {
+  align-items: center;
+  gap: 8px;
+}
+
+.place-profile-address-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.place-profile-directions-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--cp-mint);
+  color: var(--cp-brand);
+  text-decoration: none;
+  transition: background 140ms;
+}
+
+.place-profile-directions-btn:hover {
+  background: #c8ede1;
+}
+
 /* Link buttons */
 .place-profile-links {
   display: flex;
