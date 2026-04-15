@@ -1,5 +1,6 @@
 import { Clock, ExternalLink, Mail, MapPin, Navigation, Phone } from "lucide-react";
 import type { Place } from "../types";
+import { useSocialMeta } from "../hooks/useSocialMeta";
 
 export default function PlaceDetailScreen({
   place,
@@ -8,6 +9,13 @@ export default function PlaceDetailScreen({
   place: Place;
   onBack: () => void;
 }) {
+  useSocialMeta(
+    place.name,
+    place.bio || place.description,
+    place.bannerUrl,
+    `/mapa/${place.slug}`
+  );
+
   const hasContact = Boolean(place.phone || place.email || place.address || place.hours);
   const hasLinks   = Boolean(place.link1Url || place.link2Url);
   const displayArea = [place.city || place.area, place.country].filter(Boolean).join(", ");

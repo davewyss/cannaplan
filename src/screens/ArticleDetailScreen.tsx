@@ -2,6 +2,7 @@ import type { Ad, Article } from "../types";
 import { AdSidebar } from "../components/AdSidebar";
 import { ResponsiveImage } from "../components/ResponsiveImage";
 import { TagPills } from "../components/TagPills";
+import { useSocialMeta } from "../hooks/useSocialMeta";
 
 declare const marked: { parse: (text: string) => string };
 
@@ -11,6 +12,13 @@ function renderMarkdown(text: string): string {
 }
 
 export default function ArticleDetailScreen({ article, ads }: { article: Article; ads: Ad[] }) {
+  useSocialMeta(
+    article.title,
+    article.excerpt,
+    article.imageUrl,
+    `/articulos/${article.slug}`
+  );
+
   return (
     <div className="article-detail-stack">
       <article className="cp-card article-detail-card">

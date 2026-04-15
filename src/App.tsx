@@ -1,5 +1,6 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Route, Routes, useLocation, useNavigate, useParams } from "./router";
+import { resetSocialMeta } from "./lib/socialMeta";
 import { ArticleBottomBar } from "./components/ArticleBottomBar";
 import { BottomNav } from "./components/BottomNav";
 import { InstallPrompt } from "./components/InstallPrompt";
@@ -117,6 +118,15 @@ export default function App() {
   const { articles, ads, recursos, places, featured, loading, error } =
     useContent();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  // Reset social meta for non-detail pages (detail pages set their own meta via useSocialMeta)
+  useEffect(() => {
+    const isDetailPage = /^\/articulos\/.+/.test(pathname) || /^\/mapa\/.+/.test(pathname);
+    if (!isDetailPage) {
+      resetSocialMeta();
+    }
+  }, [pathname]);
 
   const openArticle = (article: Article) =>
     navigate(`/articulos/${article.slug}`);
