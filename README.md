@@ -1,6 +1,6 @@
 # Cannaplan app
 
-The Refactored Vite + React project for the Cannaplan app.
+ Refactored Vite + React project for the Cannaplan app.
 
 ## What changed
 
