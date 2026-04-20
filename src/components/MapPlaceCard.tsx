@@ -18,9 +18,11 @@ function typeColor(type: string): string {
 export function MapPlaceCard({
   place,
   onOpen,
+  distance,
 }: {
   place: Place;
   onOpen: (place: Place) => void;
+  distance?: number;
 }) {
   const color = typeColor(place.type);
 
@@ -40,6 +42,13 @@ export function MapPlaceCard({
             {place.type}
           </span>
           {place.area && <span className="map-place-row-area">{place.area}</span>}
+          {distance !== undefined && (
+            <span className="map-place-row-distance">
+              {distance < 1
+                ? `${Math.round(distance * 1000)} m`
+                : `${distance.toFixed(1)} km`}
+            </span>
+          )}
         </div>
 
         <h3 className="map-place-row-title">{place.name}</h3>

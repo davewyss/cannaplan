@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { AdSidebar } from "../components/AdSidebar";
 import { MapPlaceCard } from "../components/MapPlaceCard";
 import { MapTopBar } from "../components/MapTopBar";
+import { distanceKm, useGeolocation } from "../hooks/useGeolocation";
 import { matchesPlaceSearch } from "../lib/search";
 import type { Ad, Place } from "../types";
 
@@ -56,6 +57,10 @@ export default function MapScreen({
   const leafletMapRef = useRef<any>(null);
   const markersRef = useRef<globalThis.Map<number, any>>(new globalThis.Map());
 
+  const geo = useGeolocation();
+  const userMarkerRef = useRef<any>(null);
+  const [geoDismissed, setGeoDismissed] = useState(false);
+
   const [query, setQuery] = useState("");
   const [activeType, setActiveType] = useState<string | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
@@ -69,11 +74,27 @@ export default function MapScreen({
   }, [places]);
 
   const filtered = useMemo(() => {
-    return places.filter((p) => {
+    const base = places.filter((p) => {
       const typeMatch = activeType ? p.type === activeType : true;
       return typeMatch && matchesPlaceSearch(p, query);
     });
-  }, [places, query, activeType]);
+
+    // Sort by distance when user location is known
+    if (geo.status === "active") {
+      return [...base].sort((a, b) => {
+        const da =
+          a.lat != null && a.lng != null
+            ? distanceKm(geo.lat, geo.lng, a.lat, a.lng)
+            : Infinity;
+        const db =
+          b.lat != null && b.lng != null
+            ? distanceKm(geo.lat, geo.lng, b.lat, b.lng)
+            : Infinity;
+        return da - db;
+      });
+    }
+    return base;
+  }, [places, query, activeType, geo]);
 
   const mappable = useMemo(() => filtered.filter((p) => p.lat && p.lng), [filtered]);
 
@@ -162,6 +183,34 @@ export default function MapScreen({
     map.fitBounds(bounds, { padding: [40, 40], animate: true, maxZoom: 14 });
   }, [mappable, mapReady]);
 
+  // User location marker
+  useEffect(() => {
+    const map = leafletMapRef.current;
+    if (!map || !mapReady || geo.status !== "active") return;
+
+    const userIcon = L.divIcon({
+      className: "",
+      html: `<div style="width:16px;height:16px;border-radius:50%;background:#1d8867;border:3px solid white;box-shadow:0 0 0 3px rgba(29,136,103,0.35)"></div>`,
+      iconSize: [16, 16],
+      iconAnchor: [8, 8],
+    });
+
+    if (userMarkerRef.current) {
+      userMarkerRef.current.setLatLng([geo.lat, geo.lng]);
+    } else {
+      userMarkerRef.current = L.marker([geo.lat, geo.lng], { icon: userIcon, zIndexOffset: 1000 })
+        .addTo(map);
+      map.panTo([geo.lat, geo.lng], { animate: true });
+    }
+
+    return () => {
+      if (userMarkerRef.current) {
+        userMarkerRef.current.remove();
+        userMarkerRef.current = null;
+      }
+    };
+  }, [geo, mapReady]);
+
   function handleCardOpen(place: Place) {
     if (place.lat && place.lng && leafletMapRef.current) {
       leafletMapRef.current.panTo([place.lat, place.lng], { animate: true });
@@ -176,7 +225,11 @@ export default function MapScreen({
     let adIndex = 0;
 
     filtered.forEach((place, i) => {
-      rows.push(<MapPlaceCard key={place.id} place={place} onOpen={handleCardOpen} />);
+      const dist =
+        geo.status === "active" && place.lat != null && place.lng != null
+          ? distanceKm(geo.lat, geo.lng, place.lat, place.lng)
+          : undefined;
+      rows.push(<MapPlaceCard key={place.id} place={place} onOpen={handleCardOpen} distance={dist} />);
 
       const isAdSlot = (i + 1) % AD_INTERVAL === 0;
       if (isAdSlot && mapaAds.length > 0) {
@@ -213,6 +266,16 @@ export default function MapScreen({
         showFilters={showFilters}
         onToggleFilters={() => setShowFilters((v) => !v)}
       />
+
+      {/* Geolocation denied banner */}
+      {geo.status === "denied" && !geoDismissed && (
+        <div className="map-geo-denied-banner">
+          <span>{geo.reason}</span>
+          <button className="map-geo-denied-close" onClick={() => setGeoDismissed(true)}>
+            <X size={13} />
+          </button>
+        </div>
+      )}
 
       {/* Expandable search row */}
       {showSearch && (
