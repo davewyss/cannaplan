@@ -16,7 +16,7 @@ export function MapTopBar({
   onLocate: () => void;
 }) {
   return (
-    <header className="inicio-topbar">
+    <header className="inicio-topbar inicio-topbar--map">
       <div className="inicio-topbar-left">
         <img src="/logo_reverse_512.png" alt="Cannaplan" className="inicio-topbar-logo" width="28" height="28" />
         <div className="inicio-topbar-title">Guía Cannábica</div>

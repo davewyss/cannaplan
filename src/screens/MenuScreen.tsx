@@ -6,7 +6,7 @@ const items = [
   { key: "home" as const, label: "Inicio", icon: House },
   { key: "map" as const, label: "Mapa", icon: MapPin },
   { key: "news" as const, label: "Artículos", icon: Newspaper },
-  { key: "legal-help" as const, label: "Ayuda legal", icon: Scale },
+  { key: "legal-help" as const, label: "Soporte legal", icon: Scale },
   { key: "contact" as const, label: "Contacto", icon: Send },
   { key: "about" as const, label: "Sobre nosotros", icon: Info },
 ];

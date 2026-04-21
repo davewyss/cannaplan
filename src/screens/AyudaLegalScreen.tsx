@@ -1,61 +1,78 @@
-import { useEffect, useState } from "react";
-import { getDocPageHtml } from "../contentApi";
-import { Spinner } from "../components/Spinner";
+import { renderMd } from "../lib/renderMarkdown";
+import { LegalFooterPills } from "../components/LegalFooterPills";
 
-const LEGAL_HELP_DOC_ID = (import.meta.env.VITE_LEGAL_HELP_DOC_ID as string | undefined) ?? "1y2vRQfoX1Tf6lPrMcxe8ED_MfXXC9Mh2RCH0vch7Smg";
+const CONTENT = `
+# Soporte Legal
 
-export default function AyudaLegalScreen({ onBack }: { onBack: () => void }) {
-  const [html, setHtml] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+Cannaplan no ofrece asesoramiento jurídico personalizado. Esta sección resume el marco legal del cannabis en España como orientación general. Para consultas específicas, contacta con un abogado especializado.
 
-  useEffect(() => {
-    let active = true;
+## Marco legal en España
 
-    async function load() {
-      try {
-        setLoading(true);
-        setError("");
-        const nextHtml = await getDocPageHtml(LEGAL_HELP_DOC_ID ?? "");
-        if (!active) return;
-        setHtml(nextHtml);
-      } catch (err) {
-        if (!active) return;
-        setError(err instanceof Error ? err.message : "No se pudo cargar la página.");
-      } finally {
-        if (active) setLoading(false);
-      }
-    }
+El cannabis en España se encuentra en una situación jurídica particular: su consumo y tenencia privados no son delito, pero su venta, tráfico y cultivo con fines comerciales están penados.
 
-    load();
-    return () => { active = false; };
-  }, []);
+**Artículo 25.1 LOPSC (Ley de Seguridad Ciudadana):** la tenencia de drogas en la vía pública o en lugares visibles constituye infracción administrativa, no penal, y puede conllevar multa de entre 601 € y 30.000 €.
 
+**Artículo 368 del Código Penal:** el tráfico, cultivo y elaboración de sustancias con fines de distribución a terceros es delito, con penas de prisión de 1 a 3 años y multa.
+
+## Consumo personal y autoconsumo
+
+El Tribunal Supremo ha establecido que el consumo privado en lugar cerrado no es delito. Para que exista presunción de autoconsumo, la cantidad debe ser reducida y no deben existir indicios de distribución.
+
+No existe una cantidad legalmente establecida que marque el límite entre consumo personal y tráfico — la valoración es caso por caso.
+
+## Clubs cannábicos
+
+Los clubs cannábicos operan en una zona gris legal: no están regulados a nivel nacional, aunque algunas comunidades autónomas han impulsado normativas propias. Su actividad se fundamenta en:
+
+- Consumo compartido entre adultos miembros
+- Cultivo colectivo sin ánimo de lucro
+- Distribución interna sin venta a terceros
+
+Su funcionamiento puede ser cuestionado por las autoridades. Consulta la normativa de tu comunidad autónoma antes de afiliarte o fundar uno.
+
+## Si la policía te para
+
+- Tienes derecho a guardar silencio y a no declarar sin abogado.
+- Puedes solicitar un abogado de oficio si no puedes permitirte uno privado.
+- No estás obligado a permitir cacheos sin causa justificada, tu consentimiento o intervención judicial.
+- Si te intervienen sustancias, exige el acta de intervención y conserva una copia.
+- Nunca firmes documentos que no entiendas.
+
+## Recursos y organizaciones
+
+Para consultas legales concretas o apoyo, puedes contactar con:
+
+- **ARSEC** — Asociación Ramón Santos de Estudios sobre el Cannabis
+- **FAC** — Federación de Asociaciones Cannábicas
+- **Energy Control** — reducción de riesgos y orientación
+- Un abogado penalista especializado en drogas
+
+## Aviso
+
+La información de esta sección es de carácter divulgativo y puede no estar actualizada. Las leyes y su interpretación pueden cambiar. Cannaplan no asume responsabilidad por decisiones tomadas en base a este contenido.
+`;
+
+export default function AyudaLegalScreen({
+  onBack,
+  onNavigate,
+}: {
+  onBack: () => void;
+  onNavigate?: (key: string) => void;
+}) {
   return (
     <div className="screen-grid">
       <div className="static-page-wrap">
-        {loading ? (
-          <Spinner />
-        ) : error ? (
-          <div className="cp-card"><div className="cp-card-inner"><p className="static-page-status">{error}</p></div></div>
-        ) : (
-          <div className="cp-card">
-            <div className="cp-card-inner">
-              <div className="article-content" dangerouslySetInnerHTML={{ __html: html }} />
-              <div className="static-sub-section contact-form-wrap">
-                <iframe
-                  title="Formulario de Contacto"
-                  src="https://plugins.crisp.chat/urn:crisp.im:contact-form:0/contact/2c23d7c0-c6dd-42f4-b798-6f17a0f41dcc"
-                  referrerPolicy="origin"
-                  sandbox="allow-forms allow-popups allow-scripts allow-same-origin"
-                  width="100%"
-                  height="600px"
-                  frameBorder="0"
-                />
-              </div>
-            </div>
+        <div className="cp-card">
+          <div className="cp-card-inner">
+            <div
+              className="article-content legal-page"
+              dangerouslySetInnerHTML={{ __html: renderMd(CONTENT) }}
+            />
+            {onNavigate && (
+              <LegalFooterPills onNavigate={onNavigate} current="legal-help" />
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

@@ -5,6 +5,8 @@ import { clearConsent, restoreConsent } from "./lib/consent";
 import { isPwa } from "./lib/pwa";
 import { ArticleBottomBar } from "./components/ArticleBottomBar";
 import { BottomNav } from "./components/BottomNav";
+import { DesktopNav } from "./components/DesktopNav";
+import { DesktopFooter } from "./components/DesktopFooter";
 import { CookieBanner } from "./components/CookieBanner";
 import { InstallPrompt } from "./components/InstallPrompt";
 import { StaticBottomBar } from "./components/StaticBottomBar";
@@ -176,6 +178,7 @@ export default function App() {
 
   return (
     <>
+      <DesktopNav articles={articles} />
       <main className="shell">
         <Suspense fallback={<ScreenLoader />}>
           <Routes>
@@ -268,7 +271,7 @@ export default function App() {
             />
             <Route
               path="/menu/ayuda-legal"
-              element={<AyudaLegalScreen onBack={() => navigate(-1)} />}
+              element={<AyudaLegalScreen onBack={() => navigate(-1)} onNavigate={(k) => navigate(MENU_ROUTES[k] ?? "/")} />}
             />
 
             {/* ── Legal pages ───────────────────────────────────────────── */}
@@ -308,6 +311,7 @@ export default function App() {
       )}
       <InstallPrompt />
       <BottomBarSwitch />
+      <DesktopFooter onManageConsent={handleManageConsent} />
     </>
   );
 }

@@ -1,52 +1,43 @@
-import { useEffect, useState } from "react";
-import { getDocPageHtml } from "../contentApi";
-import { Spinner } from "../components/Spinner";
+import { renderMd } from "../lib/renderMarkdown";
 
-const SOBRE_DOC_ID = (import.meta.env.VITE_SOBRE_DOC_ID as string | undefined) ?? "1sScZKtpEyALwVwvpvUcOVWvWCP3WN7iSGieuNfQnHR0";
+const CONTENT = `
+# Sobre Cannaplan
+
+Cannaplan nació con una misión clara: crear la guía de referencia sobre cannabis en España. Una plataforma accesible, rigurosa y sin ánimo comercial que reúna información, recursos y orientación legal en un solo lugar.
+
+## Qué hacemos
+
+Publicamos contenido editorial sobre regulación, salud y novedades del sector cannábico. Mantenemos un directorio actualizado de asociaciones, dispensarios, médicos, abogados, farmacias y otros servicios en todo el territorio español. Ofrecemos orientación básica sobre el marco legal vigente y los derechos del usuario.
+
+## Cómo lo hacemos
+
+Trabajamos con fuentes verificadas, colaboramos con expertos del sector y mantenemos una política editorial independiente. No recibimos comisiones por incluir a ningún proveedor en nuestro directorio — si está aquí, es porque cumple criterios de utilidad para la comunidad.
+
+## Quiénes somos
+
+Somos un equipo pequeño con experiencia en tecnología, comunicación y el sector cannábico en España. Creemos en un enfoque informado, responsable y sin estigmas. El cannabis tiene un lugar en la conversación pública — y Cannaplan quiere ser esa conversación.
+
+## Transparencia
+
+Cannaplan es un proyecto independiente. Nos financiamos a través de espacios publicitarios y acuerdos de colaboración claramente identificados. Nunca confundiremos contenido editorial con publicidad.
+
+## Únete
+
+Si quieres colaborar, proponer un recurso para el directorio o escribir para Cannaplan, escríbenos a [info@cannaplan.org](mailto:info@cannaplan.org). También puedes seguirnos en Instagram [@cannaplan_app](https://www.instagram.com/cannaplan_app/).
+`;
 
 export default function SobreNosotrosScreen({ onBack }: { onBack: () => void }) {
-  const [html, setHtml] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    let active = true;
-
-    async function load() {
-      try {
-        setLoading(true);
-        setError("");
-        const nextHtml = await getDocPageHtml(SOBRE_DOC_ID ?? "");
-        if (!active) return;
-        setHtml(nextHtml);
-      } catch (err) {
-        if (!active) return;
-        setError(err instanceof Error ? err.message : "No se pudo cargar la página.");
-      } finally {
-        if (active) setLoading(false);
-      }
-    }
-
-    load();
-    return () => {
-      active = false;
-    };
-  }, []);
-
   return (
     <div className="screen-grid">
       <div className="static-page-wrap">
-        {loading ? (
-          <Spinner />
-        ) : error ? (
-          <div className="cp-card"><div className="cp-card-inner"><p className="static-page-status">{error}</p></div></div>
-        ) : (
-          <div className="cp-card">
-            <div className="cp-card-inner">
-              <div className="article-content" dangerouslySetInnerHTML={{ __html: html }} />
-            </div>
+        <div className="cp-card">
+          <div className="cp-card-inner">
+            <div
+              className="article-content legal-page"
+              dangerouslySetInnerHTML={{ __html: renderMd(CONTENT) }}
+            />
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
