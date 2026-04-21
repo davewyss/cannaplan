@@ -2006,42 +2006,6 @@ input, textarea { outline: none; }
   color: var(--cp-brand);
 }
 
-.map-geo-denied-banner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  background: #fff3f3;
-  border-bottom: 1px solid #ffd0d0;
-  padding: 8px 16px;
-  font-family: Poppins, sans-serif;
-  font-size: 12px;
-  color: #c0392b;
-}
-
-.map-geo-denied-close {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #c0392b;
-  padding: 2px;
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.map-geo-cambiar {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #c0392b;
-  font-family: Poppins, sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  text-decoration: underline;
-  padding: 0;
-  margin-left: 4px;
-}
 
 .map-place-row-title {
   margin: 0;
@@ -2769,81 +2733,114 @@ input, textarea { outline: none; }
   }
 }
 
-/* ── Cookie consent banner ──────────────────────────────────────────────── */
+/* ── Cookie consent popup ───────────────────────────────────────────────── */
 
-.cookie-banner {
+.cookie-popup-overlay {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 8000;
-  background: var(--cp-navy, #282d48);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 9999;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (min-width: 480px) {
+  .cookie-popup-overlay {
+    align-items: center;
+  }
+}
+
+.cookie-popup-card {
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  padding: 28px 24px 24px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.12);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@media (min-width: 480px) {
+  .cookie-popup-card {
+    border-radius: 20px;
+    padding: 32px 28px 28px;
+    max-height: 80vh;
+  }
+}
+
+.cookie-popup-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--cp-brand, #1d8867);
   color: #fff;
-  padding: 20px 20px calc(20px + env(safe-area-inset-bottom, 0px));
-  box-shadow: 0 -6px 32px rgba(0, 0, 0, 0.22);
+  margin: 0 auto 14px;
 }
 
-.cookie-banner-inner {
-  max-width: 680px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.cookie-popup-title {
+  font-family: Poppins, sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--cp-navy, #282d48);
+  margin: 0 0 10px;
+  line-height: 1.3;
 }
 
-.cookie-banner-text-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.cookie-banner-text {
-  margin: 0;
+.cookie-popup-body {
   font-family: Poppins, sans-serif;
   font-size: 13px;
-  line-height: 1.65;
-  color: rgba(255, 255, 255, 0.82);
+  color: #666;
+  line-height: 1.6;
+  margin: 0 0 8px;
+  text-align: left;
 }
 
-.cookie-banner-links {
-  margin: 0;
+.cookie-popup-links {
+  margin: 0 0 16px;
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.cookie-banner-link {
+.cookie-popup-link {
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
-  color: var(--cp-light, #a8dadc);
+  color: var(--cp-brand, #1d8867);
   font-family: Poppins, sans-serif;
   font-size: 12px;
   text-decoration: underline;
 }
 
-.cookie-banner-link-sep {
-  color: rgba(255, 255, 255, 0.3);
+.cookie-popup-link-sep {
+  color: #ccc;
   font-size: 12px;
 }
 
-/* Configurar panel */
+/* Configurar toggles panel */
 .cookie-config-panel {
-  background: rgba(255, 255, 255, 0.06);
+  background: #f7fafb;
   border-radius: 12px;
-  padding: 4px 0;
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 16px;
+  overflow: hidden;
+  text-align: left;
 }
 
 .cookie-config-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
   padding: 12px 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .cookie-config-row:last-child {
@@ -2861,13 +2858,13 @@ input, textarea { outline: none; }
   font-family: Poppins, sans-serif;
   font-size: 13px;
   font-weight: 600;
-  color: #fff;
+  color: var(--cp-navy, #282d48);
 }
 
 .cookie-config-desc {
   font-family: Poppins, sans-serif;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.55);
+  color: #888;
   line-height: 1.5;
 }
 
@@ -2877,7 +2874,7 @@ input, textarea { outline: none; }
   width: 40px;
   height: 22px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.18);
+  background: #d0d0d0;
   border: none;
   cursor: pointer;
   flex-shrink: 0;
@@ -2891,7 +2888,7 @@ input, textarea { outline: none; }
 
 .cookie-toggle--locked {
   background: var(--cp-brand, #1d8867);
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: default;
 }
 
@@ -2905,6 +2902,7 @@ input, textarea { outline: none; }
   background: #fff;
   transition: transform 200ms ease;
   display: block;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .cookie-toggle--on .cookie-toggle-knob,
@@ -2913,73 +2911,41 @@ input, textarea { outline: none; }
 }
 
 /* Action buttons */
-.cookie-banner-actions {
+.cookie-popup-actions {
   display: flex;
+  flex-direction: column;
   gap: 8px;
-  flex-wrap: wrap;
 }
 
-.cookie-banner-actions--config {
-  justify-content: flex-end;
-}
-
-.cookie-btn {
-  flex: 1;
-  min-width: 90px;
-  padding: 11px 14px;
-  border-radius: 10px;
+.cookie-popup-secondary {
+  background: none;
+  border: 1.5px solid rgba(40, 45, 72, 0.18);
+  border-radius: 12px;
+  padding: 12px;
   font-family: Poppins, sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
+  color: var(--cp-navy, #282d48);
   cursor: pointer;
-  white-space: nowrap;
-  border: none;
+  width: 100%;
 }
 
-.cookie-btn--reject {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  color: rgba(255, 255, 255, 0.85);
+.cookie-popup-secondary:active {
+  background: #f0f0f0;
 }
 
-.cookie-btn--reject:hover {
-  border-color: rgba(255, 255, 255, 0.55);
-  color: #fff;
+/* Geo denied popup extras */
+.geo-denied-icon {
+  background: #e74c3c !important;
 }
 
-.cookie-btn--config {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  color: rgba(255, 255, 255, 0.85);
-}
-
-.cookie-btn--config:hover {
-  border-color: rgba(255, 255, 255, 0.55);
-  color: #fff;
-}
-
-.cookie-btn--accept {
-  background: var(--cp-brand, #1d8867);
-  color: #fff;
-  border: none;
-}
-
-.cookie-btn--accept:active {
-  opacity: 0.85;
-}
-
-@media (min-width: 520px) {
-  .cookie-banner-actions {
-    flex-wrap: nowrap;
-  }
-
-  .cookie-btn {
-    flex: none;
-  }
-
-  .cookie-btn--accept {
-    margin-left: auto;
-  }
+.geo-denied-hint {
+  font-family: Poppins, sans-serif;
+  font-size: 11px;
+  color: #999;
+  line-height: 1.55;
+  margin: -4px 0 8px;
+  text-align: left;
 }
 
 /* ── Geo pre-prompt modal ───────────────────────────────────────────────── */

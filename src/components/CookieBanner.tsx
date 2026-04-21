@@ -1,3 +1,4 @@
+import { Shield } from "lucide-react";
 import { useState } from "react";
 import { acceptAll, getStoredPrefs, hasDecided, rejectAll, savePrefs } from "../lib/consent";
 import type { ConsentPrefs } from "../lib/consent";
@@ -33,21 +34,29 @@ export function CookieBanner({ onNavigateCookies, onNavigatePrivacy }: Props) {
   }
 
   return (
-    <div className="cookie-banner" role="dialog" aria-modal="true" aria-label="Configuración de cookies">
-      <div className="cookie-banner-inner">
+    <div className="cookie-popup-overlay">
+      <div className="cookie-popup-card" role="dialog" aria-modal="true" aria-label="Configuración de cookies">
 
-        {/* Text */}
-        <div className="cookie-banner-text-wrap">
-          <p className="cookie-banner-text">
-            Usamos cookies y tecnologías similares para que Cannaplan funcione correctamente,
-            analizar cómo se usa la app y mostrar recursos cercanos en el mapa — solo con tu permiso.
-          </p>
-          <p className="cookie-banner-links">
-            <button className="cookie-banner-link" onClick={onNavigateCookies}>Política de cookies</button>
-            <span className="cookie-banner-link-sep">·</span>
-            <button className="cookie-banner-link" onClick={onNavigatePrivacy}>Privacidad</button>
-          </p>
+        {/* Icon */}
+        <div className="cookie-popup-icon">
+          <Shield size={26} strokeWidth={1.8} />
         </div>
+
+        {/* Title */}
+        <h2 className="cookie-popup-title">Cannaplan y las cookies</h2>
+
+        {/* Body */}
+        <p className="cookie-popup-body">
+          Usamos cookies necesarias para que la app funcione. Con tu permiso, también usamos
+          analítica para mejorarla y tu ubicación para mostrarte recursos cercanos en el mapa.
+        </p>
+
+        {/* Policy links */}
+        <p className="cookie-popup-links">
+          <button className="cookie-popup-link" onClick={onNavigateCookies}>Política de cookies</button>
+          <span className="cookie-popup-link-sep">·</span>
+          <button className="cookie-popup-link" onClick={onNavigatePrivacy}>Privacidad</button>
+        </p>
 
         {/* Configurar panel */}
         {configOpen && (
@@ -58,7 +67,7 @@ export function CookieBanner({ onNavigateCookies, onNavigatePrivacy }: Props) {
               <div className="cookie-config-row-info">
                 <span className="cookie-config-label">Necesarias</span>
                 <span className="cookie-config-desc">
-                  Imprescindibles para el funcionamiento básico de la app. No se pueden desactivar.
+                  Imprescindibles para el funcionamiento básico. No se pueden desactivar.
                 </span>
               </div>
               <div className="cookie-toggle cookie-toggle--locked" aria-label="Siempre activo">
@@ -71,8 +80,7 @@ export function CookieBanner({ onNavigateCookies, onNavigatePrivacy }: Props) {
               <div className="cookie-config-row-info">
                 <span className="cookie-config-label">Analítica</span>
                 <span className="cookie-config-desc">
-                  Google Analytics (GA4). Nos ayuda a entender cómo se usa la app para mejorarla.
-                  No identifica a personas.
+                  Google Analytics (GA4). Nos ayuda a entender cómo se usa la app. No identifica personas.
                 </span>
               </div>
               <button
@@ -91,8 +99,7 @@ export function CookieBanner({ onNavigateCookies, onNavigatePrivacy }: Props) {
               <div className="cookie-config-row-info">
                 <span className="cookie-config-label">Ubicación</span>
                 <span className="cookie-config-desc">
-                  Usamos tu ubicación para ordenar recursos en el mapa por distancia.
-                  Nunca se almacena ni comparte.
+                  Para ordenar recursos por distancia en el mapa. Nunca se almacena ni comparte.
                 </span>
               </div>
               <button
@@ -109,22 +116,22 @@ export function CookieBanner({ onNavigateCookies, onNavigatePrivacy }: Props) {
           </div>
         )}
 
-        {/* Action buttons */}
-        <div className={"cookie-banner-actions" + (configOpen ? " cookie-banner-actions--config" : "")}>
+        {/* Actions */}
+        <div className="cookie-popup-actions">
           {configOpen ? (
-            <button className="cookie-btn cookie-btn--accept" onClick={handleSavePrefs}>
+            <button className="geo-preprompt-allow" onClick={handleSavePrefs}>
               Guardar preferencias
             </button>
           ) : (
             <>
-              <button className="cookie-btn cookie-btn--reject" onClick={handleRejectAll}>
-                Rechazar
+              <button className="geo-preprompt-allow" onClick={handleAcceptAll}>
+                Aceptar todo
               </button>
-              <button className="cookie-btn cookie-btn--config" onClick={() => setConfigOpen(true)}>
+              <button className="cookie-popup-secondary" onClick={() => setConfigOpen(true)}>
                 Configurar
               </button>
-              <button className="cookie-btn cookie-btn--accept" onClick={handleAcceptAll}>
-                Aceptar todo
+              <button className="geo-preprompt-deny" onClick={handleRejectAll}>
+                Rechazar
               </button>
             </>
           )}

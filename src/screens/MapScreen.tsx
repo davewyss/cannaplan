@@ -293,24 +293,29 @@ export default function MapScreen({
         onToggleFilters={() => setShowFilters((v) => !v)}
       />
 
-      {/* Geolocation denied banner */}
+      {/* Geolocation denied popup */}
       {geo.status === "denied" && !geoDismissed && (
-        <div className="map-geo-denied-banner">
-          <span>
-            {geo.reason}{" "}
-            <button
-              className="map-geo-cambiar"
-              onClick={() => {
-                setGeoDismissed(false);
-                requestGeo();
-              }}
-            >
-              cambiar
-            </button>
-          </span>
-          <button className="map-geo-denied-close" onClick={() => setGeoDismissed(true)}>
-            <X size={13} />
-          </button>
+        <div className="geo-preprompt-overlay" onClick={() => setGeoDismissed(true)}>
+          <div className="geo-preprompt-card geo-denied-card" onClick={(e) => e.stopPropagation()}>
+            <div className="geo-preprompt-icon geo-denied-icon">
+              <MapPin size={26} strokeWidth={1.8} />
+            </div>
+            <h2 className="geo-preprompt-title">Ubicación no disponible</h2>
+            <p className="geo-preprompt-body">{geo.reason}</p>
+            {geo.reason.includes("denegado") && (
+              <p className="geo-denied-hint">
+                Si cambiaste de opinión, activa el permiso en la configuración de tu navegador y vuelve a intentarlo.
+              </p>
+            )}
+            <div className="geo-preprompt-actions">
+              <button className="geo-preprompt-allow" onClick={() => { requestGeo(); }}>
+                Reintentar
+              </button>
+              <button className="geo-preprompt-deny" onClick={() => setGeoDismissed(true)}>
+                Sin ubicación
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
