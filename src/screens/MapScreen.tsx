@@ -65,7 +65,6 @@ export default function MapScreen({
   // Pre-prompt only shows when the user explicitly taps the locate button.
   // Exception: auto-trigger silently if they already granted location consent via cookie banner.
   const [showPrePrompt, setShowPrePrompt] = useState(false);
-  const [geoDismissed, setGeoDismissed] = useState(false);
 
   // Auto-trigger geo if cookie banner already granted location consent
   useEffect(() => {
@@ -307,23 +306,13 @@ export default function MapScreen({
         onLocate={handleLocateTap}
       />
 
-      {/* Geolocation denied popup */}
-      {geo.status === "denied" && !geoDismissed && (
-        <div className="geo-preprompt-overlay" onClick={() => setGeoDismissed(true)}>
-          <div className="geo-preprompt-card geo-denied-card" onClick={(e) => e.stopPropagation()}>
-            <div className="geo-preprompt-icon geo-denied-icon">
-              <MapPin size={26} strokeWidth={1.8} />
-            </div>
-            <h2 className="geo-preprompt-title">Ubicación no disponible</h2>
-            <p className="geo-preprompt-body">
-              Has denegado el acceso a tu ubicación. Si cambiaste de opinión, activa el permiso en la configuración de tu navegador.
-            </p>
-            <div className="geo-preprompt-actions">
-              <button className="geo-preprompt-deny geo-preprompt-deny--solo" onClick={() => setGeoDismissed(true)}>
-                Continuar sin ubicación
-              </button>
-            </div>
-          </div>
+      {/* Inline location nudge — only when geo hasn't been requested yet */}
+      {geo.status === "idle" && (
+        <div className="map-location-nudge">
+          <MapPin size={13} />
+          <button className="map-location-nudge-btn" onClick={handleLocateTap}>
+            Activar ubicación
+          </button>
         </div>
       )}
 

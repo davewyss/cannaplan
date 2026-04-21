@@ -3075,21 +3075,32 @@ input, textarea { outline: none; }
   color: #666;
 }
 
-/* Solo dismiss button (no primary action alongside it) */
-.geo-preprompt-deny--solo {
-  width: 100%;
-  padding: 14px;
-  background: #f4f5f7;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--cp-navy);
-  text-align: center;
-}
-
 /* Locate button in topbar when geo was denied */
 .geo-btn-denied {
   opacity: 0.4;
+}
+
+/* Inline location nudge strip above the map */
+.map-location-nudge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 16px;
+  background: #f4f6f8;
+  color: #8a9099;
+}
+
+.map-location-nudge-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cp-brand);
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 /* ── Legal pages (Privacy, Cookies) ────────────────────────────────────── */
