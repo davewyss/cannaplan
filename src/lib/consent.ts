@@ -84,3 +84,13 @@ export function restoreConsent() {
   const prefs = parseStored();
   if (prefs) applyToGtag(prefs);
 }
+
+/** Clear stored consent (used when user wants to change preferences) */
+export function clearConsent() {
+  localStorage.removeItem(CONSENT_KEY);
+  // Reset gtag back to denied
+  gtagSafe("consent", "update", {
+    analytics_storage: "denied",
+    ad_storage: "denied",
+  });
+}

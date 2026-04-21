@@ -1,7 +1,7 @@
-import { Suspense, lazy, useEffect } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { Route, Routes, useLocation, useNavigate, useParams } from "./router";
 import { resetSocialMeta } from "./lib/socialMeta";
-import { restoreConsent } from "./lib/consent";
+import { clearConsent, restoreConsent } from "./lib/consent";
 import { ArticleBottomBar } from "./components/ArticleBottomBar";
 import { BottomNav } from "./components/BottomNav";
 import { CookieBanner } from "./components/CookieBanner";
@@ -122,8 +122,15 @@ export default function App() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+  const [cookieBannerForced, setCookieBannerForced] = useState(false);
+
   // Restore prior cookie consent on first load
   useEffect(() => { restoreConsent(); }, []);
+
+  function handleManageConsent() {
+    clearConsent();
+    setCookieBannerForced(true);
+  }
 
   // Reset social meta for non-detail pages (detail pages set their own meta via useSocialMeta)
   useEffect(() => {
@@ -265,7 +272,7 @@ export default function App() {
             />
             <Route
               path="/legal/cookies"
-              element={<CookiesScreen onBack={() => navigate(-1)} />}
+              element={<CookiesScreen onBack={() => navigate(-1)} onManageConsent={handleManageConsent} />}
             />
             <Route
               path="/legal/terminos"
@@ -288,6 +295,8 @@ export default function App() {
       <CookieBanner
         onNavigateCookies={() => navigate(MENU_ROUTES["cookies"])}
         onNavigatePrivacy={() => navigate(MENU_ROUTES["privacy"])}
+        forceShow={cookieBannerForced}
+        onClose={() => setCookieBannerForced(false)}
       />
       <InstallPrompt />
       <BottomBarSwitch />

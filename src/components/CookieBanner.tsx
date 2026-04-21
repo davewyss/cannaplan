@@ -6,9 +6,11 @@ import type { ConsentPrefs } from "../lib/consent";
 interface Props {
   onNavigateCookies: () => void;
   onNavigatePrivacy: () => void;
+  forceShow?: boolean;
+  onClose?: () => void;
 }
 
-export function CookieBanner({ onNavigateCookies, onNavigatePrivacy }: Props) {
+export function CookieBanner({ onNavigateCookies, onNavigatePrivacy, forceShow, onClose }: Props) {
   const [visible, setVisible] = useState(() => !hasDecided());
   const [configOpen, setConfigOpen] = useState(false);
   const [prefs, setPrefs] = useState<ConsentPrefs>(() => ({
@@ -16,21 +18,27 @@ export function CookieBanner({ onNavigateCookies, onNavigatePrivacy }: Props) {
     location:  getStoredPrefs()?.location  ?? false,
   }));
 
-  if (!visible) return null;
+  const isVisible = visible || forceShow;
+  if (!isVisible) return null;
+
+  function close() {
+    setVisible(false);
+    onClose?.();
+  }
 
   function handleAcceptAll() {
     acceptAll();
-    setVisible(false);
+    close();
   }
 
   function handleRejectAll() {
     rejectAll();
-    setVisible(false);
+    close();
   }
 
   function handleSavePrefs() {
     savePrefs(prefs);
-    setVisible(false);
+    close();
   }
 
   return (

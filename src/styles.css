@@ -3049,3 +3049,129 @@ input, textarea { outline: none; }
 .geo-preprompt-deny:active {
   color: #666;
 }
+
+/* ── Legal pages (Privacy, Cookies) ────────────────────────────────────── */
+
+.legal-page h1 {
+  font-family: Poppins, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--cp-navy);
+  margin: 0 0 4px;
+}
+
+.legal-updated {
+  font-family: Poppins, sans-serif;
+  font-size: 12px;
+  color: #999;
+  margin: 0 0 28px;
+}
+
+.legal-page h2 {
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cp-navy);
+  margin: 28px 0 8px;
+  padding-top: 4px;
+  border-top: 1px solid var(--cp-line);
+}
+
+.legal-page h3 {
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cp-navy);
+  margin: 20px 0 6px;
+}
+
+.legal-page p {
+  font-family: Poppins, sans-serif;
+  font-size: 13px;
+  color: var(--cp-text);
+  line-height: 1.75;
+  margin: 0 0 12px;
+}
+
+.legal-page ul {
+  margin: 0 0 12px;
+  padding-left: 20px;
+}
+
+.legal-page ul li {
+  font-family: Poppins, sans-serif;
+  font-size: 13px;
+  color: var(--cp-text);
+  line-height: 1.75;
+  margin-bottom: 4px;
+}
+
+.legal-page a {
+  color: var(--cp-brand);
+  text-decoration: underline;
+}
+
+.legal-page code {
+  font-family: monospace;
+  font-size: 12px;
+  background: rgba(29, 136, 103, 0.08);
+  color: var(--cp-brand);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+/* Cookie table */
+.cookie-table-wrap {
+  overflow-x: auto;
+  margin: 0 0 16px;
+  border-radius: 10px;
+  border: 1px solid var(--cp-line);
+}
+
+.cookie-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Poppins, sans-serif;
+  font-size: 12px;
+}
+
+.cookie-table th {
+  background: var(--cp-mint);
+  color: var(--cp-navy);
+  font-weight: 600;
+  text-align: left;
+  padding: 8px 12px;
+  white-space: nowrap;
+}
+
+.cookie-table td {
+  padding: 8px 12px;
+  color: var(--cp-text);
+  border-top: 1px solid var(--cp-line);
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.cookie-table tr:nth-child(even) td {
+  background: rgba(247, 250, 251, 0.6);
+}
+
+/* Manage consent button */
+.cookie-manage-btn {
+  display: inline-flex;
+  align-items: center;
+  background: var(--cp-brand);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 22px;
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 4px 0 20px;
+}
+
+.cookie-manage-btn:active {
+  opacity: 0.85;
+}
