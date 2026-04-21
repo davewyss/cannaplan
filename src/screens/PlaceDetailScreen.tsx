@@ -1,4 +1,4 @@
-import { Clock, ExternalLink, Mail, MapPin, Navigation, Phone } from "lucide-react";
+import { Clock, ExternalLink, Globe, Mail, MapPin, Navigation, Phone } from "lucide-react";
 import type { Place } from "../types";
 import { useSocialMeta } from "../hooks/useSocialMeta";
 import { FALLBACK_BANNER, FALLBACK_LOGO } from "../lib/images";
@@ -18,7 +18,7 @@ export default function PlaceDetailScreen({
   );
 
   const hasContact = Boolean(place.phone || place.email || place.address || place.hours);
-  const hasLinks   = Boolean(place.link1Url || place.link2Url);
+  const hasLinks   = Boolean(place.websiteUrl || place.link1Url || place.link2Url);
   const displayArea = [place.city || place.area, place.country].filter(Boolean).join(", ");
 
   // Helper to build Google Maps directions URL
@@ -111,6 +111,17 @@ export default function PlaceDetailScreen({
         {/* Links */}
         {hasLinks && (
           <div className="place-profile-links">
+            {place.websiteUrl && (
+              <a
+                href={place.websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="place-profile-link-btn place-profile-link-btn--website"
+              >
+                <Globe size={14} />
+                Sitio Web
+              </a>
+            )}
             {place.link1Url && (
               <a
                 href={place.link1Url}

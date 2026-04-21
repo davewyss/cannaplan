@@ -2718,6 +2718,15 @@ input, textarea { outline: none; }
   background: #c8ede1;
 }
 
+.place-profile-link-btn--website {
+  background: var(--cp-brand);
+  color: #fff;
+}
+
+.place-profile-link-btn--website:hover {
+  background: #176e52;
+}
+
 /* Mobile adjustments */
 @media (max-width: 640px) {
   .place-profile-body {

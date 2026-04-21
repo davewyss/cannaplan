@@ -630,6 +630,10 @@ export async function getMapPlaces(): Promise<Place[]> {
         const email = String(r.Email ?? r.Correo ?? r["Correo Electrónico"] ?? "").trim() || undefined;
 
         // ── Links ─────────────────────────────────────────────────────────
+        const websiteUrl = normalizeLinkUrl(getFirstString(r, [
+          "Sitio Web", "Website", "Web", "Pagina Web", "Página Web",
+          "URL Web", "URL del Sitio", "Sitio",
+        ]));
         const link1Url   = normalizeLinkUrl(getFirstString(r, ["Enlace 1"]));
         const link1Label = String(r["Etiqueta Enlace 1"] ?? "").trim() || undefined;
         const link2Url   = normalizeLinkUrl(getFirstString(r, ["Enlace 2"]));
@@ -668,6 +672,7 @@ export async function getMapPlaces(): Promise<Place[]> {
           logoAlt:   String(r["Logo Alt"]    ?? "").trim() || undefined,
           bannerUrl: bannerUrl || undefined,
           bannerAlt: String(r["Banner Alt"]  ?? "").trim() || undefined,
+          websiteUrl,
           link1Url,
           link1Label,
           link2Url,

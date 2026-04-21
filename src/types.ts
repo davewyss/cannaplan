@@ -44,6 +44,7 @@ export type Place = {
   logoAlt?: string;
   bannerUrl?: string;  // Banner (4:1)
   bannerAlt?: string;
+  websiteUrl?: string; // Dedicated website — always labelled "Sitio Web"
   link1Url?: string;
   link1Label?: string;
   link2Url?: string;
