@@ -1,8 +1,10 @@
 import { Suspense, lazy, useEffect } from "react";
 import { Route, Routes, useLocation, useNavigate, useParams } from "./router";
 import { resetSocialMeta } from "./lib/socialMeta";
+import { restoreConsent } from "./lib/consent";
 import { ArticleBottomBar } from "./components/ArticleBottomBar";
 import { BottomNav } from "./components/BottomNav";
+import { CookieBanner } from "./components/CookieBanner";
 import { InstallPrompt } from "./components/InstallPrompt";
 import { StaticBottomBar } from "./components/StaticBottomBar";
 import { ErrorState } from "./components/ErrorState";
@@ -119,6 +121,9 @@ export default function App() {
     useContent();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  // Restore prior cookie consent on first load
+  useEffect(() => { restoreConsent(); }, []);
 
   // Reset social meta for non-detail pages (detail pages set their own meta via useSocialMeta)
   useEffect(() => {
@@ -280,6 +285,7 @@ export default function App() {
           </Routes>
         </Suspense>
       </main>
+      <CookieBanner onNavigateCookies={() => navigate(MENU_ROUTES["cookies"])} />
       <InstallPrompt />
       <BottomBarSwitch />
     </>

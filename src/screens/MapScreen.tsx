@@ -1,6 +1,7 @@
 import { MapPin, Navigation, Search, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AdSidebar } from "../components/AdSidebar";
+import { GeoPrePrompt } from "../components/GeoPrePrompt";
 import { MapPlaceCard } from "../components/MapPlaceCard";
 import { MapTopBar } from "../components/MapTopBar";
 import { distanceKm, useGeolocation } from "../hooks/useGeolocation";
@@ -57,8 +58,9 @@ export default function MapScreen({
   const leafletMapRef = useRef<any>(null);
   const markersRef = useRef<globalThis.Map<number, any>>(new globalThis.Map());
 
-  const geo = useGeolocation();
+  const [geo, requestGeo] = useGeolocation();
   const userMarkerRef = useRef<any>(null);
+  const [showPrePrompt, setShowPrePrompt] = useState(true);
   const [geoDismissed, setGeoDismissed] = useState(false);
 
   const [query, setQuery] = useState("");
@@ -259,6 +261,17 @@ export default function MapScreen({
 
   return (
     <div className="map-screen-scroll">
+      {/* Geo pre-prompt modal */}
+      {geo.status === "idle" && showPrePrompt && (
+        <GeoPrePrompt
+          onAllow={() => {
+            setShowPrePrompt(false);
+            requestGeo();
+          }}
+          onDeny={() => setShowPrePrompt(false)}
+        />
+      )}
+
       {/* Topbar */}
       <MapTopBar
         showSearch={showSearch}
@@ -270,7 +283,18 @@ export default function MapScreen({
       {/* Geolocation denied banner */}
       {geo.status === "denied" && !geoDismissed && (
         <div className="map-geo-denied-banner">
-          <span>{geo.reason}</span>
+          <span>
+            {geo.reason}{" "}
+            <button
+              className="map-geo-cambiar"
+              onClick={() => {
+                setGeoDismissed(false);
+                requestGeo();
+              }}
+            >
+              cambiar
+            </button>
+          </span>
           <button className="map-geo-denied-close" onClick={() => setGeoDismissed(true)}>
             <X size={13} />
           </button>

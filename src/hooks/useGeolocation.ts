@@ -1,18 +1,21 @@
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 export type GeoState =
+  | { status: "idle" }
   | { status: "loading" }
   | { status: "active"; lat: number; lng: number }
   | { status: "denied"; reason: string };
 
-export function useGeolocation(): GeoState {
-  const [state, setState] = useState<GeoState>({ status: "loading" });
+export function useGeolocation(): [GeoState, () => void] {
+  const [state, setState] = useState<GeoState>({ status: "idle" });
 
-  useEffect(() => {
+  const request = useCallback(() => {
     if (!navigator.geolocation) {
       setState({ status: "denied", reason: "Tu navegador no soporta geolocalización." });
       return;
     }
+
+    setState({ status: "loading" });
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
@@ -35,7 +38,7 @@ export function useGeolocation(): GeoState {
     );
   }, []);
 
-  return state;
+  return [state, request];
 }
 
 /** Haversine distance in km between two lat/lng points */

@@ -2030,6 +2030,19 @@ input, textarea { outline: none; }
   flex-shrink: 0;
 }
 
+.map-geo-cambiar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #c0392b;
+  font-family: Poppins, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: underline;
+  padding: 0;
+  margin-left: 4px;
+}
+
 .map-place-row-title {
   margin: 0;
   font-family: Poppins, sans-serif;
@@ -2754,4 +2767,197 @@ input, textarea { outline: none; }
   .place-profile-name {
     font-size: 18px;
   }
+}
+
+/* ── Cookie consent banner ──────────────────────────────────────────────── */
+
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 8000;
+  background: var(--cp-navy, #282d48);
+  color: #fff;
+  padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.18);
+}
+
+.cookie-banner-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .cookie-banner-inner {
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+  }
+}
+
+.cookie-banner-text {
+  margin: 0;
+  font-family: Poppins, sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  flex: 1;
+}
+
+.cookie-banner-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--cp-light, #a8dadc);
+  font-family: Poppins, sans-serif;
+  font-size: 13px;
+  text-decoration: underline;
+}
+
+.cookie-banner-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.cookie-banner-reject {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  padding: 9px 16px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: Poppins, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cookie-banner-reject:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #fff;
+}
+
+.cookie-banner-accept {
+  background: var(--cp-brand, #1d8867);
+  border: none;
+  border-radius: 10px;
+  padding: 9px 20px;
+  color: #fff;
+  font-family: Poppins, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cookie-banner-accept:active {
+  opacity: 0.85;
+}
+
+/* ── Geo pre-prompt modal ───────────────────────────────────────────────── */
+
+.geo-preprompt-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 9999;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (min-width: 480px) {
+  .geo-preprompt-overlay {
+    align-items: center;
+  }
+}
+
+.geo-preprompt-card {
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  padding: 32px 24px 28px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.12);
+}
+
+@media (min-width: 480px) {
+  .geo-preprompt-card {
+    border-radius: 20px;
+    padding: 36px 32px 32px;
+  }
+}
+
+.geo-preprompt-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--cp-brand, #1d8867);
+  color: #fff;
+  margin: 0 auto 16px;
+}
+
+.geo-preprompt-title {
+  font-family: Poppins, sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--cp-navy, #282d48);
+  margin: 0 0 10px;
+  line-height: 1.3;
+}
+
+.geo-preprompt-body {
+  font-family: Poppins, sans-serif;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+
+.geo-preprompt-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.geo-preprompt-allow {
+  background: var(--cp-brand, #1d8867);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-family: Poppins, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+}
+
+.geo-preprompt-allow:active {
+  opacity: 0.85;
+}
+
+.geo-preprompt-deny {
+  background: none;
+  border: none;
+  color: #999;
+  font-family: Poppins, sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.geo-preprompt-deny:active {
+  color: #666;
 }
