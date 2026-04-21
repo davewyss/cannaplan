@@ -410,13 +410,50 @@ input, textarea { outline: none; }
 }
 .featured-image { height: 320px; background: linear-gradient(135deg, #f3f1eb 0%, #e8f6f8 52%, #f2fbf8 100%); }
 .featured-body { padding: 32px; display: grid; gap: 16px; }
-.featured-body h1 { margin: 0; color: var(--cp-navy); font-size: 48px; line-height: 1.02; max-width: 860px; }
+.featured-body h1 { margin: 0; color: var(--cp-navy); font-size: 34px; line-height: 1.08; max-width: 860px; }
 .featured-body p { margin: 0; color: var(--cp-text); font-size: 18px; line-height: 1.85; max-width: 850px; }
 .featured-meta { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 4px; }
 .grid-home { display: grid; gap: 28px; }
 .grid-2-main { display: grid; gap: 16px; grid-template-columns: 1.2fr 0.8fr; }
 .grid-places-3 { display: grid; gap: 16px; grid-template-columns: repeat(3, 1fr); }
 .grid-places-2 { display: grid; gap: 16px; grid-template-columns: repeat(2, 1fr); }
+
+/* ── Home layout: featured + noticias left, map right ── */
+.home-layout {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 1.2fr 0.85fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "featured map"
+    "noticias map";
+}
+.home-area-featured { grid-area: featured; }
+.home-area-noticias { grid-area: noticias; }
+.home-area-map {
+  grid-area: map;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.home-map-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.home-map-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.home-map-grow {
+  flex: 1;
+  min-height: 220px;
+  margin-bottom: 4px;
+}
+.home-map-grow .spain-map-preview-wrap { height: 100%; }
+.home-map-grow .spain-map-preview { height: 100%; }
 .surface-box {
   min-height: 180px; border-radius: 22px; border: 1px dashed var(--cp-light); background: #f5fbfb;
   display: grid; place-items: center; padding: 16px;
@@ -448,7 +485,7 @@ input, textarea { outline: none; }
 .info-grid { display: grid; gap: 16px; grid-template-columns: 1.15fr 0.85fr; }
 @media (max-width: 920px) {
   .grid-2-main, .info-grid, .grid-places-3, .grid-places-2 { grid-template-columns: 1fr; }
-  .featured-body h1 { font-size: 36px; }
+  .featured-body h1 { font-size: 28px; }
   .section-title h2 { font-size: 28px; }
 }
 
@@ -1305,6 +1342,29 @@ input, textarea { outline: none; }
   .article-detail-layout,
   .articles-layout {
     grid-template-columns: 1fr;
+  }
+
+  /* Home layout: stack as featured → map → noticias on mobile */
+  .home-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "featured"
+      "map"
+      "noticias";
+  }
+  .home-area-map {
+    align-self: auto;
+  }
+  .home-map-card {
+    flex: none;
+  }
+  .home-map-inner {
+    flex: none;
+  }
+  .home-map-grow {
+    flex: none;
+    min-height: 220px;
   }
 
   .articles-sidebar {

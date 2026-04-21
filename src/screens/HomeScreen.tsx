@@ -84,30 +84,46 @@ export function HomeScreen({
   return (
     <div className="grid-home">
       <InicioTopBar onSearchClick={onSearchClick} />
-      <FeaturedStory article={featured} onOpen={(a) => { fireInstallTrigger(); onOpenArticle(a); }} />
 
-      <section className="grid-2-main">
-        <div className="cp-card">
-          <div className="cp-card-inner">
-            <SectionTitle eyebrow="Últimas noticias" title="" />
-            <div className="card-list-grid">
-              {secondaryArticles.map((article) => (
-                <ArticleCard key={article.id} article={article} onOpen={(a) => { fireInstallTrigger(); onOpenArticle(a); }} />
-              ))}
-            </div>
-          </div>
+      <section className="home-layout">
+
+        {/* ── Featured article ── */}
+        <div className="home-area-featured">
+          <FeaturedStory article={featured} onOpen={(a) => { fireInstallTrigger(); onOpenArticle(a); }} />
         </div>
 
-        <div className="side-stack">
-          <div className="cp-card">
-            <div className="cp-card-inner">
-              <SectionTitle eyebrow="Nuestros aliados" title="Guía Cannábica" body="Consulta fichas y explora por zona." />
-              <SpainMapPreview onClick={() => onGoToTab("map")} />
-              <Button onClick={() => onGoToTab("map")}>Ir a la guía</Button>
+        {/* ── Map — right column on desktop, between featured + noticias on mobile ── */}
+        <div className="home-area-map">
+          <div className="cp-card home-map-card">
+            <div className="cp-card-inner home-map-inner">
+              <SectionTitle
+                eyebrow="Mapa"
+                title="Guía Cannábica"
+                body="Busca por zona, filtra por tipo y encuentra recursos cerca de ti."
+              />
+              <Button onClick={() => onGoToTab("map")}>Explorar</Button>
+              <div className="home-map-grow">
+                <SpainMapPreview onClick={() => onGoToTab("map")} />
+              </div>
             </div>
           </div>
           <AdSidebar ads={ads} ubicacion="inicio" />
         </div>
+
+        {/* ── Últimas noticias ── */}
+        <div className="home-area-noticias">
+          <div className="cp-card">
+            <div className="cp-card-inner">
+              <SectionTitle eyebrow="Últimas noticias" title="" />
+              <div className="card-list-grid">
+                {secondaryArticles.map((article) => (
+                  <ArticleCard key={article.id} article={article} onOpen={(a) => { fireInstallTrigger(); onOpenArticle(a); }} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
       </section>
 
       {recursoAsPlaces.length > 0 && (

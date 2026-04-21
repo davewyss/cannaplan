@@ -125,14 +125,14 @@ export default function App() {
 
   const [cookieBannerForced, setCookieBannerForced] = useState(false);
 
-  // Splash: shown for a fixed short window in PWA mode only.
-  // After it expires the app renders immediately — content streams in behind it.
-  const [splashDone, setSplashDone] = useState(() => !isPwa());
+  // Splash: PWA only. Must hold for at least 2 s AND wait for content to finish loading.
+  const [timerDone, setTimerDone] = useState(() => !isPwa());
   useEffect(() => {
-    if (splashDone) return;
-    const t = setTimeout(() => setSplashDone(true), 1200);
+    if (timerDone) return;
+    const t = setTimeout(() => setTimerDone(true), 2000);
     return () => clearTimeout(t);
-  }, [splashDone]);
+  }, [timerDone]);
+  const splashDone = timerDone && !loading;
 
   // Restore prior cookie consent on first load
   useEffect(() => { restoreConsent(); }, []);
