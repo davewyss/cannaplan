@@ -1,4 +1,4 @@
-import { ChevronRight, House, Info, MapPin, Newspaper, Scale, Send } from "lucide-react";
+import { ChevronRight, House, Info, MapPin, Newspaper, Scale, Send, ShieldCheck } from "lucide-react";
 
 type Target = "home" | "map" | "news" | "legal-help" | "contact" | "about" | "privacy" | "cookies" | "terms" | "data-access" | "sobre-app";
 
@@ -21,7 +21,13 @@ const footerItems = [
 
 const year = new Date().getFullYear();
 
-export default function MenuScreen({ onOpen }: { onOpen: (target: Target) => void }) {
+export default function MenuScreen({
+  onOpen,
+  onManageConsent,
+}: {
+  onOpen: (target: Target) => void;
+  onManageConsent?: () => void;
+}) {
   return (
     <div className="screen-grid">
       <div className="menu-grid">
@@ -48,6 +54,12 @@ export default function MenuScreen({ onOpen }: { onOpen: (target: Target) => voi
             </button>
           ))}
         </div>
+        {onManageConsent && (
+          <button className="menu-footer-pill menu-footer-pill--privacy" onClick={onManageConsent}>
+            <ShieldCheck size={12} />
+            Gestionar cookies
+          </button>
+        )}
         <div className="menu-copyright">© {year} Cannaplan</div>
       </div>
     </div>

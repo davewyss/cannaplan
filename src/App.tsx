@@ -249,6 +249,7 @@ export default function App() {
               element={
                 <MenuScreen
                   onOpen={(target) => navigate(MENU_ROUTES[target] ?? "/")}
+                  onManageConsent={handleManageConsent}
                 />
               }
             />
@@ -297,12 +298,14 @@ export default function App() {
           </Routes>
         </Suspense>
       </main>
-      <CookieBanner
-        onNavigateCookies={() => navigate(MENU_ROUTES["cookies"])}
-        onNavigatePrivacy={() => navigate(MENU_ROUTES["privacy"])}
-        forceShow={cookieBannerForced}
-        onClose={() => setCookieBannerForced(false)}
-      />
+      {!loading && (
+        <CookieBanner
+          onNavigateCookies={() => navigate(MENU_ROUTES["cookies"])}
+          onNavigatePrivacy={() => navigate(MENU_ROUTES["privacy"])}
+          forceShow={cookieBannerForced}
+          onClose={() => setCookieBannerForced(false)}
+        />
+      )}
       <InstallPrompt />
       <BottomBarSwitch />
     </>

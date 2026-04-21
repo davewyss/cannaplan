@@ -907,6 +907,20 @@ input, textarea { outline: none; }
   border-color: var(--cp-brand);
 }
 
+.menu-footer-pill--privacy {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+  border-color: rgba(29, 136, 103, 0.35);
+  color: var(--cp-brand);
+}
+
+.menu-footer-pill--privacy:hover {
+  background: rgba(29, 136, 103, 0.08);
+  border-color: var(--cp-brand);
+}
+
 .legal-footer-pills {
   display: flex;
   flex-wrap: wrap;
