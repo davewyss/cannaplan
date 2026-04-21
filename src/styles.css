@@ -1713,8 +1713,22 @@ input, textarea { outline: none; }
   font-family: Poppins, sans-serif;
   font-size: 16px;
   font-weight: 700;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: default;
   color: var(--cp-navy);
   line-height: 1.2;
+}
+
+.map-place-card-name--link {
+  cursor: pointer;
+  color: var(--cp-navy);
+}
+
+.map-place-card-name--link:hover {
+  text-decoration: underline;
 }
 
 .map-place-card-area {
@@ -1743,6 +1757,27 @@ input, textarea { outline: none; }
   font-family: Poppins, sans-serif;
   font-size: 12px;
   color: var(--cp-text);
+}
+
+.map-place-card-address--link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.map-place-card-address--link:hover {
+  text-decoration: underline;
+}
+
+.map-place-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.map-place-card-meta-icon {
+  flex-shrink: 0;
 }
 
 .map-place-card-address {

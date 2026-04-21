@@ -1,4 +1,4 @@
-import { MapPin, Navigation, Search, X } from "lucide-react";
+import { Mail, MapPin, Navigation, Phone, Search, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AdSidebar } from "../components/AdSidebar";
 import { GeoPrePrompt } from "../components/GeoPrePrompt";
@@ -384,46 +384,80 @@ export default function MapScreen({
       <div className="map-container-wrap">
         <div ref={mapRef} className="map-leaflet" />
 
-        {selectedPlace && (
-          <div className="map-place-card">
-            <div className="map-place-card-body">
-              <div className="map-place-card-top">
-                <span className="map-place-type-pill" style={{ background: typeColor(selectedPlace.type) }}>
-                  {selectedPlace.type}
-                </span>
-                <button className="map-place-card-close" onClick={() => setSelectedPlace(null)}>
-                  <X size={14} />
+        {selectedPlace && (() => {
+          const p = selectedPlace;
+          const fullAddr = [p.address1, p.address2, p.city, p.province, p.postalCode]
+            .filter(Boolean).join(", ");
+          const addrForMap = fullAddr || p.address;
+          const mapsUrl = addrForMap
+            ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(addrForMap)}`
+            : null;
+
+          return (
+            <div className="map-place-card">
+              <div className="map-place-card-body">
+                <div className="map-place-card-top">
+                  <span className="map-place-type-pill" style={{ background: typeColor(p.type) }}>
+                    {p.type}
+                  </span>
+                  <button className="map-place-card-close" onClick={() => setSelectedPlace(null)}>
+                    <X size={14} />
+                  </button>
+                </div>
+
+                {/* Name — clickable to open full profile */}
+                <button className="map-place-card-name map-place-card-name--link" onClick={() => onOpenPlace(p)}>
+                  {p.name}
+                </button>
+
+                {p.area && <div className="map-place-card-area">{p.area}</div>}
+
+                {addrForMap && (
+                  <div className="map-place-card-meta">
+                    <MapPin size={12} className="map-place-card-meta-icon" />
+                    {mapsUrl ? (
+                      <a
+                        href={mapsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="map-place-card-address map-place-card-address--link"
+                        title="Ver en Google Maps"
+                      >
+                        {fullAddr || p.address}
+                      </a>
+                    ) : (
+                      <span className="map-place-card-address">{fullAddr || p.address}</span>
+                    )}
+                    <div className="map-place-card-actions">
+                      {mapsUrl && (
+                        <a href={mapsUrl} target="_blank" rel="noopener noreferrer"
+                          className="map-place-card-directions" title="Cómo llegar">
+                          <Navigation size={13} />
+                        </a>
+                      )}
+                      {p.phone && (
+                        <a href={`tel:${p.phone}`}
+                          className="map-place-card-directions" title={p.phone}>
+                          <Phone size={13} />
+                        </a>
+                      )}
+                      {p.email && (
+                        <a href={`mailto:${p.email}`}
+                          className="map-place-card-directions" title={p.email}>
+                          <Mail size={13} />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                <button className="map-place-card-cta" onClick={() => onOpenPlace(p)}>
+                  Ver ficha completa
                 </button>
               </div>
-              <div className="map-place-card-name">{selectedPlace.name}</div>
-              {selectedPlace.area && <div className="map-place-card-area">{selectedPlace.area}</div>}
-              {(selectedPlace.address1 || selectedPlace.address) && (() => {
-                const shortAddr = selectedPlace.address1 || selectedPlace.address;
-                const mapsQuery = encodeURIComponent(
-                  [shortAddr, selectedPlace.city, selectedPlace.province].filter(Boolean).join(", ")
-                );
-                return (
-                  <div className="map-place-card-meta">
-                    <MapPin size={12} />
-                    <span className="map-place-card-address">{shortAddr}</span>
-                    <a
-                      href={`https://www.google.com/maps/dir/?api=1&destination=${mapsQuery}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="map-place-card-directions"
-                      title="Cómo llegar"
-                    >
-                      <Navigation size={13} />
-                    </a>
-                  </div>
-                );
-              })()}
-              <button className="map-place-card-cta" onClick={() => onOpenPlace(selectedPlace)}>
-                Ver ficha completa
-              </button>
             </div>
-          </div>
-        )}
+          );
+        })()}
       </div>
 
       {/* Cards + sidebar layout */}
