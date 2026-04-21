@@ -62,10 +62,9 @@ export default function MapScreen({
   const [geo, requestGeo] = useGeolocation();
   const userMarkerRef = useRef<any>(null);
 
-  // Show the pre-prompt only if the user hasn't decided via the cookie banner yet.
-  // If they already granted location consent → auto-trigger geo silently.
-  // If they rejected it → skip geo entirely.
-  const [showPrePrompt, setShowPrePrompt] = useState(() => !hasDecided());
+  // Pre-prompt only shows when the user explicitly taps the locate button.
+  // Exception: auto-trigger silently if they already granted location consent via cookie banner.
+  const [showPrePrompt, setShowPrePrompt] = useState(false);
   const [geoDismissed, setGeoDismissed] = useState(false);
 
   // Auto-trigger geo if cookie banner already granted location consent
@@ -75,6 +74,19 @@ export default function MapScreen({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  function handleLocateTap() {
+    if (geo.status === "active") return; // already located — could pan to user
+    if (geo.status === "loading") return;
+    if (!hasDecided()) {
+      setShowPrePrompt(true); // show our custom pre-prompt first
+    } else if (hasLocationConsent()) {
+      requestGeo();
+    } else {
+      // They previously declined via cookie banner — re-open the pre-prompt
+      setShowPrePrompt(true);
+    }
+  }
 
   const [query, setQuery] = useState("");
   const [activeType, setActiveType] = useState<string | null>(null);
@@ -291,6 +303,8 @@ export default function MapScreen({
         onToggleSearch={() => setShowSearch((v) => !v)}
         showFilters={showFilters}
         onToggleFilters={() => setShowFilters((v) => !v)}
+        geoStatus={geo.status}
+        onLocate={handleLocateTap}
       />
 
       {/* Geolocation denied popup */}
@@ -301,18 +315,12 @@ export default function MapScreen({
               <MapPin size={26} strokeWidth={1.8} />
             </div>
             <h2 className="geo-preprompt-title">Ubicación no disponible</h2>
-            <p className="geo-preprompt-body">{geo.reason}</p>
-            {geo.reason.includes("denegado") && (
-              <p className="geo-denied-hint">
-                Si cambiaste de opinión, activa el permiso en la configuración de tu navegador y vuelve a intentarlo.
-              </p>
-            )}
+            <p className="geo-preprompt-body">
+              Has denegado el acceso a tu ubicación. Si cambiaste de opinión, activa el permiso en la configuración de tu navegador.
+            </p>
             <div className="geo-preprompt-actions">
-              <button className="geo-preprompt-allow" onClick={() => { requestGeo(); }}>
-                Reintentar
-              </button>
-              <button className="geo-preprompt-deny" onClick={() => setGeoDismissed(true)}>
-                Sin ubicación
+              <button className="geo-preprompt-deny geo-preprompt-deny--solo" onClick={() => setGeoDismissed(true)}>
+                Continuar sin ubicación
               </button>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { renderMd } from "../lib/renderMarkdown";
+import { LegalFooterPills } from "../components/LegalFooterPills";
 
 // ── Content ───────────────────────────────────────────────────────────────────
 // To connect a markdown editor or CMS in the future, replace this string
@@ -63,7 +64,13 @@ Calle Miguel Hernández, 13, 28840 Mejorada del Campo, Madrid
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export default function DataAccessScreen({ onBack }: { onBack: () => void }) {
+export default function DataAccessScreen({
+  onBack,
+  onNavigate,
+}: {
+  onBack: () => void;
+  onNavigate?: (key: string) => void;
+}) {
   return (
     <div className="screen-grid">
       <div className="static-page-wrap">
@@ -73,6 +80,9 @@ export default function DataAccessScreen({ onBack }: { onBack: () => void }) {
               className="article-content legal-page"
               dangerouslySetInnerHTML={{ __html: renderMd(CONTENT) }}
             />
+            {onNavigate && (
+              <LegalFooterPills onNavigate={onNavigate} current="data-access" />
+            )}
           </div>
         </div>
       </div>

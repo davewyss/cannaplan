@@ -1,4 +1,5 @@
 import { renderMd } from "../lib/renderMarkdown";
+import { LegalFooterPills } from "../components/LegalFooterPills";
 
 // ── Content ───────────────────────────────────────────────────────────────────
 // To connect a markdown editor or CMS in the future, replace this string
@@ -84,7 +85,13 @@ Podemos actualizar esta política ocasionalmente. Si los cambios son significati
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export default function PrivacyScreen({ onBack }: { onBack: () => void }) {
+export default function PrivacyScreen({
+  onBack,
+  onNavigate,
+}: {
+  onBack: () => void;
+  onNavigate?: (key: string) => void;
+}) {
   return (
     <div className="screen-grid">
       <div className="static-page-wrap">
@@ -94,6 +101,9 @@ export default function PrivacyScreen({ onBack }: { onBack: () => void }) {
               className="article-content legal-page"
               dangerouslySetInnerHTML={{ __html: renderMd(CONTENT) }}
             />
+            {onNavigate && (
+              <LegalFooterPills onNavigate={onNavigate} current="privacy" />
+            )}
           </div>
         </div>
       </div>

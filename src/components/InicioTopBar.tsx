@@ -9,7 +9,7 @@ export function InicioTopBar({ onSearchClick }: { onSearchClick: () => void }) {
           <div className="inicio-topbar-title">Cannaplan</div>
           <div className="inicio-topbar-tagline">
             <span className="tagline-short">Información y defensa del cannabis</span>
-            <span className="tagline-full">Información y defensa del cannabis en España</span>
+            <span className="tagline-full">Información y defensa del cannabis</span>
           </div>
         </div>
       </div>

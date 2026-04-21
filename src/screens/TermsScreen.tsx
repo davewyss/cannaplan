@@ -1,4 +1,5 @@
 import { renderMd } from "../lib/renderMarkdown";
+import { LegalFooterPills } from "../components/LegalFooterPills";
 
 // ── Content ───────────────────────────────────────────────────────────────────
 // To connect a markdown editor or CMS in the future, replace this string
@@ -54,7 +55,13 @@ Las presentes condiciones se rigen por la legislación española. Para la resolu
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export default function TermsScreen({ onBack }: { onBack: () => void }) {
+export default function TermsScreen({
+  onBack,
+  onNavigate,
+}: {
+  onBack: () => void;
+  onNavigate?: (key: string) => void;
+}) {
   return (
     <div className="screen-grid">
       <div className="static-page-wrap">
@@ -64,6 +71,9 @@ export default function TermsScreen({ onBack }: { onBack: () => void }) {
               className="article-content legal-page"
               dangerouslySetInnerHTML={{ __html: renderMd(CONTENT) }}
             />
+            {onNavigate && (
+              <LegalFooterPills onNavigate={onNavigate} current="terms" />
+            )}
           </div>
         </div>
       </div>

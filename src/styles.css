@@ -907,6 +907,22 @@ input, textarea { outline: none; }
   border-color: var(--cp-brand);
 }
 
+.legal-footer-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.legal-meta {
+  margin-top: 24px;
+  font-size: 13px;
+  color: #aab0bc;
+}
+
 .menu-copyright {
   font-family: Poppins, sans-serif;
   font-size: 11px;
@@ -3057,6 +3073,23 @@ input, textarea { outline: none; }
 
 .geo-preprompt-deny:active {
   color: #666;
+}
+
+/* Solo dismiss button (no primary action alongside it) */
+.geo-preprompt-deny--solo {
+  width: 100%;
+  padding: 14px;
+  background: #f4f5f7;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--cp-navy);
+  text-align: center;
+}
+
+/* Locate button in topbar when geo was denied */
+.geo-btn-denied {
+  opacity: 0.4;
 }
 
 /* ── Legal pages (Privacy, Cookies) ────────────────────────────────────── */

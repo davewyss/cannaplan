@@ -1,4 +1,5 @@
 import { renderMd } from "../lib/renderMarkdown";
+import { LegalFooterPills } from "../components/LegalFooterPills";
 
 // ── Content ───────────────────────────────────────────────────────────────────
 // To connect a markdown editor or CMS in the future, replace these strings
@@ -77,9 +78,10 @@ Para cualquier consulta sobre el uso de cookies, escríbenos a [info@cannaplan.o
 interface Props {
   onBack: () => void;
   onManageConsent?: () => void;
+  onNavigate?: (key: string) => void;
 }
 
-export default function CookiesScreen({ onBack, onManageConsent }: Props) {
+export default function CookiesScreen({ onBack, onManageConsent, onNavigate }: Props) {
   return (
     <div className="screen-grid">
       <div className="static-page-wrap">
@@ -96,6 +98,9 @@ export default function CookiesScreen({ onBack, onManageConsent }: Props) {
 
               <div dangerouslySetInnerHTML={{ __html: renderMd(CONTENT_BOTTOM) }} />
             </div>
+            {onNavigate && (
+              <LegalFooterPills onNavigate={onNavigate} current="cookies" />
+            )}
           </div>
         </div>
       </div>

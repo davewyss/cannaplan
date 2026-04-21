@@ -273,25 +273,25 @@ export default function App() {
             {/* ── Legal pages ───────────────────────────────────────────── */}
             <Route
               path="/legal/privacidad"
-              element={<PrivacyScreen onBack={() => navigate(-1)} />}
+              element={<PrivacyScreen onBack={() => navigate(-1)} onNavigate={(k) => navigate(MENU_ROUTES[k] ?? "/")} />}
             />
             <Route
               path="/legal/cookies"
-              element={<CookiesScreen onBack={() => navigate(-1)} onManageConsent={handleManageConsent} />}
+              element={<CookiesScreen onBack={() => navigate(-1)} onManageConsent={handleManageConsent} onNavigate={(k) => navigate(MENU_ROUTES[k] ?? "/")} />}
             />
             <Route
               path="/legal/terminos"
-              element={<TermsScreen onBack={() => navigate(-1)} />}
+              element={<TermsScreen onBack={() => navigate(-1)} onNavigate={(k) => navigate(MENU_ROUTES[k] ?? "/")} />}
             />
             <Route
               path="/legal/acceso-datos"
-              element={<DataAccessScreen onBack={() => navigate(-1)} />}
+              element={<DataAccessScreen onBack={() => navigate(-1)} onNavigate={(k) => navigate(MENU_ROUTES[k] ?? "/")} />}
             />
 
             {/* ── Misc ─────────────────────────────────────────────────── */}
             <Route
               path="/sobre-app"
-              element={<SobreAppScreen onBack={() => navigate(-1)} />}
+              element={<SobreAppScreen onBack={() => navigate(-1)} onNavigate={(k) => navigate(MENU_ROUTES[k] ?? "/")} />}
             />
 
           </Routes>
