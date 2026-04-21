@@ -285,7 +285,10 @@ export default function App() {
           </Routes>
         </Suspense>
       </main>
-      <CookieBanner onNavigateCookies={() => navigate(MENU_ROUTES["cookies"])} />
+      <CookieBanner
+        onNavigateCookies={() => navigate(MENU_ROUTES["cookies"])}
+        onNavigatePrivacy={() => navigate(MENU_ROUTES["privacy"])}
+      />
       <InstallPrompt />
       <BottomBarSwitch />
     </>

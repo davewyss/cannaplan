@@ -5,6 +5,7 @@ import { GeoPrePrompt } from "../components/GeoPrePrompt";
 import { MapPlaceCard } from "../components/MapPlaceCard";
 import { MapTopBar } from "../components/MapTopBar";
 import { distanceKm, useGeolocation } from "../hooks/useGeolocation";
+import { hasDecided, hasLocationConsent } from "../lib/consent";
 import { matchesPlaceSearch } from "../lib/search";
 import type { Ad, Place } from "../types";
 
@@ -60,8 +61,20 @@ export default function MapScreen({
 
   const [geo, requestGeo] = useGeolocation();
   const userMarkerRef = useRef<any>(null);
-  const [showPrePrompt, setShowPrePrompt] = useState(true);
+
+  // Show the pre-prompt only if the user hasn't decided via the cookie banner yet.
+  // If they already granted location consent → auto-trigger geo silently.
+  // If they rejected it → skip geo entirely.
+  const [showPrePrompt, setShowPrePrompt] = useState(() => !hasDecided());
   const [geoDismissed, setGeoDismissed] = useState(false);
+
+  // Auto-trigger geo if cookie banner already granted location consent
+  useEffect(() => {
+    if (hasDecided() && hasLocationConsent()) {
+      requestGeo();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [query, setQuery] = useState("");
   const [activeType, setActiveType] = useState<string | null>(null);
