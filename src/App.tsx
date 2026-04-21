@@ -125,6 +125,15 @@ export default function App() {
 
   const [cookieBannerForced, setCookieBannerForced] = useState(false);
 
+  // Splash: shown for a fixed short window in PWA mode only.
+  // After it expires the app renders immediately — content streams in behind it.
+  const [splashDone, setSplashDone] = useState(() => !isPwa());
+  useEffect(() => {
+    if (splashDone) return;
+    const t = setTimeout(() => setSplashDone(true), 1200);
+    return () => clearTimeout(t);
+  }, [splashDone]);
+
   // Restore prior cookie consent on first load
   useEffect(() => { restoreConsent(); }, []);
 
@@ -146,22 +155,11 @@ export default function App() {
   const openPlace = (place: Place) => navigate(`/mapa/${place.slug}`);
   const goToTab   = (tab: TabKey) => navigate(TAB_ROUTES[tab]);
 
-  // ── Loading / error full-screen ───────────────────────────────────────────
+  // ── Splash (PWA only, time-capped) ───────────────────────────────────────
 
-  if (loading) {
-    // Full branded splash only in PWA (installed on home screen).
-    // Regular browser tab gets a minimal spinner — less jarring for web visitors.
-    return isPwa() ? (
-      <LoadingState />
-    ) : (
-      <>
-        <main className="shell">
-          <Spinner />
-        </main>
-        <BottomNav />
-      </>
-    );
-  }
+  if (!splashDone) return <LoadingState />;
+
+  // ── Error full-screen ─────────────────────────────────────────────────────
 
   if (error) {
     return (
@@ -197,6 +195,8 @@ export default function App() {
                     onGoToTab={goToTab}
                     onSearchClick={() => navigate("/buscar")}
                   />
+                ) : loading ? (
+                  <Spinner />
                 ) : (
                   <ErrorState message="No hay contenido disponible todavía." />
                 )
