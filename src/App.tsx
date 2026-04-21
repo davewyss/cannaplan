@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect, useState } from "react";
 import { Route, Routes, useLocation, useNavigate, useParams } from "./router";
 import { resetSocialMeta } from "./lib/socialMeta";
 import { clearConsent, restoreConsent } from "./lib/consent";
+import { isPwa } from "./lib/pwa";
 import { ArticleBottomBar } from "./components/ArticleBottomBar";
 import { BottomNav } from "./components/BottomNav";
 import { CookieBanner } from "./components/CookieBanner";
@@ -148,10 +149,14 @@ export default function App() {
   // ── Loading / error full-screen ───────────────────────────────────────────
 
   if (loading) {
-    return (
+    // Full branded splash only in PWA (installed on home screen).
+    // Regular browser tab gets a minimal spinner — less jarring for web visitors.
+    return isPwa() ? (
+      <LoadingState />
+    ) : (
       <>
         <main className="shell">
-          <LoadingState />
+          <Spinner />
         </main>
         <BottomNav />
       </>
