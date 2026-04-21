@@ -5,7 +5,7 @@ import { GeoPrePrompt } from "../components/GeoPrePrompt";
 import { MapPlaceCard } from "../components/MapPlaceCard";
 import { MapTopBar } from "../components/MapTopBar";
 import { distanceKm, useGeolocation } from "../hooks/useGeolocation";
-import { hasDecided, hasLocationConsent } from "../lib/consent";
+import { getStoredPrefs, hasDecided, hasLocationConsent, savePrefs } from "../lib/consent";
 import { matchesPlaceSearch } from "../lib/search";
 import type { Ad, Place } from "../types";
 
@@ -289,10 +289,18 @@ export default function MapScreen({
       {geo.status === "idle" && showPrePrompt && (
         <GeoPrePrompt
           onAllow={() => {
+            // Persist location consent so the cookie popup reflects the choice
+            const current = getStoredPrefs();
+            savePrefs({ analytics: current?.analytics ?? false, location: true });
             setShowPrePrompt(false);
             requestGeo();
           }}
-          onDeny={() => setShowPrePrompt(false)}
+          onDeny={() => {
+            // Persist the refusal too
+            const current = getStoredPrefs();
+            savePrefs({ analytics: current?.analytics ?? false, location: false });
+            setShowPrePrompt(false);
+          }}
         />
       )}
 
