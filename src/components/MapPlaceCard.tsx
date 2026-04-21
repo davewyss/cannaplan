@@ -1,4 +1,5 @@
 import type { Place } from "../types";
+import { FALLBACK_LOGO } from "../lib/images";
 
 const TYPE_COLORS: Record<string, string> = {
   "Asociación": "#1d8867",
@@ -28,13 +29,12 @@ export function MapPlaceCard({
 
   return (
     <button className="map-place-row" onClick={() => onOpen(place)}>
-      {place.imageUrl ? (
-        <img src={place.imageUrl} alt={place.name} className="map-place-row-thumb" />
-      ) : (
-        <div className="map-place-row-swatch" style={{ background: color + "18" }}>
-          <span className="map-place-row-swatch-dot" style={{ background: color }} />
-        </div>
-      )}
+      <img
+        src={place.imageUrl || FALLBACK_LOGO}
+        alt={place.name}
+        className="map-place-row-thumb"
+        onError={(e) => { (e.currentTarget as HTMLImageElement).src = FALLBACK_LOGO; }}
+      />
 
       <div className="map-place-row-body">
         <div className="map-place-row-meta">

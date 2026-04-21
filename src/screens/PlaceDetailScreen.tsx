@@ -1,6 +1,7 @@
 import { Clock, ExternalLink, Mail, MapPin, Navigation, Phone } from "lucide-react";
 import type { Place } from "../types";
 import { useSocialMeta } from "../hooks/useSocialMeta";
+import { FALLBACK_BANNER, FALLBACK_LOGO } from "../lib/images";
 
 export default function PlaceDetailScreen({
   place,
@@ -33,28 +34,20 @@ export default function PlaceDetailScreen({
 
       {/* ── Banner + logo (logo is inside banner div, absolutely positioned) ── */}
       <div className="place-profile-banner-outer">
-        {place.bannerUrl ? (
-          <img
-            src={place.bannerUrl}
-            alt={place.bannerAlt ?? place.name}
-            className="place-profile-banner"
-          />
-        ) : (
-          <div className="place-profile-banner place-profile-banner--empty" />
-        )}
+        <img
+          src={place.bannerUrl || FALLBACK_BANNER}
+          alt={place.bannerAlt ?? place.name}
+          className="place-profile-banner"
+          onError={(e) => { (e.currentTarget as HTMLImageElement).src = FALLBACK_BANNER; }}
+        />
 
         {/* Logo sits half-inside / half-below the banner */}
-        {place.imageUrl ? (
-          <img
-            src={place.imageUrl}
-            alt={place.logoAlt ?? place.name}
-            className="place-profile-logo"
-          />
-        ) : (
-          <div className="place-profile-logo place-profile-logo--empty">
-            {place.name.charAt(0).toUpperCase()}
-          </div>
-        )}
+        <img
+          src={place.imageUrl || FALLBACK_LOGO}
+          alt={place.logoAlt ?? place.name}
+          className="place-profile-logo"
+          onError={(e) => { (e.currentTarget as HTMLImageElement).src = FALLBACK_LOGO; }}
+        />
       </div>
 
       {/* ── Body: everything below the banner ────────────────────────────── */}
